@@ -35,6 +35,7 @@ namespace DashBoard
         {
             Console.Write("Press any key ...");
             Console.ReadLine();
+            
         }
 
         /*  SECTION "BoardHead"
@@ -54,57 +55,78 @@ namespace DashBoard
 
 
 
-        static string[] symbol = { "+", "xxxxx xxxxx", "-", "|" };
+        static string[] symbols = { "+", "xxxxx xxxxx", "-", "|" };
         static char filler = '-';
 
         // print a line
-        //  +--------------------+ (length=100)
+        //  +--------------------+  //  length=100)
         static void DrawLine(int line)
         {
             //String drawline = "{0}{1,100}";
             //Console.Write(drawline, symbol[0], symbol[0].PadLeft(100, filler));
             // Convert it into String.Format();
-            String drawline = String.Format("{0}{1,100}", symbol[0], symbol[0].PadLeft(100, filler));
+            string symbol = (string)symbols[0];
+            String drawline = String.Format("{0}{1,100}", symbol, symbol.PadLeft(100, filler));
             Console.SetCursorPosition(0, line);
             Console.Write(drawline);
         }
 
+        //  print a box 
+        //  (left and right border)
+        //  |                    |  //  length = 100)
+        static void DrawBox(int line)
+        {
+            string symbol = (string)symbols[3];
+            String drawbox = String.Format("{0}{0,100}",symbol);
+            Console.SetCursorPosition(0, line);
+            Console.Write(drawbox);
+        }
+
+        //  print foo at the center of a line, 
+        //  (center of line is calculated)
+        //  |         foo        |
+        static void CenterText(int line, string foo)
+        {
+            int start = (x - foo.Length) / 2;
+            Console.SetCursorPosition(start, line);
+            Console.Write(foo);
+        }
 
         // print the board
         static void PrintHead()
         {
-            //  Define the strings
-            String line = String.Format("{0}{1,50}{2,50}", symbol[0], symbol[1], symbol[2]);
+            //  Define some strings
+            String line = String.Format("{0}{1,50}{2,50}", symbols[0], symbols[1], symbols[2]);
 
-            String line_2 = String.Format("{0}{1,50}{2,50}", symbol[0], symbol[2], symbol[1]);
+            String line_2 = String.Format("{0}{1,50}{2,50}", symbols[0], symbols[2], symbols[1]);
 
             // we calc the center
             //  center is row/2 - text.length / 2
+            //int center = (x - symbols[1].Length) / 2;
 
-            int center = (x - symbol[1].Length) / 2;
+            //String centertext = String.Format("{0}", symbols[1]);
+            //String textbox = String.Format("{0}{0,100}", symbols[3]);
 
-            // concat it into string format
-            //String centertext = String.Format("{0}{1,50}{2,50}", symbol[0], symbol[1], symbol[2]);
-            String centertext = String.Format("{0}", symbol[1]);
-
-
-            String textbox = String.Format("{0}{0,100}", symbol[3]);
-
-            //  Print it out
+            //  ** Print it out  **
+            //  Set Cursor to upper left corner;
             Console.SetCursorPosition(0, 0);
             
             // we have a DrawLine(int line);
             //Console.Write(drawline, symbol[0], symbol[0].PadLeft(100, filler));
             DrawLine(0);
 
-            Console.SetCursorPosition(0, 1);
-            Console.Write(line_2);
+            //Console.SetCursorPosition(0, 1);
+            //Console.Write(line_2);
+            DrawBox(1);
 
-            Console.SetCursorPosition(0, 2);
-            Console.Write(textbox);
+            //Console.SetCursorPosition(0, 2);
+            //Console.Write(textbox);
+            DrawBox(2);
 
-            Console.SetCursorPosition(center, 2);
-            Console.Write(centertext);
+            //Console.SetCursorPosition(center, 2);
+            //Console.Write(centertext);
+            CenterText(2, "This is my text!");
+            DrawBox(3);
 
             DrawLine(4);
         }
@@ -120,6 +142,7 @@ namespace DashBoard
 
 
             Close();
+            
         }
     }
 }
