@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("WindowSizing")]
-[assembly: AssemblyDescription("A show reel of window size manipulation")]
+[assembly: AssemblyTitle("DashBoard")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("M2vH")]
-[assembly: AssemblyProduct("WindowSizing")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("DashBoard")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("1f5fb27b-1033-4b7f-b76c-5e93f63728be")]
+[assembly: Guid("54de4c5a-e21c-4adb-b12c-09647f3ddbe8")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //
