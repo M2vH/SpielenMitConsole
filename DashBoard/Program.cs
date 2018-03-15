@@ -33,6 +33,7 @@ namespace DashBoard
         // close the game
         static void Close()
         {
+            Center();
             Console.Write("Press any key ...");
             Console.ReadLine();
             
@@ -139,6 +140,34 @@ namespace DashBoard
             PrintHead();
             Center();
 
+            bool play = true;
+            do
+            {
+                ConsoleKeyInfo key;
+                key = Console.ReadKey(true);
+                //char move = Convert.ToChar(key);
+                //Console.Write(key.Key);
+                switch (key.Key)
+                {
+                    case ConsoleKey.W:
+                        {
+                            Console.CursorTop = Console.CursorTop - 1;
+                            // Console.CursorLeft -= 1;
+                            break;
+                        }
+                    case ConsoleKey.L:
+                        {
+                            play = false;
+                            break;
+                        }
+                    default:
+                        {
+                            Center();
+                            break;
+                        }
+
+                }
+            } while (play);
 
 
             Close();
