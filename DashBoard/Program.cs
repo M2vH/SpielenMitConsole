@@ -142,14 +142,10 @@ namespace DashBoard
             DrawLine(4);
         }
 
-
-        // The Game
-        static void Main(string[] args)
+        // make a play
+        // ! only cursor is moving !
+        static void Move()
         {
-            InitGame();
-            PrintHead();
-            Center();
-
             bool play = true;
             do
             {
@@ -159,12 +155,18 @@ namespace DashBoard
                 //Console.Write(key.Key);
                 switch (key.Key)
                 {
+                    // monster size is x = 5, y = 3
+                    // min/max cursor positions are:
+                    // left = 2;            // monster left is 2 pixel from middle
+                    // right = x - 2 - 2;   // -2 for the monster size, -2 for the OutOfRange Exception
+                    // upper = int top + 1;     // top is set when dashboard is printed;
+                    // bottom = y - 1 - 1;  // -1 for the monster size, -1 for the excepiton
                     case ConsoleKey.W:
                         {
                             int pos_y = Console.CursorTop;
                             // if we are not at the top:
                             // top is set when board is created;
-                            if (pos_y > top)
+                            if (pos_y > top +1)    
                             {
                                 Console.CursorTop = Console.CursorTop - 1;
                             }
@@ -176,7 +178,7 @@ namespace DashBoard
                             int pos_x = Console.CursorLeft;
                             // if we are not at the outer right
                             // move right;
-                            if (pos_x < x-1)
+                            if (pos_x < x - 4)
                             {
                                 Console.CursorLeft += 1;
                             }
@@ -187,7 +189,7 @@ namespace DashBoard
                             // remember where we are
                             int pos_y = Console.CursorTop;
                             // if we are not at bottom:
-                            if (pos_y < y-1)
+                            if (pos_y < y - 2)
                             {
                                 Console.CursorTop += 1;
                             }
@@ -198,7 +200,7 @@ namespace DashBoard
                             // remember where we are
                             int pos_x = Console.CursorLeft;
                             // if we are not at the outer left
-                            if (pos_x > 0)
+                            if (pos_x > 2)
                             {
                                 Console.CursorLeft -= 1;
                             }
@@ -222,8 +224,109 @@ namespace DashBoard
 
                 }
             } while (play);
+        }
+
+        // make a monster
+        // 
+        /*
+        
+        (°°)
+        /  \
+         ][ 
+        
+        */
+
+            // !! ToDo
+            // set Cursor position to middle of Monster
+        static void PrintTheMonster(int x, int y)
+        {
+            string parts = "(° °)" +  "#" +   // we use # to split string
+                             "~   ~" + "#" +   // 
+                             " ] [ " + "#"    ;
+
+            var monster = parts.Split('#');
+            // set position of cursor after every printed part of monster
+            // params are the middle of the monster
+
+            // [1] printing the head
+            Console.SetCursorPosition(x-2, y-1);
+            Console.Write(monster[0]);
+
+            // [2] printing the arms
+            //      set cursor
+            Console.SetCursorPosition(Console.CursorLeft - monster[0].Length,Console.CursorTop +1);
+            //      print arms
+            Console.Write(monster[1]);
+
+            // [3] printing the legs
+            //      set cursor
+            Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
+            //      print legs
+            Console.Write(monster[2]);
+
+            // [4] set cursor position back to params
+            Console.SetCursorPosition(x,y);
+
+        }
+
+        // Hide the Monster
+        static void HideTheMonster(int x, int y)
+        {
+            string parts = "     " + "#" +   // we use # to split string
+                             "     " + "#" +   // 
+                             "     " + "#";
+
+            var background = parts.Split('#');
+            // set position of cursor after every printed part of monster
+            // params are the middle of the monster
+
+            // [1] printing the head
+            Console.SetCursorPosition(x - 2, y - 1);
+            Console.Write(background[0]);
+
+            // [2] printing the arms
+            //      set cursor
+            Console.SetCursorPosition(Console.CursorLeft - background[0].Length, Console.CursorTop + 1);
+            //      print arms
+            Console.Write(background[1]);
+
+            // [3] printing the legs
+            //      set cursor
+            Console.SetCursorPosition(Console.CursorLeft - background[0].Length, Console.CursorTop + 1);
+            //      print legs
+            Console.Write(background[2]);
+
+            // [4] set cursor position back to params
+            Console.SetCursorPosition(x, y);
+
+        }
+
+        // The Game
+        static void Main(string[] args)
+        {
+            InitGame();
+            PrintHead();
+            Center();
 
 
+
+            Move();
+
+            // hide the cursor
+            Console.CursorVisible = false;
+
+            // Display a monster
+            PrintTheMonster(Console.CursorLeft, Console.CursorTop);
+
+
+            System.Threading.Thread.Sleep(2000);
+
+            // Hide the monster (overwrite with space)
+            HideTheMonster(Console.CursorLeft, Console.CursorTop);
+
+            Console.CursorVisible = true;
+
+            // Exit and close shell
             Close();
             
         }
