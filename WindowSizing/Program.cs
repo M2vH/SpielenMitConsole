@@ -37,7 +37,7 @@ namespace WindowSizing
             Console.WriteLine("Breite startet bei {0} und Höhe ist {1}.", width, height);
 
 
-            // Setze Window auf halbe Breite;
+            // set Window auf halbe Breite;
             int halfthewidth = width / 2;
 
             Console.SetWindowSize(halfthewidth, height);
@@ -87,8 +87,8 @@ namespace WindowSizing
             // dotline .....
             var dotline = " ...";
             // Abstand zum Text
-            string dist = "20";
-            int d = 20;
+            // string dist = "20";
+            // int d = 20;
 
             // {0,20:}
             // rechter Bund mit 20 Zeichen Abstand

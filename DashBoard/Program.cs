@@ -238,7 +238,7 @@ namespace DashBoard
 
             // !! ToDo
             // set Cursor position to middle of Monster
-        static void PrintTheMonster(int x, int y)
+        static void PrintTheMonster(int pos_x, int pos_y)
         {
             string parts = "(° °)" +  "#" +   // we use # to split string
                              " ~x~ " + "#" +   // 
@@ -249,12 +249,12 @@ namespace DashBoard
             // params are the middle of the monster
 
             // [1] printing the head
-            Console.SetCursorPosition(x-2, y-1);
+            Console.SetCursorPosition(pos_x - 2, pos_y - 1);
             Console.Write(monster[0]);
 
             // [2] printing the arms
             //      set cursor
-            Console.SetCursorPosition(Console.CursorLeft - monster[0].Length,Console.CursorTop +1);
+            Console.SetCursorPosition(Console.CursorLeft - monster[0].Length,Console.CursorTop + 1);
             //      print arms
             Console.Write(monster[1]);
 
@@ -265,39 +265,64 @@ namespace DashBoard
             Console.Write(monster[2]);
 
             // [4] set cursor position back to params
-            Console.SetCursorPosition(x,y);
+            Console.SetCursorPosition(pos_x,pos_y);
 
         }
 
         // Hide the Monster
-        static void HideTheMonster(int x, int y)
+        static void HideTheMonster(int pos_x, int pos_y)
         {
-            string parts = "     " + "#" +   // we use # to split string
-                             "     " + "#" +   // 
-                             "     " + "#";
+            int new_x = pos_x - 2;
+            int new_y = pos_y - 1;
 
-            var background = parts.Split('#');
+            string monster_string = "";
+
+            for (int j = 0; j < 3; j++)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    monster_string += background[new_y + j][new_x + i];
+                }
+                monster_string += "#";
+            }
+
+            string parts = monster_string;
+
+            //string parts = "     " + "#" +   // we use # to split string
+            //                 "     " + "#" +   // 
+            //                 "     " + "#";
+
+            var blanc_bg = parts.Split('#');
             // set position of cursor after every printed part of monster
             // params are the middle of the monster
+            // Set cursor to background color
+
+            // [0] set background color;
+            //      store default color;
+            ConsoleColor color_backup = Console.ForegroundColor; 
+            Console.ForegroundColor = darkgreen;
 
             // [1] printing the head
-            Console.SetCursorPosition(x - 2, y - 1);
-            Console.Write(background[0]);
+            Console.SetCursorPosition(pos_x - 2, pos_y - 1);
+            Console.Write(blanc_bg[0]);
 
             // [2] printing the arms
             //      set cursor
-            Console.SetCursorPosition(Console.CursorLeft - background[0].Length, Console.CursorTop + 1);
+            Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
             //      print arms
-            Console.Write(background[1]);
+            Console.Write(blanc_bg[1]);
 
             // [3] printing the legs
             //      set cursor
-            Console.SetCursorPosition(Console.CursorLeft - background[0].Length, Console.CursorTop + 1);
+            Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
             //      print legs
-            Console.Write(background[2]);
+            Console.Write(blanc_bg[2]);
 
             // [4] set cursor position back to params
-            Console.SetCursorPosition(x, y);
+            Console.SetCursorPosition(pos_x, pos_y);
+
+            // [5] set CursorColor back to default
+            Console.ForegroundColor = color_backup;
 
         }
 
@@ -308,13 +333,9 @@ namespace DashBoard
         // create a new ForegroundColor
         static ConsoleColor darkgreen = ConsoleColor.DarkGreen;
 
-
-        // The Game
-        static void Main(string[] args)
+        // Draw a random background
+        static void DrawBackground()
         {
-            InitGame();
-            PrintHead();
-
             // draw a background
             // random o,O and a lot of ' ';
             // Console.SetCursorPosition(0, top);
@@ -331,7 +352,7 @@ namespace DashBoard
             Console.ForegroundColor = darkgreen;
 
             // we go from line top to window.height -1
-            for (int i = top; i < y-1; i++)
+            for (int i = top; i < y - 1; i++)
             {
                 string one_line = "";
                 // we go from left to right
@@ -339,7 +360,7 @@ namespace DashBoard
                 {
                     // drag an int, because Random is always int
                     number = random.Next(0, selection.Length - 1);
-                    
+
                     // pull the symbol out of the selection
                     symbol = (char)selection[number];
 
@@ -350,12 +371,22 @@ namespace DashBoard
                     // and store it for recovery after monster printing
                     one_line += symbol;
                     background[i] = one_line;
-                    
+
                 }
             }
 
             // Set back the ForegroundColor
             Console.ForegroundColor = oldcolor;
+
+        }
+
+        // The Game
+        static void Main(string[] args)
+        {
+            InitGame();
+            PrintHead();
+
+            DrawBackground();
 
             Center();
 
@@ -365,16 +396,19 @@ namespace DashBoard
             // hide the cursor
             Console.CursorVisible = false;
 
-            // Display a monster
+            // Display a monster...
             PrintTheMonster(Console.CursorLeft, Console.CursorTop);
 
-
+            // ...for 2 seconds.
             System.Threading.Thread.Sleep(2000);
 
             // Hide the monster (overwrite with space)
             HideTheMonster(Console.CursorLeft, Console.CursorTop);
 
             Console.CursorVisible = true;
+
+            // Relax for 2 seconds
+            System.Threading.Thread.Sleep(2000);
 
             // Exit and close shell
             Close();
