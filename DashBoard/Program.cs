@@ -241,7 +241,7 @@ namespace DashBoard
         static void PrintTheMonster(int x, int y)
         {
             string parts = "(° °)" +  "#" +   // we use # to split string
-                             "~   ~" + "#" +   // 
+                             " ~x~ " + "#" +   // 
                              " ] [ " + "#"    ;
 
             var monster = parts.Split('#');
@@ -301,13 +301,63 @@ namespace DashBoard
 
         }
 
+        // The Background
+        // store the background in 2-dimensional char array
+        static string[] background = new string[y-1];
+
+        // create a new ForegroundColor
+        static ConsoleColor darkgreen = ConsoleColor.DarkGreen;
+
+
         // The Game
         static void Main(string[] args)
         {
             InitGame();
             PrintHead();
-            Center();
 
+            // draw a background
+            // random o,O and a lot of ' ';
+            // Console.SetCursorPosition(0, top);
+
+            Random random = new Random();
+            string selection = "o O Q    ";
+            int number;
+            char symbol;
+
+            // store the default ForegroundColor
+            ConsoleColor oldcolor = Console.ForegroundColor;
+
+            // print background in DarkGreen
+            Console.ForegroundColor = darkgreen;
+
+            // we go from line top to window.height -1
+            for (int i = top; i < y-1; i++)
+            {
+                string one_line = "";
+                // we go from left to right
+                for (int j = 0; j < x; j++)
+                {
+                    // drag an int, because Random is always int
+                    number = random.Next(0, selection.Length - 1);
+                    
+                    // pull the symbol out of the selection
+                    symbol = (char)selection[number];
+
+                    // print symbol 
+                    Console.SetCursorPosition(j, i);
+                    Console.Write(symbol);
+
+                    // and store it for recovery after monster printing
+                    one_line += symbol;
+                    background[i] = one_line;
+                    
+                }
+            }
+
+            // Set back the ForegroundColor
+            Console.ForegroundColor = oldcolor;
+
+            Center();
 
 
             Move();
