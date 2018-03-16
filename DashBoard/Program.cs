@@ -12,6 +12,8 @@ namespace DashBoard
         static int x = 101;
         static int y = 30;
 
+        static int top = 0;
+
         // set screen to default
         static void InitGame()
         {
@@ -70,6 +72,11 @@ namespace DashBoard
             String drawline = String.Format("{0}{1,100}", symbol, symbol.PadLeft(100, filler));
             Console.SetCursorPosition(0, line);
             Console.Write(drawline);
+
+            // reduce playgound
+            top += 1;
+
+            
         }
 
         //  print a box 
@@ -81,6 +88,9 @@ namespace DashBoard
             String drawbox = String.Format("{0}{0,100}",symbol);
             Console.SetCursorPosition(0, line);
             Console.Write(drawbox);
+
+            // reduce playground
+            top += 1;
         }
 
         //  print foo at the center of a line, 
@@ -151,8 +161,47 @@ namespace DashBoard
                 {
                     case ConsoleKey.W:
                         {
-                            Console.CursorTop = Console.CursorTop - 1;
-                            // Console.CursorLeft -= 1;
+                            int pos_y = Console.CursorTop;
+                            // if we are not at the top:
+                            // top is set when board is created;
+                            if (pos_y > top)
+                            {
+                                Console.CursorTop = Console.CursorTop - 1;
+                            }
+                            break;
+                        }
+                    case ConsoleKey.D:
+                        {
+                            // remember where we actualy are
+                            int pos_x = Console.CursorLeft;
+                            // if we are not at the outer right
+                            // move right;
+                            if (pos_x < x-1)
+                            {
+                                Console.CursorLeft += 1;
+                            }
+                            break;
+                        }
+                    case ConsoleKey.X:
+                        {
+                            // remember where we are
+                            int pos_y = Console.CursorTop;
+                            // if we are not at bottom:
+                            if (pos_y < y-1)
+                            {
+                                Console.CursorTop += 1;
+                            }
+                            break;
+                        }
+                    case ConsoleKey.A:
+                        {
+                            // remember where we are
+                            int pos_x = Console.CursorLeft;
+                            // if we are not at the outer left
+                            if (pos_x > 0)
+                            {
+                                Console.CursorLeft -= 1;
+                            }
                             break;
                         }
                     case ConsoleKey.L:
@@ -160,9 +209,14 @@ namespace DashBoard
                             play = false;
                             break;
                         }
-                    default:
+                    case ConsoleKey.H:
                         {
                             Center();
+                            break;
+                        }
+                    default:
+                        {
+                            // Center();
                             break;
                         }
 
