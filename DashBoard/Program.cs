@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace DashBoard
 {
@@ -393,6 +393,8 @@ namespace DashBoard
 
         }
 
+
+
         // The Game
         static void Main(string[] args)
         {
@@ -403,6 +405,31 @@ namespace DashBoard
 
             Center();
 
+
+            var autoEvent = new AutoResetEvent(false);
+            int invokeCount = 0;
+            int maxCount = 10;
+            string counter = "";
+
+
+            void PrintTime(Object stateInfo)
+            {
+                // AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
+                autoEvent = (AutoResetEvent)stateInfo;
+                Center();
+                ++invokeCount;
+                counter = invokeCount.ToString();
+                Console.Write("Hello..." + counter);
+
+                if (invokeCount == maxCount)
+                {
+                    invokeCount = 0;
+                    autoEvent.Set();
+                }
+            }
+
+            var mytimer = new Timer(PrintTime, autoEvent, 1000, 250);
+            autoEvent.WaitOne();
             // hide the cursor
             Console.CursorVisible = false;
 
