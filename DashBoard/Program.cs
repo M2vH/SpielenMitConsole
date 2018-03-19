@@ -149,10 +149,18 @@ namespace DashBoard
             bool play = true;
             do
             {
+                // store the actual cursor position;
+                int pos_y = Console.CursorTop;
+                int pos_x = Console.CursorLeft;
+
+                // we need a monster;
+                PrintTheMonster(pos_x, pos_y);
+
                 ConsoleKeyInfo key;
                 key = Console.ReadKey(true);
                 //char move = Convert.ToChar(key);
                 //Console.Write(key.Key);
+
                 switch (key.Key)
                 {
                     // monster size is x = 5, y = 3
@@ -163,45 +171,42 @@ namespace DashBoard
                     // bottom = y - 1 - 1;  // -1 for the monster size, -1 for the excepiton
                     case ConsoleKey.W:
                         {
-                            int pos_y = Console.CursorTop;
                             // if we are not at the top:
-                            // top is set when board is created;
+                            // ( ! top is set when board is created !);
                             if (pos_y > top +1)    
                             {
+                                HideTheMonster(pos_x, pos_y);
                                 Console.CursorTop = Console.CursorTop - 1;
                             }
                             break;
                         }
                     case ConsoleKey.D:
                         {
-                            // remember where we actualy are
-                            int pos_x = Console.CursorLeft;
                             // if we are not at the outer right
                             // move right;
                             if (pos_x < x - 4)
                             {
+                                HideTheMonster(pos_x, pos_y);
                                 Console.CursorLeft += 1;
                             }
                             break;
                         }
                     case ConsoleKey.X:
                         {
-                            // remember where we are
-                            int pos_y = Console.CursorTop;
                             // if we are not at bottom:
-                            if (pos_y < y - 2)
+                            if (pos_y < y - 3)
                             {
+                                HideTheMonster(pos_x, pos_y);
                                 Console.CursorTop += 1;
                             }
                             break;
                         }
                     case ConsoleKey.A:
                         {
-                            // remember where we are
-                            int pos_x = Console.CursorLeft;
                             // if we are not at the outer left
                             if (pos_x > 2)
                             {
+                                HideTheMonster(pos_x, pos_y);
                                 Console.CursorLeft -= 1;
                             }
                             break;
@@ -359,7 +364,7 @@ namespace DashBoard
             // print background in DarkGreen
             Console.ForegroundColor = darkgreen;
 
-            // we go from line top to window.height -1
+            // we go from line top to window.height ( -1 ? )
             for (int i = top; i < y - 1; i++)
             {
                 string one_line = "";
@@ -398,21 +403,12 @@ namespace DashBoard
 
             Center();
 
-
-            Move();
-
             // hide the cursor
             Console.CursorVisible = false;
 
-            // Display a monster...
-            PrintTheMonster(Console.CursorLeft, Console.CursorTop);
+            Move();
 
-            // ...for 2 seconds.
-            System.Threading.Thread.Sleep(2000);
-
-            // Hide the monster (overwrite with space)
-            HideTheMonster(Console.CursorLeft, Console.CursorTop);
-
+            // show the cursor;
             Console.CursorVisible = true;
 
             // Relax for 2 seconds
