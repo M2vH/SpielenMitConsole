@@ -412,7 +412,7 @@ namespace DashBoard
             //  Put counter in his own Thread
 
             //  
-            var autoEvent = new AutoResetEvent(false);
+            var autoEvent = new AutoResetEvent(true);
 
             //  init invokeCount;
             int invokeCount = 0;
@@ -424,13 +424,12 @@ namespace DashBoard
             {
                 AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
 
-                CenterText(2, "Hello... " + (++invokeCount).ToString() ) ;
+                CenterText(2, "Hello...        " + (++invokeCount).ToString() ) ;
                     if (invokeCount == maxCount)
                     {
                         secondAuto.Set();
                         KillTimer();
                     }
-                //}
 			}
 
             void KillTimer()
