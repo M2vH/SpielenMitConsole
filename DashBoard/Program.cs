@@ -240,9 +240,9 @@ namespace DashBoard
             // set Cursor position to middle of Monster
         static void PrintTheMonster(int pos_x, int pos_y)
         {
-            string parts = "(° °)" +  "#" +   // we use # to split string
-                             " ~x~ " + "#" +   // 
-                             " ] [ " + "#"    ;
+            string parts = "(° °)" + "#" +   // we use # to split string
+                           " ~x~ " + "#" +   // 
+                           " ] [ " + "#"    ;
 
             var monster = parts.Split('#');
             // set position of cursor after every printed part of monster
@@ -272,20 +272,28 @@ namespace DashBoard
         // Hide the Monster
         static void HideTheMonster(int pos_x, int pos_y)
         {
+            // store upper left corner of monster
             int new_x = pos_x - 2;
             int new_y = pos_y - 1;
 
+            // place to store the background
             string monster_string = "";
 
+            // get the chars out of the background array
             for (int j = 0; j < 3; j++)
             {
                 for (int i = 0; i < 5; i++)
                 {
+                    // build the string
+                    // get the corresponding char
                     monster_string += background[new_y + j][new_x + i];
                 }
+                // add the delimeter;
+                // we use it like a newline later
                 monster_string += "#";
             }
 
+            // put it in the old monster printing function
             string parts = monster_string;
 
             //string parts = "     " + "#" +   // we use # to split string
@@ -337,7 +345,7 @@ namespace DashBoard
         static void DrawBackground()
         {
             // draw a background
-            // random o,O and a lot of ' ';
+            // random o, O, Q and a lot of ' ';
             // Console.SetCursorPosition(0, top);
 
             Random random = new Random();
@@ -368,7 +376,7 @@ namespace DashBoard
                     Console.SetCursorPosition(j, i);
                     Console.Write(symbol);
 
-                    // and store it for recovery after monster printing
+                    // and store it for recovery when hiding a monster
                     one_line += symbol;
                     background[i] = one_line;
 
