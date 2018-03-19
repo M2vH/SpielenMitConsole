@@ -394,7 +394,7 @@ namespace DashBoard
         }
 
 
-
+        static Timer mytimer;
         // The Game
         static void Main(string[] args)
         {
@@ -404,32 +404,43 @@ namespace DashBoard
             DrawBackground();
 
             Center();
-
-
-            var autoEvent = new AutoResetEvent(false);
+            var autoEvent = new AutoResetEvent(true);
             int invokeCount = 0;
-            int maxCount = 10;
-            string counter = "";
 
+            // we run for sixty seconds;
+            int maxCount = 60;
+            // string counter = "";
 
             void PrintTime(Object stateInfo)
             {
-                // AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
-                autoEvent = (AutoResetEvent)stateInfo;
-                Center();
-                ++invokeCount;
-                counter = invokeCount.ToString();
-                Console.Write("Hello..." + counter);
+                AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
+                //lock (mylock)
+                //{
+                // Center();
+                // ++invokeCount;
+                // counter = invokeCount.ToString();
+                // Console.Write("Hello...{0,-2}", (++invokeCount).ToString());
 
-                if (invokeCount == maxCount)
-                {
-                    invokeCount = 0;
-                    autoEvent.Set();
-                }
+                CenterText(2, "Hello... " + (++invokeCount).ToString() ) ;
+                    if (invokeCount == maxCount)
+                    {
+                        secondAuto.Set();
+                        KillTimer();
+                    }
+                //}
+			}
+
+            void KillTimer()
+            {
+                mytimer.Dispose();
             }
 
-            var mytimer = new Timer(PrintTime, autoEvent, 1000, 250);
+            mytimer = new Timer(PrintTime, autoEvent, 1000, 1000);
+
             autoEvent.WaitOne();
+            // mytimer.Dispose();
+            
+            
             // hide the cursor
             Console.CursorVisible = false;
 
@@ -439,7 +450,7 @@ namespace DashBoard
             Console.CursorVisible = true;
 
             // Relax for 2 seconds
-            System.Threading.Thread.Sleep(2000);
+            Thread.Sleep(2000);
 
             // Exit and close shell
             Close();
