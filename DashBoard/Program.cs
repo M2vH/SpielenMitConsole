@@ -404,22 +404,25 @@ namespace DashBoard
             DrawBackground();
 
             Center();
-            var autoEvent = new AutoResetEvent(true);
+            // hide the cursor
+            Console.CursorVisible = false;
+
+            //  * We start a counter *
+            //  * ToDo *
+            //  Put counter in his own Thread
+
+            //  
+            var autoEvent = new AutoResetEvent(false);
+
+            //  init invokeCount;
             int invokeCount = 0;
 
             // we run for sixty seconds;
             int maxCount = 60;
-            // string counter = "";
 
             void PrintTime(Object stateInfo)
             {
                 AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
-                //lock (mylock)
-                //{
-                // Center();
-                // ++invokeCount;
-                // counter = invokeCount.ToString();
-                // Console.Write("Hello...{0,-2}", (++invokeCount).ToString());
 
                 CenterText(2, "Hello... " + (++invokeCount).ToString() ) ;
                     if (invokeCount == maxCount)
@@ -435,15 +438,16 @@ namespace DashBoard
                 mytimer.Dispose();
             }
 
+            // *alt*
+            //  second param <autoevent>
             mytimer = new Timer(PrintTime, autoEvent, 1000, 1000);
 
+            // 
             autoEvent.WaitOne();
-            // mytimer.Dispose();
-            
-            
-            // hide the cursor
-            Console.CursorVisible = false;
 
+            // Thread movingThread = new Thread(Move);
+            // movingThread.Start();
+            // movingThread.Abort();
             Move();
 
             // show the cursor;
