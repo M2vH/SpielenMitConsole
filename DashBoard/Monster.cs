@@ -1,0 +1,128 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DashBoard
+{
+    struct Monster
+    {
+        
+        
+        // store top left corner of monster
+        int start_x, start_y;
+        
+        // store actual position of monster
+        public int pos_x, pos_y;
+
+        // store name to personalize monster
+        public string name;
+
+        // store the symbols to draw the monster 
+        public string[] monster;
+
+        public void PrintMonster(int x, int y)
+        {
+            // store aktual position of monster
+            pos_x = x;
+            pos_y = y;
+            // set cursor to top left corner of monster
+            start_x = x - 2;
+            start_y = y - 1;
+
+            lock (Program.printlock)
+            {
+
+                // [1] printing the head
+                //      set cursor to start_x, start_y
+                Console.SetCursorPosition(start_x, start_y);
+                //      write the head
+                Console.Write(monster[0]);
+
+                // [2] printing the arms
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
+                //      print arms
+                Console.Write(monster[1]);
+
+                // [3] printing the legs
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
+                //      print legs
+                Console.Write(monster[2]);
+
+                // [4] set cursor position back to params
+                Console.SetCursorPosition(pos_x, pos_y);
+            }
+
+        }
+
+        public void HideMonster(int x, int y)
+        {
+            // set cursor to top left corner of monster
+            start_x = x - 2;
+            start_y = y - 1;
+
+            string monster_string = "";
+
+            // get the chars out of the background array
+            for (int j = 0; j < 3; j++)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    // build the string
+                    // get the corresponding char
+                    monster_string += Program.background[start_y + j][start_x + i];
+                }
+                // add the delimeter;
+                // we use it like a newline later
+                monster_string += "#";
+            }
+
+            // put it in the old monster printing function
+            string parts = monster_string;
+
+            //string parts = "     " + "#" +   // we use # to split string
+            //                 "     " + "#" +   // 
+            //                 "     " + "#";
+
+            var blanc_bg = parts.Split('#');
+            // set position of cursor after every printed part of monster
+            // params are the middle of the monster
+            // Set cursor to background color
+
+            // [0] set background color;
+            //      store default color;
+            ConsoleColor color_backup = Console.ForegroundColor;
+            Console.ForegroundColor = Program.darkgreen;
+
+            lock (Program.printlock)
+            {
+
+                // [1] printing the head
+                Console.SetCursorPosition(pos_x - 2, pos_y - 1);
+                Console.Write(blanc_bg[0]);
+
+                // [2] printing the arms
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
+                //      print arms
+                Console.Write(blanc_bg[1]);
+
+                // [3] printing the legs
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
+                //      print legs
+                Console.Write(blanc_bg[2]);
+
+                // [4] set cursor position back to params
+                Console.SetCursorPosition(pos_x, pos_y);
+
+                // [5] set CursorColor back to default
+                Console.ForegroundColor = color_backup;
+            }
+        }
+    }
+}
+

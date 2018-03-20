@@ -9,12 +9,12 @@ namespace DashBoard
     class Program
     {
         // Set default screen params
-        static int x = 101;
-        static int y = 30;
+        public static int x = 101;
+        public static int y = 30;
 
-        static int top = 0;
+        public static int top = 0;
 
-        static object printlock = new object();
+        public static object printlock = new object();
 
         // set screen to default
         static void InitGame()
@@ -109,7 +109,7 @@ namespace DashBoard
             }
         }
 
-        // print the board
+        // print the head of the board
         static void PrintHead()
         {
             //  Define some strings
@@ -152,88 +152,123 @@ namespace DashBoard
         // ! only cursor is moving !
         static void Move()
         {
+            // Instatiate a monster;
+            Monster monster_1 = new Monster
+            {
+                //  fill the monster;
+                monster = new string[3],
+                
+                //  set position of monster
+                //  we use cursor, because its set to center
+                pos_x = Console.CursorLeft,
+                pos_y = Console.CursorTop
+            };
+            monster_1.monster[0] = "(° °)";
+            monster_1.monster[1] = " ~*~ ";
+            monster_1.monster[2] = " ] [ ";
+
+
+
             bool play = true;
             do
             {
                 // store the actual cursor position;
-                int pos_y = Console.CursorTop;
-                int pos_x = Console.CursorLeft;
+                //  !   This will cause Error,
+                //  !   when Timer is ready at this moment.
+                // int pos_y = Console.CursorTop;
+                // int pos_x = Console.CursorLeft;
 
-                // we need a monster;
-                PrintTheMonster(pos_x, pos_y);
+                //  we need a monster;
+                //  PrintTheMonster(pos_x, pos_y);
+
+                monster_1.PrintMonster(monster_1.pos_x, monster_1.pos_y);
 
                 ConsoleKeyInfo key;
                 key = Console.ReadKey(true);
                 //char move = Convert.ToChar(key);
                 //Console.Write(key.Key);
 
-                switch (key.Key)
+                lock (printlock)
                 {
-                    // monster size is x = 5, y = 3
-                    // min/max cursor positions are:
-                    // left = 2;            // monster left is 2 pixel from middle
-                    // right = x - 2 - 2;   // -2 for the monster size, -2 for the OutOfRange Exception
-                    // upper = int top + 1;     // top is set when dashboard is printed;
-                    // bottom = y - 1 - 1;  // -1 for the monster size, -1 for the excepiton
-                    case ConsoleKey.W:
-                        {
-                            // if we are not at the top:
-                            // ( ! top is set when board is created !);
-                            if (pos_y > top +1)    
+                    switch (key.Key)
+                    {
+                        // monster size is x = 5, y = 3
+                        // min/max cursor positions are:
+                        // left = 2;            // monster left is 2 pixel from middle
+                        // right = x - 2 - 2;   // -2 for the monster size, -2 for the OutOfRange Exception
+                        // upper = int top + 1;     // top is set when dashboard is printed;
+                        // bottom = y - 1 - 1;  // -1 for the monster size, -1 for the excepiton
+                        case ConsoleKey.W:
                             {
-                                HideTheMonster(pos_x, pos_y);
-                                Console.CursorTop = Console.CursorTop - 1;
+                                // if we are not at the top:
+                                // ( ! top is set when board is created !);
+                                if (monster_1.pos_y > top + 1)
+                                {
+                                    HideTheMonster(monster_1.pos_x, monster_1.pos_y);
+                                    // Console.CursorTop = Console.CursorTop - 1;
+                                    monster_1.pos_y--;
+                                }
+                                break;
                             }
-                            break;
-                        }
-                    case ConsoleKey.D:
-                        {
-                            // if we are not at the outer right
-                            // move right;
-                            if (pos_x < x - 4)
+                        case ConsoleKey.D:
                             {
-                                HideTheMonster(pos_x, pos_y);
-                                Console.CursorLeft += 1;
+                                // if we are not at the outer right
+                                // move right;
+                                if (monster_1.pos_x < x - 4)
+                                {
+                                    HideTheMonster(monster_1.pos_x, monster_1.pos_y);
+                                    // Console.CursorLeft += 1;
+                                    monster_1.pos_x++;
+                                }
+                                break;
                             }
-                            break;
-                        }
-                    case ConsoleKey.X:
-                        {
-                            // if we are not at bottom:
-                            if (pos_y < y - 3)
+                        case ConsoleKey.X:
                             {
-                                HideTheMonster(pos_x, pos_y);
-                                Console.CursorTop += 1;
+                                // if we are not at bottom:
+                                if (monster_1.pos_y < y - 3)
+                                {
+                                    HideTheMonster(monster_1.pos_x, monster_1.pos_y);
+                                    // Console.CursorTop += 1;
+                                    monster_1.pos_y++;
+                                }
+                                break;
                             }
-                            break;
-                        }
-                    case ConsoleKey.A:
-                        {
-                            // if we are not at the outer left
-                            if (pos_x > 2)
+                        case ConsoleKey.A:
                             {
-                                HideTheMonster(pos_x, pos_y);
-                                Console.CursorLeft -= 1;
+                                // if we are not at the outer left
+                                if (monster_1.pos_x > 2)
+                                {
+                                    HideTheMonster(monster_1.pos_x, monster_1.pos_y);
+                                    // Console.CursorLeft -= 1;
+                                    monster_1.pos_x--;
+                                }
+                                break;
                             }
-                            break;
-                        }
-                    case ConsoleKey.L:
-                        {
-                            play = false;
-                            break;
-                        }
-                    case ConsoleKey.H:
-                        {
-                            Center();
-                            break;
-                        }
-                    default:
-                        {
-                            // Center();
-                            break;
-                        }
+                        case ConsoleKey.L:
+                            {
+                                play = false;
+                                break;
+                            }
+                        case ConsoleKey.H:
+                            {
+                                // we lock this section
+                                lock (printlock)
+                                {
+                                    Center();
+                                    monster_1.pos_x = Console.CursorLeft;
+                                    monster_1.pos_y = Console.CursorTop;
+                                }
+                                    break;
+                            }
+                        default:
+                            {
+                                // Center();
+                                break;
+                            }
 
+                    }
                 }
+
             } while (play);
         }
 
@@ -247,8 +282,7 @@ namespace DashBoard
         
         */
 
-            // !! ToDo
-            // set Cursor position to middle of Monster
+        // Print a Monster
         static void PrintTheMonster(int pos_x, int pos_y)
         {
             string parts = "(° °)" + "#" +   // we use # to split string
@@ -281,6 +315,9 @@ namespace DashBoard
                 Console.SetCursorPosition(pos_x, pos_y);
             }
         }
+
+        // *! ToDo !*
+        //  Instantiate a Monster
 
         // Hide the Monster
         static void HideTheMonster(int pos_x, int pos_y)
@@ -352,11 +389,15 @@ namespace DashBoard
 
         // The Background
         // store the background in 2-dimensional char array
-        static string[] background = new string[y-1];
+        public static string[] background = new string[y-1];
 
         // create a new ForegroundColor
-        static ConsoleColor darkgreen = ConsoleColor.DarkGreen;
+        public static ConsoleColor darkgreen = ConsoleColor.DarkGreen;
 
+        /* ! ToDo ! */
+        //  create a background struct
+        //  to store the colors
+        
         // Draw a random background
         static void DrawBackground()
         {
