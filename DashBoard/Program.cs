@@ -14,6 +14,8 @@ namespace DashBoard
 
         static int top = 0;
 
+        static object printlock = new object();
+
         // set screen to default
         static void InitGame()
         {
@@ -99,8 +101,12 @@ namespace DashBoard
         static void CenterText(int line, string foo)
         {
             int start = (x - foo.Length) / 2;
-            Console.SetCursorPosition(start, line);
-            Console.Write(foo);
+
+            lock (printlock)
+            {
+                Console.SetCursorPosition(start, line);
+                Console.Write(foo);
+            }
         }
 
         // print the board
@@ -253,25 +259,27 @@ namespace DashBoard
             // set position of cursor after every printed part of monster
             // params are the middle of the monster
 
-            // [1] printing the head
-            Console.SetCursorPosition(pos_x - 2, pos_y - 1);
-            Console.Write(monster[0]);
+            lock (printlock)
+            {
+                // [1] printing the head
+                Console.SetCursorPosition(pos_x - 2, pos_y - 1);
+                Console.Write(monster[0]);
 
-            // [2] printing the arms
-            //      set cursor
-            Console.SetCursorPosition(Console.CursorLeft - monster[0].Length,Console.CursorTop + 1);
-            //      print arms
-            Console.Write(monster[1]);
+                // [2] printing the arms
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
+                //      print arms
+                Console.Write(monster[1]);
 
-            // [3] printing the legs
-            //      set cursor
-            Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
-            //      print legs
-            Console.Write(monster[2]);
+                // [3] printing the legs
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
+                //      print legs
+                Console.Write(monster[2]);
 
-            // [4] set cursor position back to params
-            Console.SetCursorPosition(pos_x,pos_y);
-
+                // [4] set cursor position back to params
+                Console.SetCursorPosition(pos_x, pos_y);
+            }
         }
 
         // Hide the Monster
@@ -315,28 +323,31 @@ namespace DashBoard
             ConsoleColor color_backup = Console.ForegroundColor; 
             Console.ForegroundColor = darkgreen;
 
-            // [1] printing the head
-            Console.SetCursorPosition(pos_x - 2, pos_y - 1);
-            Console.Write(blanc_bg[0]);
+            lock (printlock)
+            {
 
-            // [2] printing the arms
-            //      set cursor
-            Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
-            //      print arms
-            Console.Write(blanc_bg[1]);
+                // [1] printing the head
+                Console.SetCursorPosition(pos_x - 2, pos_y - 1);
+                Console.Write(blanc_bg[0]);
 
-            // [3] printing the legs
-            //      set cursor
-            Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
-            //      print legs
-            Console.Write(blanc_bg[2]);
+                // [2] printing the arms
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
+                //      print arms
+                Console.Write(blanc_bg[1]);
 
-            // [4] set cursor position back to params
-            Console.SetCursorPosition(pos_x, pos_y);
+                // [3] printing the legs
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
+                //      print legs
+                Console.Write(blanc_bg[2]);
 
-            // [5] set CursorColor back to default
-            Console.ForegroundColor = color_backup;
+                // [4] set cursor position back to params
+                Console.SetCursorPosition(pos_x, pos_y);
 
+                // [5] set CursorColor back to default
+                Console.ForegroundColor = color_backup;
+            }
         }
 
         // The Background
@@ -418,14 +429,36 @@ namespace DashBoard
             int invokeCount = 0;
 
             // we run for sixty seconds;
-            int maxCount = 60;
+            int maxCount = 120;
+
+            // we display remaining time
+            int remainTime = maxCount;
+
+            //TimeSpan startTime = TimeSpan.FromSeconds(maxCount);
+            //TimeSpan remainTime, playTime;
 
             void PrintTime(Object stateInfo)
             {
-                AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
+                ++invokeCount;
+                --remainTime;    
+                
+                // String timeString = String.Format("{0:D2}m :{1:D2}s", remainTime.Minutes, remainTime.Seconds);
+                // we print the timer with CenterText(int line, string text);
 
-                CenterText(2, "Hello...        " + (++invokeCount).ToString() ) ;
-                    if (invokeCount == maxCount)
+                // String timeText = String.Format("{0}{1,-15}", "Time remaining", timeString);
+
+                String timeText = String.Format("{0}{1,5} : {2}", "Time remaining", 
+                                            arg1: (remainTime / 60).ToString(), 
+                                            arg2: (remainTime % 60).ToString());
+                
+                // CenterText(2, "Hello...        " + (++invokeCount).ToString() ) ;
+
+                CenterText(2, timeText);
+
+                // We start a timer thread
+                AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
+                
+                if (invokeCount == maxCount)
                     {
                         secondAuto.Set();
                         KillTimer();
@@ -439,14 +472,12 @@ namespace DashBoard
 
             // *alt*
             //  second param <autoevent>
+
             mytimer = new Timer(PrintTime, autoEvent, 1000, 1000);
 
-            // 
             autoEvent.WaitOne();
 
-            // Thread movingThread = new Thread(Move);
-            // movingThread.Start();
-            // movingThread.Abort();
+
             Move();
 
             // show the cursor;
