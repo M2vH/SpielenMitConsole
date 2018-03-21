@@ -153,19 +153,26 @@ namespace DashBoard
         static void Move()
         {
             // Instatiate a monster;
-            Monster monster_1 = new Monster
+            Monster player = new Monster
             {
                 //  fill the monster;
-                monster = new string[3],
-                
+                parts = new string[3],
+                name = "The fast Goblin",
+
+                //  *! works !*
                 //  set position of monster
                 //  we use cursor, because its set to center
-                pos_x = Console.CursorLeft,
-                pos_y = Console.CursorTop
+                //  pos_x = Console.CursorLeft,
+                //  pos_y = Console.CursorTop
+
+                //  position user_monster in left half
+                pos_x = x / 3,
+                pos_y = (y+top) / 2
+
             };
-            monster_1.monster[0] = "(° °)";
-            monster_1.monster[1] = " ~*~ ";
-            monster_1.monster[2] = " ] [ ";
+            player.parts[0] = "(° °)";
+            player.parts[1] = " ~*~ ";
+            player.parts[2] = " ] [ ";
 
 
 
@@ -181,7 +188,7 @@ namespace DashBoard
                 //  we need a monster;
                 //  PrintTheMonster(pos_x, pos_y);
 
-                monster_1.PrintMonster(monster_1.pos_x, monster_1.pos_y);
+                player.PrintMonster(player.pos_x, player.pos_y);
 
                 ConsoleKeyInfo key;
                 key = Console.ReadKey(true);
@@ -202,11 +209,11 @@ namespace DashBoard
                             {
                                 // if we are not at the top:
                                 // ( ! top is set when board is created !);
-                                if (monster_1.pos_y > top + 1)
+                                if (player.pos_y > top + 1)
                                 {
-                                    HideTheMonster(monster_1.pos_x, monster_1.pos_y);
+                                    HideTheMonster(player.pos_x, player.pos_y);
                                     // Console.CursorTop = Console.CursorTop - 1;
-                                    monster_1.pos_y--;
+                                    player.pos_y--;
                                 }
                                 break;
                             }
@@ -214,33 +221,33 @@ namespace DashBoard
                             {
                                 // if we are not at the outer right
                                 // move right;
-                                if (monster_1.pos_x < x - 4)
+                                if (player.pos_x < x - 4)
                                 {
-                                    HideTheMonster(monster_1.pos_x, monster_1.pos_y);
+                                    HideTheMonster(player.pos_x, player.pos_y);
                                     // Console.CursorLeft += 1;
-                                    monster_1.pos_x++;
+                                    player.pos_x++;
                                 }
                                 break;
                             }
                         case ConsoleKey.X:
                             {
                                 // if we are not at bottom:
-                                if (monster_1.pos_y < y - 3)
+                                if (player.pos_y < y - 3)
                                 {
-                                    HideTheMonster(monster_1.pos_x, monster_1.pos_y);
+                                    HideTheMonster(player.pos_x, player.pos_y);
                                     // Console.CursorTop += 1;
-                                    monster_1.pos_y++;
+                                    player.pos_y++;
                                 }
                                 break;
                             }
                         case ConsoleKey.A:
                             {
                                 // if we are not at the outer left
-                                if (monster_1.pos_x > 2)
+                                if (player.pos_x > 2)
                                 {
-                                    HideTheMonster(monster_1.pos_x, monster_1.pos_y);
+                                    HideTheMonster(player.pos_x, player.pos_y);
                                     // Console.CursorLeft -= 1;
-                                    monster_1.pos_x--;
+                                    player.pos_x--;
                                 }
                                 break;
                             }
@@ -255,8 +262,8 @@ namespace DashBoard
                                 lock (printlock)
                                 {
                                     Center();
-                                    monster_1.pos_x = Console.CursorLeft;
-                                    monster_1.pos_y = Console.CursorTop;
+                                    player.pos_x = Console.CursorLeft;
+                                    player.pos_y = Console.CursorTop;
                                 }
                                     break;
                             }
@@ -267,7 +274,7 @@ namespace DashBoard
                             }
 
                     }
-                }
+                } // end of lock
 
             } while (play);
         }
@@ -276,13 +283,14 @@ namespace DashBoard
         // 
         /*
         
-        (°°)
-        /  \
-         ][ 
+        (° °)   {0.0}
+         ~*~    o-U-o
+         ] [     / \
         
         */
 
         // Print a Monster
+        /*
         static void PrintTheMonster(int pos_x, int pos_y)
         {
             string parts = "(° °)" + "#" +   // we use # to split string
@@ -315,11 +323,10 @@ namespace DashBoard
                 Console.SetCursorPosition(pos_x, pos_y);
             }
         }
-
-        // *! ToDo !*
-        //  Instantiate a Monster
+        */
 
         // Hide the Monster
+        
         static void HideTheMonster(int pos_x, int pos_y)
         {
             // store upper left corner of monster
@@ -386,6 +393,7 @@ namespace DashBoard
                 Console.ForegroundColor = color_backup;
             }
         }
+        
 
         // The Background
         // store the background in 2-dimensional char array

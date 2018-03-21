@@ -20,8 +20,10 @@ namespace DashBoard
         public string name;
 
         // store the symbols to draw the monster 
-        public string[] monster;
+        public string[] parts;
 
+        //  print a monster at pos x,y
+        //  lock the printing of a Monster 
         public void PrintMonster(int x, int y)
         {
             // store aktual position of monster
@@ -38,19 +40,19 @@ namespace DashBoard
                 //      set cursor to start_x, start_y
                 Console.SetCursorPosition(start_x, start_y);
                 //      write the head
-                Console.Write(monster[0]);
+                Console.Write(parts[0]);
 
                 // [2] printing the arms
                 //      set cursor
-                Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
+                Console.SetCursorPosition(Console.CursorLeft - parts[0].Length, Console.CursorTop + 1);
                 //      print arms
-                Console.Write(monster[1]);
+                Console.Write(parts[1]);
 
                 // [3] printing the legs
                 //      set cursor
-                Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
+                Console.SetCursorPosition(Console.CursorLeft - parts[0].Length, Console.CursorTop + 1);
                 //      print legs
-                Console.Write(monster[2]);
+                Console.Write(parts[2]);
 
                 // [4] set cursor position back to params
                 Console.SetCursorPosition(pos_x, pos_y);
@@ -58,6 +60,9 @@ namespace DashBoard
 
         }
 
+        //  hide the monster
+        //  recover the background
+        //  lock the printing
         public void HideMonster(int x, int y)
         {
             // set cursor to top left corner of monster
