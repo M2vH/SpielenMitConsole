@@ -205,7 +205,8 @@ namespace DashBoard
                         // right = x - 2 - 2;   // -2 for the monster size, -2 for the OutOfRange Exception
                         // upper = int top + 1;     // top is set when dashboard is printed;
                         // bottom = y - 1 - 1;  // -1 for the monster size, -1 for the excepiton
-                        case ConsoleKey.W:
+                        case ConsoleKey.W :
+                        case ConsoleKey.UpArrow:
                             {
                                 // if we are not at the top:
                                 // ( ! top is set when board is created !);
@@ -218,6 +219,7 @@ namespace DashBoard
                                 break;
                             }
                         case ConsoleKey.D:
+                        case ConsoleKey.RightArrow:
                             {
                                 // if we are not at the outer right
                                 // move right;
@@ -229,7 +231,8 @@ namespace DashBoard
                                 }
                                 break;
                             }
-                        case ConsoleKey.X:
+                        case ConsoleKey.S:
+                        case ConsoleKey.DownArrow:
                             {
                                 // if we are not at bottom:
                                 if (player.pos_y < y - 3)
@@ -241,6 +244,7 @@ namespace DashBoard
                                 break;
                             }
                         case ConsoleKey.A:
+                        case ConsoleKey.LeftArrow:
                             {
                                 // if we are not at the outer left
                                 if (player.pos_x > 2)
@@ -261,6 +265,7 @@ namespace DashBoard
                                 // we lock this section
                                 lock (printlock)
                                 {
+                                    player.HideMonster(player.pos_x, player.pos_y);
                                     Center();
                                     player.pos_x = Console.CursorLeft;
                                     player.pos_y = Console.CursorTop;
