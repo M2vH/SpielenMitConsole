@@ -22,6 +22,8 @@ namespace DashBoard
         // store the symbols to draw the monster 
         public string[] parts;
 
+        public Design outfit;
+
         //  print a monster at pos x,y
         //  lock the printing of a Monster 
         public void PrintMonster(int x, int y)
@@ -33,9 +35,30 @@ namespace DashBoard
             start_x = x - 2;
             start_y = y - 1;
 
+            /* This is really uneccessary 
+             * 
+             * ToDo: eliminate <string[] parts> 
+             * 
+             * check <Monster player = new Monster()>
+             
+             */
+
+            parts = outfit.designElements;
+
+            // [0] set background color;
+            //      store default color;
+            ConsoleColor color_backup = Console.ForegroundColor;
+
             lock (Program.printlock)
             {
+                // if outfit.designColor is set, (it's not Black)
+                // set ForegroundColor to outfit.designColor;
 
+                if (outfit.designColor != ConsoleColor.Black)
+                {
+                    Console.ForegroundColor = outfit.designColor;
+                }
+                
                 // [1] printing the head
                 //      set cursor to start_x, start_y
                 Console.SetCursorPosition(start_x, start_y);
@@ -56,7 +79,10 @@ namespace DashBoard
 
                 // [4] set cursor position back to params
                 Console.SetCursorPosition(pos_x, pos_y);
-            }
+
+                // [5] set cursorColor back
+                Console.ForegroundColor = color_backup;
+            }  // end of lock
 
         }
 
@@ -100,11 +126,12 @@ namespace DashBoard
             // [0] set background color;
             //      store default color;
             ConsoleColor color_backup = Console.ForegroundColor;
-            Console.ForegroundColor = Program.darkgreen;
 
             lock (Program.printlock)
             {
-
+                // set a new ForegroundColor
+                Console.ForegroundColor = Program.gameBackground;
+                
                 // [1] printing the head
                 Console.SetCursorPosition(pos_x - 2, pos_y - 1);
                 Console.Write(blanc_bg[0]);

@@ -17,14 +17,48 @@ namespace DashBoard
         public static object printlock = new object();
 
         // set screen to default
+        // init 3 different types of monster
+
+        static Design goble, frodo, angry;
+
+
         static void InitGame()
         {
+            //  Console Settings
             Console.Clear();
             Console.WindowWidth = x;
             Console.WindowHeight = y;
             Console.BufferWidth = x;
             Console.BufferHeight = y;
+            Console.BackgroundColor = ConsoleColor.Black;
 
+            //  Monster Designs;
+            /*
+            |   Goble   Frodo   Angry
+            |
+            |   (° °)   {0.0}   [-.-]
+            |    ~*~    o-U-o    _+_ 
+            |    ] [     { }     U U 
+            |
+             */
+
+            goble = new Design {
+                designName = "Goble",
+                designColor = ConsoleColor.White,
+                designElements = new string[] { "(° °)", " ~*~ ", " ] [ " },
+            };
+
+            frodo = new Design {
+                designName = "Frodo",
+                designColor = ConsoleColor.Yellow,
+                designElements = new string[] { "{0.0}", "o-U-o", " { } " },
+            };
+
+            angry = new Design {
+                designName = "Angry",
+                designColor = ConsoleColor.DarkYellow,
+                designElements = new string[] { "[-.-]", " _+_ ", " U U " },
+            };
         }
 
         // move cursor into center
@@ -148,33 +182,79 @@ namespace DashBoard
             DrawLine(4);
         }
 
+        /* Function <Monster>CreateMonster(string head, string body, string legs)
+        // Instantiates a monster with parts as parameter
+        */
+        static Monster CreatePlayer(string _head, string _body, string _legs, string _name)
+        {
+            Monster player = new Monster {
+                parts = new string[3],
+                name = _name,
+                pos_x = x / 3,
+                pos_y = (y + top) / 2,
+            };
+            player.parts[0] = _head;
+            player.parts[1] = _body;
+            player.parts[2] = _legs;
+
+            return player;
+        }
+
+        /*  Function <Monster>CreatePlayer(Design _design, string _name)
+        //  Creates a monster with a given <Design>
+        */
+        static Monster CreatePlayer(Design _design, string _name)
+        {
+            Monster player = new Monster {
+                outfit = _design,
+                name = _name,
+                pos_x = x / 3,
+                pos_y = (y + top) / 2,
+
+            };
+            return player;
+        }
+        
         // make a play
         // ! only cursor is moving !
         static void Move()
         {
-            // Instatiate a monster;
-            Monster player = new Monster
-            {
-                //  fill the monster;
-                parts = new string[3],
-                name = "The fast Goblin",
 
-                //  *! works !*
-                //  set position of monster
-                //  we use cursor, because its set to center
-                //  pos_x = Console.CursorLeft,
-                //  pos_y = Console.CursorTop
+            /* Instantiate a monster;
+            
+            Monster player = CreatePlayer("(° °)", " ~*~ ", " ] [ ", "The fast Goblin");
+            */
 
-                //  position user_monster in left half
-                pos_x = x / 3,
-                pos_y = (y+top) / 2
+            /*  We ceate a monster with an existing design
+             *  
+             */
+            Monster player = CreatePlayer(angry, "Angry");
+ 
+            /*  oldMonsterInit
+             *  
+            //  Monster player = new Monster
+            //  {
+            //        //  fill the monster;
+            //        parts = new string[3],
+            //        name = "The fast Goblin",
 
-            };
-            player.parts[0] = "(° °)";
-            player.parts[1] = " ~*~ ";
-            player.parts[2] = " ] [ ";
+            //    //  *! works !*
+            //    //  set position of monster
+            //    //  we use cursor, because its set to center
+            //    //  pos_x = Console.CursorLeft,
+            //    //  pos_y = Console.CursorTop
 
+            //    //  position user_monster in left half
+            //      pos_x = x / 3,
+            //      pos_y = (y + top) / 2,
 
+            //  };
+
+            //player.parts[0] = "(° °)";
+            //player.parts[1] = " ~*~ ";
+            //player.parts[2] = " ] [ ";
+            //oldMonsterInit
+            */
 
             bool play = true;
             do
@@ -270,7 +350,13 @@ namespace DashBoard
                                     player.pos_x = Console.CursorLeft;
                                     player.pos_y = Console.CursorTop;
                                 }
-                                    break;
+                                break;
+                            }
+                        case ConsoleKey.Spacebar:
+                            {
+                                // let the monster fight;
+                                // ToDo: create a fighting monster*
+                                break;
                             }
                         default:
                             {
@@ -284,15 +370,6 @@ namespace DashBoard
             } while (play);
         }
 
-        // make a monster
-        // 
-        /*
-        
-        (° °)   {0.0}
-         ~*~    o-U-o
-         ] [     / \
-        
-        */
 
         // Print a Monster
         /*
@@ -330,8 +407,9 @@ namespace DashBoard
         }
         */
 
+        /*
         // Hide the Monster
-        
+
         //static void HideTheMonster(int pos_x, int pos_y)
         //{
         //    // store upper left corner of monster
@@ -369,7 +447,7 @@ namespace DashBoard
 
         //    // [0] set background color;
         //    //      store default color;
-        //    ConsoleColor color_backup = Console.ForegroundColor; 
+        //    ConsoleColor color_backup = Console.ForegroundColor;
         //    Console.ForegroundColor = darkgreen;
 
         //    lock (printlock)
@@ -398,19 +476,24 @@ namespace DashBoard
         //        Console.ForegroundColor = color_backup;
         //    }
         //}
-        
+        */
 
+        /* 
         // The Background
         // store the background in 2-dimensional char array
+        */
+
+        // var to store the background in
         public static string[] background = new string[y-1];
 
-        // create a new ForegroundColor
-        public static ConsoleColor darkgreen = ConsoleColor.DarkGreen;
-
-        /* ! ToDo ! */
-        //  create a background struct
-        //  to store the colors
+        // create a new ForegroundColor for background printing
         
+        public static ConsoleColor gameBackground = ConsoleColor.DarkMagenta;
+
+        /* ToDo create a background struct
+        //  to store the colors
+        */
+
         // Draw a random background
         static void DrawBackground()
         {
@@ -419,7 +502,7 @@ namespace DashBoard
             // Console.SetCursorPosition(0, top);
 
             Random random = new Random();
-            string selection = "o O Q    ";
+            string selection = ". : ;     ";
             int number;
             char symbol;
 
@@ -427,7 +510,7 @@ namespace DashBoard
             ConsoleColor oldcolor = Console.ForegroundColor;
 
             // print background in DarkGreen
-            Console.ForegroundColor = darkgreen;
+            Console.ForegroundColor = gameBackground;
 
             // we go from line top to window.height ( -1 ? )
             for (int i = top; i < y - 1; i++)
@@ -473,8 +556,9 @@ namespace DashBoard
             Console.CursorVisible = false;
 
             //  * We start a counter *
-            //  * ToDo *
-            //  Put counter in his own Thread
+            //  counter is running in his own thread;
+            //  
+            
 
             //  
             var autoEvent = new AutoResetEvent(true);
