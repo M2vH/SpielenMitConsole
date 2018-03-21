@@ -211,7 +211,7 @@ namespace DashBoard
                                 // ( ! top is set when board is created !);
                                 if (player.pos_y > top + 1)
                                 {
-                                    HideTheMonster(player.pos_x, player.pos_y);
+                                    player.HideMonster(player.pos_x, player.pos_y);
                                     // Console.CursorTop = Console.CursorTop - 1;
                                     player.pos_y--;
                                 }
@@ -223,7 +223,7 @@ namespace DashBoard
                                 // move right;
                                 if (player.pos_x < x - 4)
                                 {
-                                    HideTheMonster(player.pos_x, player.pos_y);
+                                    player.HideMonster(player.pos_x, player.pos_y);
                                     // Console.CursorLeft += 1;
                                     player.pos_x++;
                                 }
@@ -234,7 +234,7 @@ namespace DashBoard
                                 // if we are not at bottom:
                                 if (player.pos_y < y - 3)
                                 {
-                                    HideTheMonster(player.pos_x, player.pos_y);
+                                    player.HideMonster(player.pos_x, player.pos_y);
                                     // Console.CursorTop += 1;
                                     player.pos_y++;
                                 }
@@ -245,7 +245,7 @@ namespace DashBoard
                                 // if we are not at the outer left
                                 if (player.pos_x > 2)
                                 {
-                                    HideTheMonster(player.pos_x, player.pos_y);
+                                    player.HideMonster(player.pos_x, player.pos_y);
                                     // Console.CursorLeft -= 1;
                                     player.pos_x--;
                                 }
@@ -327,72 +327,72 @@ namespace DashBoard
 
         // Hide the Monster
         
-        static void HideTheMonster(int pos_x, int pos_y)
-        {
-            // store upper left corner of monster
-            int new_x = pos_x - 2;
-            int new_y = pos_y - 1;
+        //static void HideTheMonster(int pos_x, int pos_y)
+        //{
+        //    // store upper left corner of monster
+        //    int new_x = pos_x - 2;
+        //    int new_y = pos_y - 1;
 
-            // place to store the background
-            string monster_string = "";
+        //    // place to store the background
+        //    string monster_string = "";
 
-            // get the chars out of the background array
-            for (int j = 0; j < 3; j++)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    // build the string
-                    // get the corresponding char
-                    monster_string += background[new_y + j][new_x + i];
-                }
-                // add the delimeter;
-                // we use it like a newline later
-                monster_string += "#";
-            }
+        //    // get the chars out of the background array
+        //    for (int j = 0; j < 3; j++)
+        //    {
+        //        for (int i = 0; i < 5; i++)
+        //        {
+        //            // build the string
+        //            // get the corresponding char
+        //            monster_string += background[new_y + j][new_x + i];
+        //        }
+        //        // add the delimeter;
+        //        // we use it like a newline later
+        //        monster_string += "#";
+        //    }
 
-            // put it in the old monster printing function
-            string parts = monster_string;
+        //    // put it in the old monster printing function
+        //    string parts = monster_string;
 
-            //string parts = "     " + "#" +   // we use # to split string
-            //                 "     " + "#" +   // 
-            //                 "     " + "#";
+        //    //string parts = "     " + "#" +   // we use # to split string
+        //    //                 "     " + "#" +   // 
+        //    //                 "     " + "#";
 
-            var blanc_bg = parts.Split('#');
-            // set position of cursor after every printed part of monster
-            // params are the middle of the monster
-            // Set cursor to background color
+        //    var blanc_bg = parts.Split('#');
+        //    // set position of cursor after every printed part of monster
+        //    // params are the middle of the monster
+        //    // Set cursor to background color
 
-            // [0] set background color;
-            //      store default color;
-            ConsoleColor color_backup = Console.ForegroundColor; 
-            Console.ForegroundColor = darkgreen;
+        //    // [0] set background color;
+        //    //      store default color;
+        //    ConsoleColor color_backup = Console.ForegroundColor; 
+        //    Console.ForegroundColor = darkgreen;
 
-            lock (printlock)
-            {
+        //    lock (printlock)
+        //    {
 
-                // [1] printing the head
-                Console.SetCursorPosition(pos_x - 2, pos_y - 1);
-                Console.Write(blanc_bg[0]);
+        //        // [1] printing the head
+        //        Console.SetCursorPosition(pos_x - 2, pos_y - 1);
+        //        Console.Write(blanc_bg[0]);
 
-                // [2] printing the arms
-                //      set cursor
-                Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
-                //      print arms
-                Console.Write(blanc_bg[1]);
+        //        // [2] printing the arms
+        //        //      set cursor
+        //        Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
+        //        //      print arms
+        //        Console.Write(blanc_bg[1]);
 
-                // [3] printing the legs
-                //      set cursor
-                Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
-                //      print legs
-                Console.Write(blanc_bg[2]);
+        //        // [3] printing the legs
+        //        //      set cursor
+        //        Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
+        //        //      print legs
+        //        Console.Write(blanc_bg[2]);
 
-                // [4] set cursor position back to params
-                Console.SetCursorPosition(pos_x, pos_y);
+        //        // [4] set cursor position back to params
+        //        Console.SetCursorPosition(pos_x, pos_y);
 
-                // [5] set CursorColor back to default
-                Console.ForegroundColor = color_backup;
-            }
-        }
+        //        // [5] set CursorColor back to default
+        //        Console.ForegroundColor = color_backup;
+        //    }
+        //}
         
 
         // The Background
