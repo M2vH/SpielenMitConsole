@@ -136,11 +136,16 @@ namespace DashBoard
         {
             int start = (x - foo.Length) / 2;
 
+            // Console.CursorVisible = false;
+            // ToDo: Ask, why this displays the cursor;
+            // Expected behaviour was NO cursor;
             lock (printlock)
             {
                 Console.SetCursorPosition(start, line);
                 Console.Write(foo);
             }
+            // Console.CursorVisible = true;
+
         }
 
         // print the head of the board
@@ -338,6 +343,7 @@ namespace DashBoard
                         case ConsoleKey.L:
                             {
                                 play = false;
+                                KillTimer();
                                 break;
                             }
                         case ConsoleKey.H:
@@ -355,7 +361,7 @@ namespace DashBoard
                         case ConsoleKey.Spacebar:
                             {
                                 // let the monster fight;
-                                // ToDo: create a fighting monster*
+                                // ToDo: create a monster.fight()
                                 break;
                             }
                         default:
@@ -541,9 +547,73 @@ namespace DashBoard
 
         }
 
+        /*  The Timer
+         *  We run a Timer and print a countdown in its own thread.
+         */
 
         static Timer mytimer;
-        // The Game
+
+        // We call this function when the timer thread callback is ready
+        static AutoResetEvent autoEvent = new AutoResetEvent(true);
+
+        //  we count every timer callback call
+        //  init invokeCount;
+        static int invokeCount = 0;
+
+        // we want to run for given amount of seconds;
+        static int maxCount = 120;
+
+        // we store countdown here;
+        // and init remaining time with maximum seconds
+        static int remainTime = maxCount;
+
+        // the string we want to print
+        static String timeText;
+
+        // this function is the callback for the timer
+        static void PrintTime(Object stateInfo)
+        {
+            // yes, we can
+            ++invokeCount;
+            --remainTime;
+
+            timeText = String.Format("{0}{1,5} : {2}", "Time remaining",
+                                        arg1: (remainTime / 60).ToString(),
+                                        arg2: (remainTime % 60).ToString());
+
+            // print the Countdown in the center of our dashboard
+            CenterText(2, timeText);
+
+            // We send signals to waiting threads
+            AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
+
+            if (invokeCount == maxCount)
+            {
+                secondAuto.Set();
+                KillTimer();
+            }
+        }
+
+
+        // we clean up the thread
+        static void KillTimer()
+        {
+            mytimer.Dispose();
+        }
+
+        static void StartTimer() {
+            mytimer = new Timer(PrintTime, autoEvent, 1000, 1000);
+
+            autoEvent.WaitOne();
+
+        }
+
+        /* --> The Game  <--
+         * 
+         * Keep the Main() as clean as possible
+         * 
+         */
+
         static void Main(string[] args)
         {
             InitGame();
@@ -552,79 +622,24 @@ namespace DashBoard
             DrawBackground();
 
             Center();
+            
             // hide the cursor
             Console.CursorVisible = false;
 
-            //  * We start a counter *
-            //  counter is running in his own thread;
-            //  
-            
+            // start Timer
+            StartTimer();
 
-            //  
-            var autoEvent = new AutoResetEvent(true);
-
-            //  init invokeCount;
-            int invokeCount = 0;
-
-            // we run for sixty seconds;
-            int maxCount = 120;
-
-            // we display remaining time
-            int remainTime = maxCount;
-
-            //TimeSpan startTime = TimeSpan.FromSeconds(maxCount);
-            //TimeSpan remainTime, playTime;
-
-            void PrintTime(Object stateInfo)
-            {
-                ++invokeCount;
-                --remainTime;    
-                
-                // String timeString = String.Format("{0:D2}m :{1:D2}s", remainTime.Minutes, remainTime.Seconds);
-                // we print the timer with CenterText(int line, string text);
-
-                // String timeText = String.Format("{0}{1,-15}", "Time remaining", timeString);
-
-                String timeText = String.Format("{0}{1,5} : {2}", "Time remaining", 
-                                            arg1: (remainTime / 60).ToString(), 
-                                            arg2: (remainTime % 60).ToString());
-                
-                // CenterText(2, "Hello...        " + (++invokeCount).ToString() ) ;
-
-                CenterText(2, timeText);
-
-                // We start a timer thread
-                AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
-                
-                if (invokeCount == maxCount)
-                    {
-                        secondAuto.Set();
-                        KillTimer();
-                    }
-			}
-
-            void KillTimer()
-            {
-                mytimer.Dispose();
-            }
-
-            // *alt*
-            //  second param <autoevent>
-
-            mytimer = new Timer(PrintTime, autoEvent, 1000, 1000);
-
-            autoEvent.WaitOne();
-
-
+            // next time we call it GameLoop
             Move();
-
-            // show the cursor;
-            Console.CursorVisible = true;
 
             // Relax for 2 seconds
             Thread.Sleep(2000);
 
-            // Exit and close shell
+            // show a nice cursor;
+            Console.CursorSize = 1;
+            Console.CursorVisible = true;
+
+            // A chance to Exit and close shell
             Close();
             
         }
