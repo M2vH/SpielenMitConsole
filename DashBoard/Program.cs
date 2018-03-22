@@ -187,6 +187,8 @@ namespace DashBoard
             DrawLine(4);
         }
 
+        // ToDo: Question? Where are the CreateMonster functions placed best?
+        
         /* Function <Monster>CreateMonster(string head, string body, string legs)
         // Instantiates a monster with parts as parameter
         */
@@ -206,18 +208,57 @@ namespace DashBoard
         }
 
         /*  Function <Monster>CreatePlayer(Design _design, string _name)
-        //  Creates a monster with a given <Design>
+        //  Creates a gamer monster with a given <Design> at default position
         */
         static Monster CreatePlayer(Design _design, string _name)
         {
-            Monster player = new Monster {
+            Monster monster = new Monster
+            {
                 outfit = _design,
                 name = _name,
                 pos_x = x / 3,
                 pos_y = (y + top) / 2,
 
             };
-            return player;
+            return monster;
+        }
+
+        /*  <Monster> CreatePlayer(Design _design, int _x, int _y, string _name)
+         *  Creates a Monster at a given position;
+         */
+        static Monster CreatePlayer(Design _design, int _x, int _y, string _name)
+        {
+            Monster monster = new Monster
+            {
+                outfit = _design,
+                name = _name,
+                pos_x = _x,
+                pos_y = _y,
+            };
+            return monster;
+        }
+
+        /*  Function < int[] > RandomStartPos()
+         *  Calculates a random position in the right side of the field
+         *  Returns an int[]
+         */
+        static Random random = new Random();
+        static int[] RandomStartPos()
+        {
+            int[] start = new int[2];
+
+            // pos x min/max
+            int x_min = x / 2 + 4;  // 4 steps right from middle
+            int x_max = x - 4;      // 4 steps left from outer right
+
+            // pos y min/max
+            int y_min = 4;          // 4 steps below top
+            int y_max = y - 4;      // 4 steps above bottom
+
+            start[0] = random.Next(x_min, x_max);
+            start[1] = random.Next(y_min, y_max);
+
+            return start;
         }
         
         // make a play
@@ -377,116 +418,9 @@ namespace DashBoard
         }
 
 
-        // Print a Monster
-        /*
-        static void PrintTheMonster(int pos_x, int pos_y)
-        {
-            string parts = "(° °)" + "#" +   // we use # to split string
-                           " ~x~ " + "#" +   // 
-                           " ] [ " + "#"    ;
-
-            var monster = parts.Split('#');
-            // set position of cursor after every printed part of monster
-            // params are the middle of the monster
-
-            lock (printlock)
-            {
-                // [1] printing the head
-                Console.SetCursorPosition(pos_x - 2, pos_y - 1);
-                Console.Write(monster[0]);
-
-                // [2] printing the arms
-                //      set cursor
-                Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
-                //      print arms
-                Console.Write(monster[1]);
-
-                // [3] printing the legs
-                //      set cursor
-                Console.SetCursorPosition(Console.CursorLeft - monster[0].Length, Console.CursorTop + 1);
-                //      print legs
-                Console.Write(monster[2]);
-
-                // [4] set cursor position back to params
-                Console.SetCursorPosition(pos_x, pos_y);
-            }
-        }
-        */
-
-        /*
-        // Hide the Monster
-
-        //static void HideTheMonster(int pos_x, int pos_y)
-        //{
-        //    // store upper left corner of monster
-        //    int new_x = pos_x - 2;
-        //    int new_y = pos_y - 1;
-
-        //    // place to store the background
-        //    string monster_string = "";
-
-        //    // get the chars out of the background array
-        //    for (int j = 0; j < 3; j++)
-        //    {
-        //        for (int i = 0; i < 5; i++)
-        //        {
-        //            // build the string
-        //            // get the corresponding char
-        //            monster_string += background[new_y + j][new_x + i];
-        //        }
-        //        // add the delimeter;
-        //        // we use it like a newline later
-        //        monster_string += "#";
-        //    }
-
-        //    // put it in the old monster printing function
-        //    string parts = monster_string;
-
-        //    //string parts = "     " + "#" +   // we use # to split string
-        //    //                 "     " + "#" +   // 
-        //    //                 "     " + "#";
-
-        //    var blanc_bg = parts.Split('#');
-        //    // set position of cursor after every printed part of monster
-        //    // params are the middle of the monster
-        //    // Set cursor to background color
-
-        //    // [0] set background color;
-        //    //      store default color;
-        //    ConsoleColor color_backup = Console.ForegroundColor;
-        //    Console.ForegroundColor = darkgreen;
-
-        //    lock (printlock)
-        //    {
-
-        //        // [1] printing the head
-        //        Console.SetCursorPosition(pos_x - 2, pos_y - 1);
-        //        Console.Write(blanc_bg[0]);
-
-        //        // [2] printing the arms
-        //        //      set cursor
-        //        Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
-        //        //      print arms
-        //        Console.Write(blanc_bg[1]);
-
-        //        // [3] printing the legs
-        //        //      set cursor
-        //        Console.SetCursorPosition(Console.CursorLeft - blanc_bg[0].Length, Console.CursorTop + 1);
-        //        //      print legs
-        //        Console.Write(blanc_bg[2]);
-
-        //        // [4] set cursor position back to params
-        //        Console.SetCursorPosition(pos_x, pos_y);
-
-        //        // [5] set CursorColor back to default
-        //        Console.ForegroundColor = color_backup;
-        //    }
-        //}
-        */
-
         /* 
-        // The Background
-        // store the background in 2-dimensional char array
+        * The Background
+        * store the background in 2-dimensional char array
         */
 
         // var to store the background in
@@ -546,6 +480,8 @@ namespace DashBoard
             Console.ForegroundColor = oldcolor;
 
         }
+
+
 
         /*  The Timer
          *  We run a Timer and print a countdown in its own thread.
@@ -608,6 +544,16 @@ namespace DashBoard
 
         }
 
+        /*  ToDo: Create an enemy at random position
+         *  
+         *  
+         */ 
+
+        /*  ToDo: Create random enemy movement
+         * 
+         * 
+         */
+        
         /* --> The Game  <--
          * 
          * Keep the Main() as clean as possible
