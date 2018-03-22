@@ -86,6 +86,18 @@ namespace DashBoard
 
         }
 
+        // print a monster and return true when printed;
+        public bool PrintMonster()
+        {
+            bool feedback = false;
+            if (pos_x != 0 && pos_y != 0)
+            {
+                PrintMonster(pos_x, pos_y);
+                return !feedback;
+            }
+            else return feedback;
+        }
+        
         //  hide the monster
         //  recover the background
         //  lock the printing

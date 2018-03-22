@@ -16,14 +16,14 @@ namespace DashBoard
 
         public static object printlock = new object();
 
-        // set screen to default
-        // init 3 different types of monster
-
+        // init 3 different types of monster...
         static Design goble, frodo, angry;
-
+        // ...and store them
+        static Design[] theDesigns;
 
         static void InitGame()
         {
+            // set screen to default
             //  Console Settings
             Console.Clear();
             Console.WindowWidth = x;
@@ -59,6 +59,9 @@ namespace DashBoard
                 designColor = ConsoleColor.DarkYellow,
                 designElements = new string[] { "[-.-]", " _+_ ", " U U " },
             };
+
+            theDesigns = new Design[] { goble, frodo, angry };
+            
         }
 
         // move cursor into center
@@ -263,7 +266,7 @@ namespace DashBoard
         
         // make a play
         // ! only cursor is moving !
-        static void Move()
+        static void Move(Monster _player)
         {
 
             /* Instantiate a monster;
@@ -274,52 +277,17 @@ namespace DashBoard
             /*  We ceate a monster with an existing design
              *  
              */
-            Monster player = CreatePlayer(angry, "Angry");
+            Monster player = _player;
  
-            /*  oldMonsterInit
-             *  
-            //  Monster player = new Monster
-            //  {
-            //        //  fill the monster;
-            //        parts = new string[3],
-            //        name = "The fast Goblin",
-
-            //    //  *! works !*
-            //    //  set position of monster
-            //    //  we use cursor, because its set to center
-            //    //  pos_x = Console.CursorLeft,
-            //    //  pos_y = Console.CursorTop
-
-            //    //  position user_monster in left half
-            //      pos_x = x / 3,
-            //      pos_y = (y + top) / 2,
-
-            //  };
-
-            //player.parts[0] = "(° °)";
-            //player.parts[1] = " ~*~ ";
-            //player.parts[2] = " ] [ ";
-            //oldMonsterInit
-            */
-
             bool play = true;
             do
             {
-                // store the actual cursor position;
-                //  !   This will cause Error,
-                //  !   when Timer is ready at this moment.
-                // int pos_y = Console.CursorTop;
-                // int pos_x = Console.CursorLeft;
-
                 //  we need a monster;
                 //  PrintTheMonster(pos_x, pos_y);
-
                 player.PrintMonster(player.pos_x, player.pos_y);
 
                 ConsoleKeyInfo key;
                 key = Console.ReadKey(true);
-                //char move = Convert.ToChar(key);
-                //Console.Write(key.Key);
 
                 lock (printlock)
                 {
@@ -546,8 +514,25 @@ namespace DashBoard
 
         /*  ToDo: Create an enemy at random position
          *  
-         *  
-         */ 
+         *  CreateEnemy()
+         */
+        static Monster CreateEnemy(Monster _player)
+        {
+            //  get the design of player
+            //  and select different one
+            int id = 0;
+            Design enemyDesign = theDesigns[id];
+            while (enemyDesign.designName == _player.outfit.designName)
+            {
+                id = random.Next(theDesigns.Length - 1);
+                enemyDesign = theDesigns[id];
+            }
+
+            // store a random start position
+            int[] here = RandomStartPos();
+            Monster enemy = CreatePlayer(enemyDesign, here[0],here[1], "The incredible " + enemyDesign.designName);
+            return enemy;
+        }
 
         /*  ToDo: Create random enemy movement
          * 
@@ -572,11 +557,21 @@ namespace DashBoard
             // hide the cursor
             Console.CursorVisible = false;
 
+            // Create a player
+            Monster player = CreatePlayer(goble, "Goble");
+
+            // Create an enemy...
+            Monster enemy = CreateEnemy(player);
+            // ...and print it;
+            enemy.PrintMonster();
+            
             // start Timer
             StartTimer();
 
+            // >> Loop for enemy movement comes here
+            
             // next time we call it GameLoop
-            Move();
+            Move(player);
 
             // Relax for 2 seconds
             Thread.Sleep(2000);
