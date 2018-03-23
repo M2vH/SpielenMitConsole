@@ -567,7 +567,6 @@ namespace DashBoard
             /*  
              *  We will be called every _millis
              */
-            
  
             // give waiting threads a chance to work
             resetMoveMonster.Set();
@@ -587,7 +586,8 @@ namespace DashBoard
          *  Looks like the most stupid way
          *  
          */
-        static Direction go = new Direction {
+        static Direction go = new Direction
+        {
             up = new int[] { 0, -1 },
             right_up = new int[2] { 1, -1 },
             right = new int[] { 1, 0 },
@@ -599,46 +599,48 @@ namespace DashBoard
             stay = new int[] { 0, 0 }
         };
 
-        static Choice[] choices = new Choice[] {
-            choices[0] = new Choice { coord = new int[]{0,0 } },
-            choices[1] = new Choice { coord = go.up },              //  1,2
-            choices[2] = new Choice { coord = go.right },           //  3,4,5,6,7,8
-            choices[3] = new Choice { coord = go.left },            //  9,10,11,12,13,14
-            choices[4] = new Choice { coord = go.down },            //  15,16
-            choices[5] = new Choice { coord = go.stay }             //  17
-        };
+
+        
+        //static Choice[] choices = new Choice[] {
+        //    //choices[0] = new Choice { coord = new int[]{0,0 } },
+        //    choices[1] = new Choice { coord = go.up },              //  1,2
+        //    choices[2] = new Choice { coord = go.right },           //  3,4,5,6,7,8
+        //    choices[3] = new Choice { coord = go.left },            //  9,10,11,12,13,14
+        //    choices[4] = new Choice { coord = go.down },            //  15,16
+        //    choices[5] = new Choice { coord = go.stay }             //  17
+        //};
 
         /*
          *  Get a weighted random direction
          */
-        static int[] RandomMove()
-        {
-            int[] goHere = new int[] { 0,0};
-            int selected = random.Next(1, 18);
+        //static int[] RandomMove()
+        //{
+        //    int[] goHere = new int[] { 0,0};
+        //    int selected = random.Next(1, 18);
 
-            if ( 0 < selected || selected < 3 )
-            {
-                goHere = choices[1].coord;
-            }
-            else if (3 <= selected || selected < 9)
-            {
-                goHere = choices[2].coord;
-            }
-            else if (9 <= selected || selected < 15)
-            {
-                goHere = choices[3].coord;
-            }
-            else if (15 <= selected || selected < 17)
-            {
-                goHere = choices[4].coord;
-            }
-            else if (selected == 17)
-            {
-                goHere = choices[5].coord;
-            }
+        //    if ( 0 < selected || selected < 3 )
+        //    {
+        //        goHere = choices[1].coord;
+        //    }
+        //    else if (3 <= selected || selected < 9)
+        //    {
+        //        goHere = choices[2].coord;
+        //    }
+        //    else if (9 <= selected || selected < 15)
+        //    {
+        //        goHere = choices[3].coord;
+        //    }
+        //    else if (15 <= selected || selected < 17)
+        //    {
+        //        goHere = choices[4].coord;
+        //    }
+        //    else if (selected == 17)
+        //    {
+        //        goHere = choices[5].coord;
+        //    }
 
-            return goHere;
-        }
+        //    return goHere;
+        //}
 
         /* --> The Game  <--
          * 
