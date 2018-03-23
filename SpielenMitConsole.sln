@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashBoard", "DashBoard\Dash
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringBasics", "StringBasics\StringBasics.csproj", "{DD3BACEF-3761-48D4-A624-F3DBE3D9693E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallingEvents", "CallingEvents\CallingEvents.csproj", "{E677455C-AD5B-4827-925E-1C21185BCEE7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{DD3BACEF-3761-48D4-A624-F3DBE3D9693E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD3BACEF-3761-48D4-A624-F3DBE3D9693E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD3BACEF-3761-48D4-A624-F3DBE3D9693E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E677455C-AD5B-4827-925E-1C21185BCEE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E677455C-AD5B-4827-925E-1C21185BCEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E677455C-AD5B-4827-925E-1C21185BCEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E677455C-AD5B-4827-925E-1C21185BCEE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

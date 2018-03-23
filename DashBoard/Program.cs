@@ -61,7 +61,7 @@ namespace DashBoard
             };
 
             theDesigns = new Design[] { goble, frodo, angry };
-            
+
         }
 
         // move cursor into center
@@ -77,7 +77,7 @@ namespace DashBoard
             Center();
             Console.Write("Press any key ...");
             Console.ReadLine();
-            
+
         }
 
         /*  SECTION "BoardHead"
@@ -115,7 +115,7 @@ namespace DashBoard
             // reduce playgound
             top += 1;
 
-            
+
         }
 
         //  print a box 
@@ -124,7 +124,7 @@ namespace DashBoard
         static void DrawBox(int line)
         {
             string symbol = (string)symbols[3];
-            String drawbox = String.Format("{0}{0,100}",symbol);
+            String drawbox = String.Format("{0}{0,100}", symbol);
             Console.SetCursorPosition(0, line);
             Console.Write(drawbox);
 
@@ -169,7 +169,7 @@ namespace DashBoard
             //  ** Print it out  **
             //  Set Cursor to upper left corner;
             Console.SetCursorPosition(0, 0);
-            
+
             // we have a DrawLine(int line);
             //Console.Write(drawline, symbol[0], symbol[0].PadLeft(100, filler));
             DrawLine(0);
@@ -191,7 +191,7 @@ namespace DashBoard
         }
 
         // ToDo: Question? Where are the CreateMonster functions placed best?
-        
+
         /* Function <Monster>CreateMonster(string head, string body, string legs)
         // Instantiates a monster with parts as parameter
         */
@@ -263,7 +263,7 @@ namespace DashBoard
 
             return start;
         }
-        
+
         // make a play
         // ! only cursor is moving !
         static void Move(Monster _player)
@@ -278,7 +278,7 @@ namespace DashBoard
              *  
              */
             Monster player = _player;
- 
+
             bool play = true;
             do
             {
@@ -299,7 +299,7 @@ namespace DashBoard
                         // right = x - 2 - 2;   // -2 for the monster size, -2 for the OutOfRange Exception
                         // upper = int top + 1;     // top is set when dashboard is printed;
                         // bottom = y - 1 - 1;  // -1 for the monster size, -1 for the excepiton
-                        case ConsoleKey.W :
+                        case ConsoleKey.W:
                         case ConsoleKey.UpArrow:
                             {
                                 // if we are not at the top:
@@ -393,10 +393,10 @@ namespace DashBoard
         */
 
         // var to store the background in
-        public static string[] background = new string[y-1];
+        public static string[] background = new string[y - 1];
 
         // create a new ForegroundColor for background printing
-        
+
         public static ConsoleColor gameBackground = ConsoleColor.DarkMagenta;
 
         /* ToDo create a background struct
@@ -531,7 +531,7 @@ namespace DashBoard
 
             // store a random start position
             int[] here = RandomStartPos();
-            Monster enemy = CreatePlayer(enemyDesign, here[0],here[1], "The incredible " + enemyDesign.designName);
+            Monster enemy = CreatePlayer(enemyDesign, here[0], here[1], "The incredible " + enemyDesign.designName);
             return enemy;
         }
 
@@ -551,6 +551,12 @@ namespace DashBoard
             resetMonsterTimer.WaitOne();
         }
 
+        /*  My own TimerCallback
+         * 
+         * 
+         */
+        
+        
         //  the Timer CallBack Funktion
         //  This function is called,
         //  when Timer ticks happen.
@@ -558,9 +564,11 @@ namespace DashBoard
         {
             AutoResetEvent resetMoveMonster = (AutoResetEvent)_stateInfo;
 
-            /*  We will be called every _millis
-              */
-
+            /*  
+             *  We will be called every _millis
+             */
+            
+ 
             // give waiting threads a chance to work
             resetMoveMonster.Set();
 
@@ -573,6 +581,65 @@ namespace DashBoard
 
         }
 
+        /*
+         *  Monster Movement choices
+         *  
+         *  Looks like the most stupid way
+         *  
+         */
+        static Direction go = new Direction {
+            up = new int[] { 0, -1 },
+            right_up = new int[2] { 1, -1 },
+            right = new int[] { 1, 0 },
+            right_down = new int[] { 1, 1 },
+            down = new int[] { 0, 1 },
+            left_down = new int[] { -1, 1 },
+            left = new int[] { -1, 0 },
+            left_up = new int[] { -1, -1 },
+            stay = new int[] { 0, 0 }
+        };
+
+        static Choice[] choices = new Choice[] {
+            choices[0] = new Choice { coord = new int[]{0,0 } },
+            choices[1] = new Choice { coord = go.up },              //  1,2
+            choices[2] = new Choice { coord = go.right },           //  3,4,5,6,7,8
+            choices[3] = new Choice { coord = go.left },            //  9,10,11,12,13,14
+            choices[4] = new Choice { coord = go.down },            //  15,16
+            choices[5] = new Choice { coord = go.stay }             //  17
+        };
+
+        /*
+         *  Get a weighted random direction
+         */
+        static int[] RandomMove()
+        {
+            int[] goHere = new int[] { 0,0};
+            int selected = random.Next(1, 18);
+
+            if ( 0 < selected || selected < 3 )
+            {
+                goHere = choices[1].coord;
+            }
+            else if (3 <= selected || selected < 9)
+            {
+                goHere = choices[2].coord;
+            }
+            else if (9 <= selected || selected < 15)
+            {
+                goHere = choices[3].coord;
+            }
+            else if (15 <= selected || selected < 17)
+            {
+                goHere = choices[4].coord;
+            }
+            else if (selected == 17)
+            {
+                goHere = choices[5].coord;
+            }
+
+            return goHere;
+        }
+
         /* --> The Game  <--
          * 
          * Keep the Main() as clean as possible
@@ -581,6 +648,7 @@ namespace DashBoard
 
         static void Main(string[] args)
         {
+            
             InitGame();
             PrintHead();
 

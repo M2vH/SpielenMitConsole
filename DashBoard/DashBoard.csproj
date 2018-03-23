@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Choice.cs" />
+    <Compile Include="Direction.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="Design.cs" />
     <Compile Include="Program.cs" />
