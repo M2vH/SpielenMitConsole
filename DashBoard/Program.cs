@@ -551,11 +551,6 @@ namespace DashBoard
             resetMonsterTimer.WaitOne();
         }
 
-        /*  My own TimerCallback
-         * 
-         * 
-         */
-        
         
         //  the Timer CallBack Funktion
         //  This function is called,
@@ -599,48 +594,70 @@ namespace DashBoard
             stay = new int[] { 0, 0 }
         };
 
+        // make a choice
+        static Choice[] choices = new Choice[5];
 
-        
-        //static Choice[] choices = new Choice[] {
-        //    //choices[0] = new Choice { coord = new int[]{0,0 } },
-        //    choices[1] = new Choice { coord = go.up },              //  1,2
-        //    choices[2] = new Choice { coord = go.right },           //  3,4,5,6,7,8
-        //    choices[3] = new Choice { coord = go.left },            //  9,10,11,12,13,14
-        //    choices[4] = new Choice { coord = go.down },            //  15,16
-        //    choices[5] = new Choice { coord = go.stay }             //  17
-        //};
+        static void InitChoices()
+        {
+            choices[0] = new Choice { coord = go.up };              //  1,2
+            choices[1] = new Choice { coord = go.right };           //  3,4,5,6,7,8
+            choices[2] = new Choice { coord = go.left };           //  9,10,11,12,13,14
+            choices[3] = new Choice { coord = go.down };            //  15,16
+            choices[4] = new Choice { coord = go.stay };            //  17
+        }
 
         /*
          *  Get a weighted random direction
          */
-        //static int[] RandomMove()
-        //{
-        //    int[] goHere = new int[] { 0,0};
-        //    int selected = random.Next(1, 18);
 
-        //    if ( 0 < selected || selected < 3 )
-        //    {
-        //        goHere = choices[1].coord;
-        //    }
-        //    else if (3 <= selected || selected < 9)
-        //    {
-        //        goHere = choices[2].coord;
-        //    }
-        //    else if (9 <= selected || selected < 15)
-        //    {
-        //        goHere = choices[3].coord;
-        //    }
-        //    else if (15 <= selected || selected < 17)
-        //    {
-        //        goHere = choices[4].coord;
-        //    }
-        //    else if (selected == 17)
-        //    {
-        //        goHere = choices[5].coord;
-        //    }
+        static int[] RandomMove()
+        {
+            int[] goHere = new int[] { 0, 0 };
+            int selected = random.Next(1, 18);
 
-        //    return goHere;
-        //}
+            if (0 < selected || selected < 3)
+            {
+                goHere = choices[1].coord;
+            }
+            else if (3 <= selected || selected < 9)
+            {
+                goHere = choices[2].coord;
+            }
+            else if (9 <= selected || selected < 15)
+            {
+                goHere = choices[3].coord;
+            }
+            else if (15 <= selected || selected < 17)
+            {
+                goHere = choices[4].coord;
+            }
+            else if (selected == 17)
+            {
+                goHere = choices[5].coord;
+            }
+
+            return goHere;
+        }
+
+        /*
+         *  We move a monster in random direction
+         */
+
+
+        /* static void MoveTheMonster(Monster _enemy, int _due, int _speed)
+        {
+            AutoResetEvent reset = new AutoResetEvent(true);
+            object bla = new object();
+            monsterMove = new Timer(_enemy.MoveMe, reset, _due, _speed);
+            int[] xy = RandomMove();
+            // int[] xy = new
+            _enemy.HideMonster(_enemy.pos_x, _enemy.pos_y);
+            _enemy.pos_x = xy[0];
+            _enemy.pos_y = xy[1];
+            //_enemy.MoveMe(bla);
+            reset.WaitOne();
+        }
+        */
 
         /* --> The Game  <--
          * 
@@ -658,6 +675,9 @@ namespace DashBoard
 
             Center();
             
+            // Init the choices
+            InitChoices();
+
             // hide the cursor
             Console.CursorVisible = false;
 
@@ -669,12 +689,19 @@ namespace DashBoard
             // ...and print it;
             enemy.PrintMonster();
             
+            //  we need a callback
+            //  MoveTheMonster(enemy, 500, 500);
+
+
             // start Timer
             StartTimer();
 
             // >> Loop for enemy movement comes here
-            StartMonsterTimer(500);
-            
+            //  StartMonsterTimer(500);
+
+            // check the random move selection
+            int[] test = RandomMove();
+
             // next time we call it GameLoop
             Move(player);
 
