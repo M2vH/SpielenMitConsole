@@ -353,6 +353,7 @@ namespace DashBoard
                             {
                                 play = false;
                                 KillTimer();
+                                monsterMove.Dispose();
                                 break;
                             }
                         case ConsoleKey.H:
@@ -534,11 +535,44 @@ namespace DashBoard
             return enemy;
         }
 
-        /*  ToDo: Create random enemy movement
-         * 
-         * 
+        /*  
+         *  The Monster Movement Timing
          */
-        
+
+        //  The Monster Timer objects;
+        static Timer monsterMove;
+
+        static AutoResetEvent resetMonsterTimer = new AutoResetEvent(true);
+
+        //  <void> StartMonsterTimer(int _millis);
+        static void StartMonsterTimer(int _millis)
+        {
+            monsterMove = new Timer(MoveMonster, resetMonsterTimer, 1000, _millis);
+            resetMonsterTimer.WaitOne();
+        }
+
+        //  the Timer CallBack Funktion
+        //  This function is called,
+        //  when Timer ticks happen.
+        static void MoveMonster(Object _stateInfo)
+        {
+            AutoResetEvent resetMoveMonster = (AutoResetEvent)_stateInfo;
+
+            /*  We will be called every _millis
+              */
+
+            // give waiting threads a chance to work
+            resetMoveMonster.Set();
+
+            // if shit happens
+            // monsterMove.Dispose();
+
+            //  Get random direction;
+            //  Calc new position;
+            //  set position of monster
+
+        }
+
         /* --> The Game  <--
          * 
          * Keep the Main() as clean as possible
@@ -569,6 +603,7 @@ namespace DashBoard
             StartTimer();
 
             // >> Loop for enemy movement comes here
+            StartMonsterTimer(500);
             
             // next time we call it GameLoop
             Move(player);
