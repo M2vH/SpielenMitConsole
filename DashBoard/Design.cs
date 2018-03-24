@@ -10,7 +10,7 @@ namespace DashBoard
         public string designName;
         public string[] designElements;
         public ConsoleColor designColor;
-        public int designColorId;
+        // public int designColorId;
     
     }
 }

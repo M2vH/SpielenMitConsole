@@ -168,17 +168,6 @@ namespace DashBoard
             }
         }
 
-        //  public void MoveMe(object _state)
-        //{
-        //    int[] choice = { -1, 0, 1 };
-        //    AutoResetEvent reset = new AutoResetEvent(true);
-        //    Random random = new Random();
-        //    //  pos_x = 0;
-        //    //  pos_y = 0;
-        //    PrintMonster(choice[random.Next(0,3)] , choice[random.Next(0, 3)]);
-        //    reset.Set();
-            
-        //}
     }
 }
 

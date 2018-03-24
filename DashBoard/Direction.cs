@@ -23,7 +23,7 @@ namespace DashBoard
          *                                                  15
          */
 
-        public Direction[] movement;
+        // public Direction[] movement;
 
         public int[]
             up,

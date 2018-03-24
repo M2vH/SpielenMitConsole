@@ -246,7 +246,7 @@ namespace DashBoard
          *  Returns an int[]
          */
         static Random random = new Random();
-        static int[] RandomStartPos()
+        public static int[] RandomStartPos()
         {
             int[] start = new int[2];
 
@@ -353,7 +353,8 @@ namespace DashBoard
                             {
                                 play = false;
                                 KillTimer();
-                                monsterMove.Dispose();
+                                // Stop the enemy's moving
+                                // monsterMove.Dispose();
                                 break;
                             }
                         case ConsoleKey.H:
@@ -515,9 +516,9 @@ namespace DashBoard
 
         /*  ToDo: Create an enemy at random position
          *  
-         *  CreateEnemy()
+         *  [1] CreateEnemy()
          */
-        static Monster CreateEnemy(Monster _player)
+        public static Monster CreateEnemy(Monster _player)
         {
             //  get the design of player
             //  and select different one
@@ -665,6 +666,9 @@ namespace DashBoard
          * 
          */
 
+        public static Enemy enemy;
+        public static Monster player;
+
         static void Main(string[] args)
         {
             
@@ -681,14 +685,33 @@ namespace DashBoard
             // hide the cursor
             Console.CursorVisible = false;
 
-            // Create a player
-            Monster player = CreatePlayer(goble, "Goble");
+            // Create a player...
+            //  [1]...from given Design
+            //  player = CreatePlayer(goble, "Goble");
+            //  [2]...from random design
+            int r = random.Next(0, theDesigns.Length);
+            player = CreatePlayer(theDesigns[r], theDesigns[r].designName);
 
-            // Create an enemy...
-            Monster enemy = CreateEnemy(player);
-            // ...and print it;
-            enemy.PrintMonster();
+            /* Create an enemy...
+            *  [1] this works
+            *  enemy = CreateEnemy(player);
+            *  ...and print it;
+            *  enemy.PrintMonster();
+            */
             
+            
+            //  [2] test the <struct>Enemy
+            //  Enemy enemy = new Enemy();  // This works
+            enemy = new Enemy();    
+            //  [2.1] CreateEnemyFromDesign
+            //  enemy.CreateEnemyFromDesign(angry, "The angry"); // This works
+            enemy.CreateEnemyFromOponent();
+
+            //  [3] Print the Enemy
+            enemy.monster.PrintMonster();
+
+
+
             //  we need a callback
             //  MoveTheMonster(enemy, 500, 500);
 
