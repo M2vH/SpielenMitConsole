@@ -144,8 +144,11 @@ namespace DashBoard
             // Expected behaviour was NO cursor;
             lock (printlock)
             {
+                ConsoleColor memo = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.SetCursorPosition(start, line);
                 Console.Write(foo);
+                Console.ForegroundColor = memo;
             }
             // Console.CursorVisible = true;
 
