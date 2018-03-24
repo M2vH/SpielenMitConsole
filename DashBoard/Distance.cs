@@ -22,7 +22,7 @@ namespace DashBoard
         public void PrintTheDist()
         {
             CalcDistance();
-            text = String.Format("Actual Distance:{0,4}", distance);
+            text = String.Format("{0,-21}{1,5:D2}","Actual Distance", distance);
             Program.CenterText(3, text);
         }
         void CalcDistance()

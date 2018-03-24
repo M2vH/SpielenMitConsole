@@ -486,9 +486,9 @@ namespace DashBoard
             ++invokeCount;
             --remainTime;
 
-            timeText = String.Format("{0}{1,5} : {2}", "Time remaining",
+            timeText = String.Format("{0,-16}{1,5} : {2}", "Time remaining",
                                         arg1: (remainTime / 60).ToString(),
-                                        arg2: (remainTime % 60).ToString());
+                                        arg2: (remainTime % 60).ToString("D2"));
 
             // print the Countdown in the center of our dashboard
             CenterText(2, timeText);
