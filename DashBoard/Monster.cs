@@ -35,14 +35,6 @@ namespace DashBoard
             start_x = x - 2;
             start_y = y - 1;
 
-            /* This is really uneccessary 
-             * 
-             * ToDo: eliminate <string[] parts> 
-             * 
-             * check <Monster player = new Monster()>
-             
-             */
-
             parts = outfit.designElements;
 
             // [0] set background color;

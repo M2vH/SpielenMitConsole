@@ -354,7 +354,7 @@ namespace DashBoard
                                 play = false;
                                 KillTimer();
                                 // Stop the enemy's moving
-                                // monsterMove.Dispose();
+                                monsterMove.Dispose();
                                 break;
                             }
                         case ConsoleKey.H:
@@ -563,11 +563,40 @@ namespace DashBoard
             /*  
              *  We will be called every <int>_millis
              */
-            int[] move = RandomMove();
-            enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
-            enemy.monster.pos_x += move[0];
-            enemy.monster.pos_y += move[1];
-            enemy.monster.PrintMonster();
+
+            // ToDo: Check, if move is possible
+            int[] move = { 0,0};
+            int new_x = 0;
+            int new_y = 0;
+            int pos_x = enemy.monster.pos_x;
+            int pos_y = enemy.monster.pos_y;
+            bool moveImpossible = true;
+
+            while (moveImpossible)
+            {
+                move = RandomMove();
+                new_x = pos_x + move[0];
+                new_y = pos_y + move[1];
+
+                // min_x < new_x < max_x
+                if ((2 < new_x && new_x < x - 3  ) && (top + 1 < new_y && new_y < y - 2  ))
+                {
+                    //moveImpossible = false;
+
+                    enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
+                    enemy.monster.pos_x += move[0];
+                    enemy.monster.pos_y += move[1];
+                    enemy.monster.PrintMonster();
+                    break;
+                }
+                else
+                {
+                    moveImpossible = true;
+                }
+
+            }
+
+
  
             // give waiting threads a chance to work
             resetMoveMonster.Set();
@@ -709,7 +738,7 @@ namespace DashBoard
             enemy = new Enemy();
             enemy.CreateEnemyFromOponent();
             enemy.monster.PrintMonster();
-            StartMonsterTimer(500);
+            StartMonsterTimer(200);
             //  StartMonsterTimer(500);
 
             // next time we call it GameLoop
