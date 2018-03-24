@@ -10,17 +10,17 @@ namespace DashBoard
     {
         //  possible moves
         /*  direction       x   y               how often
-         *  up              0   -1      8       1   *2      2
+         *  up              0   -1      8       1   *2      2       1,2 
          *  right up        1   -1      7       0           
-         *  right           1   0       6       1   *6      6
+         *  right           1   0       6       1   *6      6       3,4,5,6,7,8
          *  right down      1   1       5       0           
-         *  down            0   1       4       1   *2      2
+         *  down            0   1       4       1   *2      2       9,10
          *  left down       -1  1       3       0           
-         *  left            -1  0       2       1   *6      6
+         *  left            -1  0       2       1   *8      8       11,12,13,14,15,16,17,18 
          *  left up         -1  -1      1       0           
-         *  stay            0   0       0       1   *1      1
+         *  stay            0   0       0       1   *1      1       19
          *                                              --------
-         *                                                  15
+         *                                                  19
          */
 
         // public Direction[] movement;

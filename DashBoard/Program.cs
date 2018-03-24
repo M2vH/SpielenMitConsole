@@ -45,19 +45,19 @@ namespace DashBoard
             goble = new Design {
                 designName = "Goble",
                 designColor = ConsoleColor.White,
-                designElements = new string[] { "(° °)", " ~*~ ", " ] [ " },
+                designElements = new string[] { "(° °)", " ~▓~ ", " ] [ " },
             };
 
             frodo = new Design {
                 designName = "Frodo",
                 designColor = ConsoleColor.Yellow,
-                designElements = new string[] { "{0.0}", "o-U-o", " { } " },
+                designElements = new string[] { "{0.0}", " -▓- ", " { } " },
             };
 
             angry = new Design {
                 designName = "Angry",
                 designColor = ConsoleColor.DarkYellow,
-                designElements = new string[] { "[-.-]", " _+_ ", " U U " },
+                designElements = new string[] { "[-.-]", " _▓_ ", " U U " },
             };
 
             theDesigns = new Design[] { goble, frodo, angry };
@@ -75,6 +75,7 @@ namespace DashBoard
         static void Close()
         {
             Center();
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write("Press any key ...");
             Console.ReadLine();
 
@@ -86,7 +87,8 @@ namespace DashBoard
          *  + -------------------------- +
          */
 
-        // init board_head
+        //  ToDo -> Copy String.Format sample into ReadMe.txt
+        //  init board_head
         //  "{0,50:---}"
         //  string.Format("{0,50}","---");
         //
@@ -94,8 +96,6 @@ namespace DashBoard
         //  int a = 50;
         //  "{0," + a +"}"
         //  string.Format("{0," + a +"}","---");
-
-
 
         static string[] symbols = { "+", "xxxxx xxxxx", "-", "|" };
         static char filler = '-';
@@ -135,13 +135,10 @@ namespace DashBoard
         //  print foo at the center of a line, 
         //  (center of line is calculated)
         //  |         foo        |
-        static void CenterText(int line, string foo)
+        public static void CenterText(int line, string foo)
         {
             int start = (x - foo.Length) / 2;
 
-            // Console.CursorVisible = false;
-            // ToDo: Ask, why this displays the cursor;
-            // Expected behaviour was NO cursor;
             lock (printlock)
             {
                 ConsoleColor memo = Console.ForegroundColor;
@@ -150,7 +147,6 @@ namespace DashBoard
                 Console.Write(foo);
                 Console.ForegroundColor = memo;
             }
-            // Console.CursorVisible = true;
 
         }
 
@@ -258,7 +254,7 @@ namespace DashBoard
             int x_max = x - 4;      // 4 steps left from outer right
 
             // pos y min/max
-            int y_min = 4;          // 4 steps below top
+            int y_min = top + 4;          // 4 steps below top
             int y_max = y - 4;      // 4 steps above bottom
 
             start[0] = random.Next(x_min, x_max);
@@ -280,7 +276,7 @@ namespace DashBoard
             /*  We ceate a monster with an existing design
              *  
              */
-            Monster player = _player;
+            player = _player;
 
             bool play = true;
             do
@@ -517,7 +513,7 @@ namespace DashBoard
 
         }
 
-        /*  ToDo: Create an enemy at random position
+        /*  Create an enemy at random position
          *  
          *  [1] CreateEnemy()
          */
@@ -548,8 +544,8 @@ namespace DashBoard
 
         static AutoResetEvent resetMonsterTimer = new AutoResetEvent(true);
 
-        //  <void> StartMonsterTimer(int _millis);
-        static void StartMonsterTimer(int _millis)
+        //  <void> StartEnemyTimer(int _millis);
+        static void StartEnemyTimer(int _millis)
         {
             monsterMove = new Timer(MoveMonster, resetMonsterTimer, 1000, _millis);
             resetMonsterTimer.WaitOne();
@@ -567,7 +563,7 @@ namespace DashBoard
              *  We will be called every <int>_millis
              */
 
-            // ToDo: Check, if move is possible
+            // Check, if move is possible
             int[] move = { 0,0};
             int new_x = 0;
             int new_y = 0;
@@ -584,12 +580,16 @@ namespace DashBoard
                 // min_x < new_x < max_x
                 if ((2 < new_x && new_x < x - 3  ) && (top + 1 < new_y && new_y < y - 2  ))
                 {
-                    //moveImpossible = false;
-
                     enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
                     enemy.monster.pos_x += move[0];
                     enemy.monster.pos_y += move[1];
                     enemy.monster.PrintMonster();
+
+                    //  Print the distance. 
+                    //  ToDo -> Distance Printout
+                    //  put it into seperate timer
+                    dist.PrintTheDist();
+                    
                     break;
                 }
                 else
@@ -641,19 +641,19 @@ namespace DashBoard
         {
             choices[0] = new Choice { coord = go.up };              //  1,2
             choices[1] = new Choice { coord = go.right };           //  3,4,5,6,7,8
-            choices[2] = new Choice { coord = go.left };           //  9,10,11,12,13,14
-            choices[3] = new Choice { coord = go.down };            //  15,16
-            choices[4] = new Choice { coord = go.stay };            //  17
+            choices[2] = new Choice { coord = go.left };           //  9,10,11,12,13,14,15,16
+            choices[3] = new Choice { coord = go.down };            //  17,18
+            choices[4] = new Choice { coord = go.stay };            //  19
         }
 
-        /*
+        /*  
          *  Get a weighted random direction
          */
 
         static int[] RandomMove()
         {
             int[] goHere = new int[] { 0, 0 };
-            int selected = random.Next(1, 18);
+            int selected = random.Next(1, 20);
 
             if (selected >= 0 && selected < 3)  // 
             {
@@ -663,15 +663,15 @@ namespace DashBoard
             {
                 goHere = choices[1].coord;
             }
-            else if (9 <= selected && selected < 15)
+            else if (9 <= selected && selected < 17)
             {
                 goHere = choices[2].coord;
             }
-            else if (15 <= selected && selected < 17)
+            else if (17 <= selected && selected < 20)
             {
                 goHere = choices[3].coord;
             }
-            else if (selected == 17)
+            else if (selected == 20)
             {
                 goHere = choices[4].coord;
             }
@@ -679,14 +679,54 @@ namespace DashBoard
             return goHere;
         }
 
+        /* Init Player and Enemy
+         * Player comes in random outfit
+         * and Enemy is different then Player
+         */
+        static void InitPlayerAndEnemy()
+        {
+            // Create a player...
+            //  [1]...from given Design
+            //  player = CreatePlayer(goble, "Goble");
+            //  [2]...from random design
+            int r = random.Next(0, theDesigns.Length);
+            player = CreatePlayer(theDesigns[r], theDesigns[r].designName);
+
+            /* Create an enemy...
+            *  [1] this works
+            *  enemy = CreateEnemy(player);
+            *  ...and print it;
+            *  enemy.PrintMonster();
+            *
+            *  [2] test the <struct>Enemy
+            *  Enemy enemy = new Enemy();  // This works
+            *  enemy = new Enemy();    
+            *  [2.1] CreateEnemyFromDesign
+            *  enemy.CreateEnemyFromDesign(angry, "The angry"); // This works
+            *  enemy.CreateEnemyFromOponent();
+
+            *  [3] Print the Enemy
+            *  enemy.monster.PrintMonster();
+
+            *  we need a callback
+            *  MoveTheMonster(enemy, 500, 500);
+            */
+            enemy = new Enemy();
+            enemy.CreateEnemyFromOponent();
+            enemy.monster.PrintMonster();
+
+
+        }
+        
+        public static Enemy enemy;
+        public static Monster player;
+
+        public static Distance dist = new Distance();
         /* --> The Game  <--
          * 
          * Keep the Main() as clean as possible
          * 
          */
-
-        public static Enemy enemy;
-        public static Monster player;
 
         static void Main(string[] args)
         {
@@ -704,45 +744,15 @@ namespace DashBoard
             // hide the cursor
             Console.CursorVisible = false;
 
-            // Create a player...
-            //  [1]...from given Design
-            //  player = CreatePlayer(goble, "Goble");
-            //  [2]...from random design
-            int r = random.Next(0, theDesigns.Length);
-            player = CreatePlayer(theDesigns[r], theDesigns[r].designName);
-
-            /* Create an enemy...
-            *  [1] this works
-            *  enemy = CreateEnemy(player);
-            *  ...and print it;
-            *  enemy.PrintMonster();
-            */
-            ////  [2] test the <struct>Enemy
-            ////  Enemy enemy = new Enemy();  // This works
-            //enemy = new Enemy();    
-            ////  [2.1] CreateEnemyFromDesign
-            ////  enemy.CreateEnemyFromDesign(angry, "The angry"); // This works
-            //enemy.CreateEnemyFromOponent();
-
-            ////  [3] Print the Enemy
-            //enemy.monster.PrintMonster();
-
-
-
-            //  we need a callback
-            //  MoveTheMonster(enemy, 500, 500);
-
-
             // start Timer
             StartTimer();
 
-            // >> Timer for enemy movement comes here
-            //  Make sure, enemy exists already
-            enemy = new Enemy();
-            enemy.CreateEnemyFromOponent();
-            enemy.monster.PrintMonster();
-            StartMonsterTimer(200);
-            //  StartMonsterTimer(500);
+            // Init the Enemy
+            InitPlayerAndEnemy();
+
+            // Start the timerbased enemy movement
+            StartEnemyTimer(200);
+            //  StartEnemyTimer(500);
 
             // next time we call it GameLoop
             Move(player);

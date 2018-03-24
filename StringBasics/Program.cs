@@ -31,7 +31,10 @@ namespace StringBasics
 
             }
 
-            Console.WriteLine(sstring);
+            // Console.WriteLine(sstring);
+            int distance = 99;
+            String text = String.Format("Actual Distance:{0,4}", distance);
+            Console.WriteLine(text);
 
             Console.WriteLine("Press any key ...");
             Console.ReadLine();
