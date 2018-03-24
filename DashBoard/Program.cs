@@ -45,19 +45,19 @@ namespace DashBoard
             goble = new Design {
                 designName = "Goble",
                 designColor = ConsoleColor.White,
-                designElements = new string[] { "(° °)", " ~▓~ ", " ] [ " },
+                designElements = new string[] { "(° °)", " ~▓~ ", " ] [ ", "0-▓-0" },
             };
 
             frodo = new Design {
                 designName = "Frodo",
                 designColor = ConsoleColor.Yellow,
-                designElements = new string[] { "{0.0}", " -▓- ", " { } " },
+                designElements = new string[] { "{O.O}", " /▓\\ ", " { } ", "0-▓-0" },
             };
 
             angry = new Design {
                 designName = "Angry",
-                designColor = ConsoleColor.DarkYellow,
-                designElements = new string[] { "[-.-]", " _▓_ ", " U U " },
+                designColor = ConsoleColor.Green,
+                designElements = new string[] { "[-.-]", " '▓' ", " U U ", "0-▓-0" },
             };
 
             theDesigns = new Design[] { goble, frodo, angry };
@@ -244,7 +244,7 @@ namespace DashBoard
          *  Calculates a random position in the right side of the field
          *  Returns an int[]
          */
-        public static Random random = new Random();
+        public static Random random = new Random();     // ToDo: Make sure, we do it only once
         public static int[] RandomStartPos()
         {
             int[] start = new int[2];
@@ -361,10 +361,14 @@ namespace DashBoard
                                 // we lock this section
                                 lock (printlock)
                                 {
-                                    player.HideMonster(player.pos_x, player.pos_y);
-                                    Center();
-                                    player.pos_x = Console.CursorLeft;
-                                    player.pos_y = Console.CursorTop;
+                                    // jump into middle of screen
+                                    // player.HideMonster(player.pos_x, player.pos_y);
+                                    // Center();
+                                    // player.pos_x = Console.CursorLeft;
+                                    // player.pos_y = Console.CursorTop;
+
+                                    // we can fight;
+                                    player.Fight();
                                 }
                                 break;
                             }
@@ -574,6 +578,16 @@ namespace DashBoard
             while (moveImpossible)
             {
                 move = RandomMove();
+                // erst hauen, dann laufen;
+                // und nur nebeneinander;
+                if (dist.GetDistance() < 5 && dist.diff_y < 4)
+                {
+                    int r = random.Next(2, 14);
+                    if ((r % 2) == 0)
+                    {
+                    enemy.monster.Fight();
+                    }
+                }
                 new_x = pos_x + move[0];
                 new_y = pos_y + move[1];
 

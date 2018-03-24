@@ -11,6 +11,9 @@ namespace DashBoard
     {
         public int distance;
         public String text;
+        public int diff_x;
+        public int diff_y;
+
         public void PrintTheDist(int _dist)
         {
             text = String.Format("Actual Distance:{0,4}", _dist);
@@ -24,8 +27,8 @@ namespace DashBoard
         }
         void CalcDistance()
         {
-            int diff_x = Math.Abs((int)(Program.player.pos_x - Program.enemy.monster.pos_x));
-            int diff_y = Math.Abs((int)(Program.player.pos_y - Program.enemy.monster.pos_y));
+            diff_x = Math.Abs((int)(Program.player.pos_x - Program.enemy.monster.pos_x));
+            diff_y = Math.Abs((int)(Program.player.pos_y - Program.enemy.monster.pos_y));
 
             distance = (int)Math.Sqrt((double)(diff_x * diff_x + diff_y * diff_y));
         }
@@ -35,6 +38,7 @@ namespace DashBoard
         }
         public int GetDistance()
         {
+            CalcDistance();
             return distance;
         }
 

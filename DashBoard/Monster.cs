@@ -89,7 +89,8 @@ namespace DashBoard
             }
             else return feedback;
         }
-        
+
+        //  Hide Monster
         //  hide the monster
         //  recover the background
         //  lock the printing
@@ -161,7 +162,23 @@ namespace DashBoard
         }
 
         //  let it fight
-        //  switch parts[4] and parts[2]
+        //  switch parts[3] and parts[1]
+        public void Fight()
+        {
+
+            lock (Program.printlock)
+            {
+                string store = parts[1];
+                parts[1] = parts[3];
+                PrintMonster();
+                parts[1] = store;
+                Thread.Sleep(100);
+                HideMonster(pos_x,pos_y);
+                PrintMonster();
+
+            }
+
+        }
 
     }
 }
