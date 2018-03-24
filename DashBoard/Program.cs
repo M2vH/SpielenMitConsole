@@ -245,7 +245,7 @@ namespace DashBoard
          *  Calculates a random position in the right side of the field
          *  Returns an int[]
          */
-        static Random random = new Random();
+        public static Random random = new Random();
         public static int[] RandomStartPos()
         {
             int[] start = new int[2];
@@ -561,8 +561,13 @@ namespace DashBoard
             AutoResetEvent resetMoveMonster = (AutoResetEvent)_stateInfo;
 
             /*  
-             *  We will be called every _millis
+             *  We will be called every <int>_millis
              */
+            int[] move = RandomMove();
+            enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
+            enemy.monster.pos_x += move[0];
+            enemy.monster.pos_y += move[1];
+            enemy.monster.PrintMonster();
  
             // give waiting threads a chance to work
             resetMoveMonster.Set();
@@ -571,6 +576,8 @@ namespace DashBoard
             // monsterMove.Dispose();
 
             //  Get random direction;
+            //  int[] RandomMove()
+            //  Hide the enemy
             //  Calc new position;
             //  set position of monster
 
@@ -616,49 +623,29 @@ namespace DashBoard
             int[] goHere = new int[] { 0, 0 };
             int selected = random.Next(1, 18);
 
-            if (0 < selected || selected < 3)
+            if (selected >= 0 && selected < 3)  // 
+            {
+                goHere = choices[0].coord;
+            }
+            else if (selected >= 3 && selected < 9)
             {
                 goHere = choices[1].coord;
             }
-            else if (3 <= selected || selected < 9)
+            else if (9 <= selected && selected < 15)
             {
                 goHere = choices[2].coord;
             }
-            else if (9 <= selected || selected < 15)
+            else if (15 <= selected && selected < 17)
             {
                 goHere = choices[3].coord;
             }
-            else if (15 <= selected || selected < 17)
-            {
-                goHere = choices[4].coord;
-            }
             else if (selected == 17)
             {
-                goHere = choices[5].coord;
+                goHere = choices[4].coord;
             }
 
             return goHere;
         }
-
-        /*
-         *  We move a monster in random direction
-         */
-
-
-        /* static void MoveTheMonster(Monster _enemy, int _due, int _speed)
-        {
-            AutoResetEvent reset = new AutoResetEvent(true);
-            object bla = new object();
-            monsterMove = new Timer(_enemy.MoveMe, reset, _due, _speed);
-            int[] xy = RandomMove();
-            // int[] xy = new
-            _enemy.HideMonster(_enemy.pos_x, _enemy.pos_y);
-            _enemy.pos_x = xy[0];
-            _enemy.pos_y = xy[1];
-            //_enemy.MoveMe(bla);
-            reset.WaitOne();
-        }
-        */
 
         /* --> The Game  <--
          * 
@@ -698,17 +685,15 @@ namespace DashBoard
             *  ...and print it;
             *  enemy.PrintMonster();
             */
-            
-            
-            //  [2] test the <struct>Enemy
-            //  Enemy enemy = new Enemy();  // This works
-            enemy = new Enemy();    
-            //  [2.1] CreateEnemyFromDesign
-            //  enemy.CreateEnemyFromDesign(angry, "The angry"); // This works
-            enemy.CreateEnemyFromOponent();
+            ////  [2] test the <struct>Enemy
+            ////  Enemy enemy = new Enemy();  // This works
+            //enemy = new Enemy();    
+            ////  [2.1] CreateEnemyFromDesign
+            ////  enemy.CreateEnemyFromDesign(angry, "The angry"); // This works
+            //enemy.CreateEnemyFromOponent();
 
-            //  [3] Print the Enemy
-            enemy.monster.PrintMonster();
+            ////  [3] Print the Enemy
+            //enemy.monster.PrintMonster();
 
 
 
@@ -719,17 +704,19 @@ namespace DashBoard
             // start Timer
             StartTimer();
 
-            // >> Loop for enemy movement comes here
+            // >> Timer for enemy movement comes here
+            //  Make sure, enemy exists already
+            enemy = new Enemy();
+            enemy.CreateEnemyFromOponent();
+            enemy.monster.PrintMonster();
+            StartMonsterTimer(500);
             //  StartMonsterTimer(500);
-
-            // check the random move selection
-            int[] test = RandomMove();
 
             // next time we call it GameLoop
             Move(player);
 
-            // Relax for 2 seconds
-            Thread.Sleep(2000);
+            // Relax for 1/2 a second
+            Thread.Sleep(500);
 
             // show a nice cursor;
             Console.CursorSize = 1;
