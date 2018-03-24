@@ -11,6 +11,10 @@ public static void Main(Args[] e)
 {
     // Test
 }
+
+static bool Test()
+{
+    return true;
+}
 ```
 
-Wir legen ein <struct> für die Enemy-Klasse an.
