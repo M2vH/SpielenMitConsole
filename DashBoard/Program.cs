@@ -9,6 +9,9 @@ namespace DashBoard
     class Program
     {
         // Set default screen params
+        /// <summary>
+        /// Set the size of console window;
+        /// </summary>
         public static int x = 101;
         public static int y = 30;
 
@@ -16,11 +19,16 @@ namespace DashBoard
 
         public static object printlock = new object();
 
-        // init 3 different types of monster...
+        // declare 3 different types of monster...
         static Design goble, frodo, angry;
-        // ...and store them
+        // ...and declare a variable to store them
         static Design[] theDesigns;
 
+        /// <summary>
+        /// Init the game. 
+        /// Set concole size and color.
+        /// Set the layout of the monster.
+        /// </summary>
         static void InitGame()
         {
             // set screen to default
@@ -64,14 +72,18 @@ namespace DashBoard
 
         }
 
-        // move cursor into center
+        /// <summary>
+        /// Center the cursor.
+        /// </summary>
         static void Center()
         {
             Console.CursorLeft = x / 2;
             Console.CursorTop = y / 2;
         }
 
-        // close the game
+        /// <summary>
+        /// Closing the game. Display "Press any key...".
+        /// </summary>
         static void Close()
         {
             Center();
