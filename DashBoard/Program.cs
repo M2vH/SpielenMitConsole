@@ -100,8 +100,12 @@ namespace DashBoard
         static string[] symbols = { "+", "xxxxx xxxxx", "-", "|" };
         static char filler = '-';
 
-        // print a line
-        //  +--------------------+  //  length=100)
+        /// <summary>
+        /// print a line
+        /// +--------------------+  //  length=100
+        /// 
+        /// </summary>
+        /// <param name="line"></param>
         static void DrawLine(int line)
         {
             //String drawline = "{0}{1,100}";
@@ -150,7 +154,9 @@ namespace DashBoard
 
         }
 
-        // print the head of the board
+        /// <summary>
+        /// We print the layout of the dashboard.
+        /// </summary>
         static void PrintHead()
         {
             //  Define some strings
