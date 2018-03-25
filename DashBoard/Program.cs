@@ -701,10 +701,10 @@ namespace DashBoard
         {
             // Create a player...
             //  [1]...from given Design
-            //  player = CreatePlayer(goble, "Goble");
+            //  player = CreatePlayer(angry, "Angry");
             //  [2]...from random design
-            int r = random.Next(0, theDesigns.Length);
-            player = CreatePlayer(theDesigns[r], theDesigns[r].designName);
+             int r = random.Next(0, theDesigns.Length);
+             player = CreatePlayer(theDesigns[r], theDesigns[r].designName);
 
             /* Create an enemy...
             *  [1] this works
