@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
 [assembly: AssemblyTitle("DashBoard")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Play a Monster Hunter Console Game ")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("M2vH - Marco M. von Hagen")]
 [assembly: AssemblyProduct("DashBoard")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
