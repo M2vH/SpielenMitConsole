@@ -395,6 +395,7 @@ namespace DashBoard
                                 KillTimer();
                                 // Stop the enemy's moving
                                 monsterMove.Dispose();
+                                playSong = false;
                                 break;
                             }
                         case ConsoleKey.H:
@@ -809,15 +810,15 @@ namespace DashBoard
         /// <param name="_i">Sound is played _i times</param>
         static void PlaySound(int _i)
         {
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            //  System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             for (int i = 0; i < _i; i++)
             {
-                sw.Start();
+                //  sw.Start();
                 Console.Beep(sound_1[0], sound_1[1]);
                 if (_i > 0)
                 {
-                    sw.Stop();
-                    CenterText(1,sw.ElapsedMilliseconds.ToString());
+                    //  sw.Stop();
+                    //  CenterText(1,sw.ElapsedMilliseconds.ToString());
                     Thread.Sleep(sound_1[1]);
                 }
             }
@@ -836,6 +837,91 @@ namespace DashBoard
             }
             await PlaySoundAsync(_i);
         }
+
+        #region Play a sound in the background async
+        /*
+         *      Das spielen von Sound im Hintergrund 
+         *      funktioniert in der Console leider nicht.
+         *      
+         *      Trauriges Smiley
+         */ 
+
+        // public static Song backgroundSong = new Song { };
+        
+        public static Note[] theBackgroundSong = new Note[16];
+
+        static Note n_1 = new Note {f=37,d=1 };
+        static Note n_2 = new Note { f = 37, d = 1 };           // Note.{ 1020, 250 };
+        static Note n_3 = new Note { f = 37, d = 1 };           // { 2400, 250 };
+        static Note n_4 = new Note { f = 37, d = 1 };           // { 2100, 250 };
+
+        /// <summary>
+        /// Erzeugt einen "Song".
+        /// </summary>
+        public static void InitASong()
+        {
+
+            n_1.f = 1020;
+            n_2.f = 2400;
+            n_3.f = 1300;
+            n_4.f = 1900;
+
+            n_1.d = 500;
+            n_2.d = 500;
+            n_3.d = 500;
+            n_4.d = 1000;
+
+            // Note[]notes = new Note[16];
+            theBackgroundSong[0] = n_1;
+            theBackgroundSong[1] = n_2;
+            theBackgroundSong[2] = n_1;
+            theBackgroundSong[3] = n_2;
+            theBackgroundSong[4] = n_1;
+            theBackgroundSong[5] = n_2;
+            theBackgroundSong[6] = n_3;
+            theBackgroundSong[7] = n_4;
+
+            theBackgroundSong[8] = n_2;
+            theBackgroundSong[9] = n_3;
+            theBackgroundSong[10] = n_2;
+            theBackgroundSong[11] = n_3;
+            theBackgroundSong[12] = n_2;
+            theBackgroundSong[13] = n_3;
+            theBackgroundSong[14] = n_1;
+            theBackgroundSong[15] = n_4;
+
+        }
+        public static bool playSong = false;
+
+        /// <summary>
+        /// The asyncron version of PlaySong(Song)
+        /// </summary>
+        /// <param name="_newSong"></param>
+        /// <returns></returns>
+        static Task PlaySongAsync(Note[] _newSong)
+        {
+            return Task.Run( () => PlaySong(_newSong) );
+        }
+
+        static void PlaySong(Note[] newSong)
+        {
+            while (playSong)
+            {
+                int duration = 16;
+                for (int i = 0; i < duration; i++)
+                {
+                    Console.Beep(newSong[i].f, newSong[i].d);
+                }
+
+                Thread.Sleep(500);
+            }
+        }
+
+        public static async void PlayThisSong(Note[] _song)
+        {
+            await PlaySongAsync(_song);
+        }
+        #endregion
 
 
 
@@ -859,8 +945,14 @@ namespace DashBoard
             // test the sound
             // PlaySound(2);
 
-            // Let's do it...
-            // MakeSomeNoise(2);
+            //  Let's do it...
+            //  [1] Sound at the beginning
+            //  MakeSomeNoise(2);
+            //  [2] Sound in the background
+
+            // wir brauchen erst nen Song
+            InitASong();
+            PlayThisSong(theBackgroundSong);
             
             // start Timer
             StartTimer();
