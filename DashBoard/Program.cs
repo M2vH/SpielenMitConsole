@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DashBoard
 {
     class Program
     {
+        #region Alle Variablen werden hier deklariert
         // Set the default screen params
         /// <summary>
         /// Set the console window
@@ -21,6 +23,12 @@ namespace DashBoard
         public static int y = 30;
 
         public static int top = 0;
+
+
+
+        #endregion
+
+
 
         public static object printlock = new object();
 
@@ -45,7 +53,7 @@ namespace DashBoard
         /// </summary>
         static void InitGame()
         {
-            // set screen to default
+            //  set screen to default
             //  Console Settings
             Console.Clear();
             Console.WindowWidth = x;
@@ -59,7 +67,8 @@ namespace DashBoard
             |   Goble   Frodo   Angry
             |
             |   (° °)   {0.0}   [-.-]
-            |    ~*~    o-U-o    _+_ 
+            |
+            |    ~▓~    o-▓-o    '▓'
             |    ] [     { }     U U 
             |
              */
@@ -67,7 +76,7 @@ namespace DashBoard
             goble = new Design {
                 designName = "Goble",
                 designColor = ConsoleColor.White,
-                designElements = new string[] { "(° °)", " ~▓~ ", " ] [ ", "0-▓-0" },
+                designElements = new string[] { "(°;°)", " ~▓~ ", " ] [ ", "0-▓-0" },
             };
 
             frodo = new Design {
@@ -774,22 +783,85 @@ namespace DashBoard
          * 
          */
 
+        /*  The sound machine
+         *  Implementation of async background sound.
+         */
+        public static int[] sound_1 = { 1320, 2000 };
+        public static int[] sound_2 = { 1640, 50 };
+        public static int[] sound_3 = { 1020, 50 };
+
+        // The async call of the fight sound function
+        /// <summary>
+        /// The asyncronuos Task of the PlaySound.
+        /// </summary>
+        /// <remarks>Takes an number for intervals</remarks>
+        /// <param name="_i">Sound id played "_i" times</param>
+        /// <returns></returns>
+        static Task PlaySoundAsync(int _i)
+        {
+            return Task.Run(() => PlaySound(_i));
+        }
+
+        // The sound function
+        /// <summary>
+        /// The sound for the fight.
+        /// </summary>
+        /// <param name="_i">Sound is played _i times</param>
+        static void PlaySound(int _i)
+        {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            for (int i = 0; i < _i; i++)
+            {
+                sw.Start();
+                Console.Beep(sound_1[0], sound_1[1]);
+                if (_i > 0)
+                {
+                    sw.Stop();
+                    CenterText(1,sw.ElapsedMilliseconds.ToString());
+                    Thread.Sleep(sound_1[1]);
+                }
+            }
+        }
+
+        // play it async
+        /// <summary>
+        /// Play a sound asyncronuos.
+        /// </summary>
+        /// <param name="_i">Sound id played "_i" times</param>
+        public static async void MakeSomeNoise(int _i)
+        {
+            if (_i < 1)
+            {
+                _i = 1;
+            }
+            await PlaySoundAsync(_i);
+        }
+
+
+
         static void Main(string[] args)
         {
-            
+
             InitGame();
             PrintHead();
 
             DrawBackground();
 
             Center();
-            
+
             // Init the choices
             InitChoices();
 
             // hide the cursor
             Console.CursorVisible = false;
 
+
+            // test the sound
+            // PlaySound(2);
+
+            // Let's do it...
+            // MakeSomeNoise(2);
+            
             // start Timer
             StartTimer();
 
@@ -797,7 +869,7 @@ namespace DashBoard
             InitPlayerAndEnemy();
 
             // Start the timerbased enemy movement
-            StartEnemyTimer(200);
+            StartEnemyTimer(1500);
             //  StartEnemyTimer(500);
 
             // next time we call it GameLoop

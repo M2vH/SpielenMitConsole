@@ -42,6 +42,17 @@ namespace DashBoard
             return distance;
         }
 
-
+        public int Distancetest
+        {
+            get
+            {
+                CalcDistance();
+                return distance;
+            }
+            private set
+            {
+                distance = value;
+            }
+        }
     }
 }

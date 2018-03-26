@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DashBoard
 {
@@ -168,11 +169,12 @@ namespace DashBoard
 
             lock (Program.printlock)
             {
+                Program.MakeSomeNoise(1);
                 string store = parts[1];
                 parts[1] = parts[3];
                 PrintMonster();
                 parts[1] = store;
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 HideMonster(pos_x,pos_y);
                 PrintMonster();
 
