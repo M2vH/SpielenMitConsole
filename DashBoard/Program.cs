@@ -8,11 +8,16 @@ namespace DashBoard
 {
     class Program
     {
-        // Set default screen params
+        // Set the default screen params
         /// <summary>
-        /// Set the size of console window;
+        /// Set the console window
+        /// <value>width</value>
         /// </summary>
         public static int x = 101;
+        /// <summary>
+        /// Set the console window
+        /// <value>height</value>
+        /// </summary>
         public static int y = 30;
 
         public static int top = 0;
@@ -20,8 +25,17 @@ namespace DashBoard
         public static object printlock = new object();
 
         // declare 3 different types of monster...
-        static Design goble, frodo, angry;
+        /// <summary>
+        /// The "Goble".
+        /// <remarks>The anxious monster. It's quick, weak, but resistant</remarks>
+        /// </summary>
+        static Design goble;
+        static Design frodo, angry;
+        
         // ...and declare a variable to store them
+        /// <summary>
+        /// An Array to store the available typ of monster.
+        /// </summary>
         static Design[] theDesigns;
 
         /// <summary>
