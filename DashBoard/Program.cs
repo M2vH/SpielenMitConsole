@@ -850,10 +850,10 @@ namespace DashBoard
         
         public static Note[] theBackgroundSong = new Note[16];
 
-        static Note n_1 = new Note {f=37,d=1 };
-        static Note n_2 = new Note { f = 37, d = 1 };           // Note.{ 1020, 250 };
-        static Note n_3 = new Note { f = 37, d = 1 };           // { 2400, 250 };
-        static Note n_4 = new Note { f = 37, d = 1 };           // { 2100, 250 };
+        static Note n_1 = new Note { f = 37, d = 1 };
+        static Note n_2 = new Note { f = 37, d = 1 };           
+        static Note n_3 = new Note { f = 37, d = 1 };
+        static Note n_4 = new Note { f = 37, d = 1 };  
 
         /// <summary>
         /// Erzeugt einen "Song".
