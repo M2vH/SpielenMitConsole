@@ -96,9 +96,9 @@ namespace DashBoard
                 // top resistance: 30
                 stats = new Stats
                 {
-                    HPoints = 500,
-                    APoints = 40,
-                    DPoints = 30,
+                    hPoints = 500,
+                    aPoints = 40,
+                    dPoints = 30,
                 }
             };
 
@@ -110,9 +110,9 @@ namespace DashBoard
                 // low resistance: 10
                 stats = new Stats
                 {
-                    HPoints = 500,
-                    APoints = 50,
-                    DPoints = 10,
+                    hPoints = 500,
+                    aPoints = 50,
+                    dPoints = 10,
                 }
             };
 
@@ -124,9 +124,9 @@ namespace DashBoard
                 // medium resistance: 20
                 stats = new Stats
                 {
-                    HPoints = 500,
-                    APoints = 60,
-                    DPoints = 20,
+                    hPoints = 500,
+                    aPoints = 60,
+                    dPoints = 20,
                 },
             };
             #endregion
@@ -458,6 +458,12 @@ namespace DashBoard
 
                                     // we can fight;
                                     player.Fight(player);
+
+                                    // if (dist.distance < 4)
+                                    // {
+                                        // player.HitMonster(player.outfit.stats, enemy.monster.outfit.stats);
+                                        player.HitMonster(playerStats, enemyStats);
+                                    //  }
                                 }
                                 break;
                             }
@@ -723,7 +729,8 @@ namespace DashBoard
                     int r = random.Next(2, 14);
                     if ((r % 2) == 0)
                     {
-                    enemy.monster.Fight(enemy.monster);
+                        enemy.monster.Fight(enemy.monster);
+                        enemy.monster.HitMonster(enemyStats,playerStats);
                     }
                 }
                 new_x = pos_x + move[0];
@@ -1030,8 +1037,15 @@ namespace DashBoard
         #endregion
 
         #region Display the Statistics
-        public static object statsLock = new object();
 
+        public static Stats playerStats = new Stats();
+        public static Stats enemyStats = new Stats();
+
+        public static void InitStats()
+        {
+            playerStats = player.outfit.stats;
+            enemyStats = enemy.monster.outfit.stats;
+        }
         public static void PrintStats()
         {
             //  string.Format("{0,20}","---");
@@ -1042,15 +1056,16 @@ namespace DashBoard
             int atLine = 1;
             int left = 2;
             int right = 78;
-            int health = player.outfit.stats.HPoints;
-            int otherNumber = 455;
-            string playerHealth = String.Format("{0,10}{1,10}", "Health", health);
-            string playerDefense = String.Format("{0,10}{1,10}", "Defense", health-otherNumber);
+            // int health = player.outfit.stats.HPoints;
+            // int otherNumber = 455;
+            string playerHealth = String.Format("{0,10}{1,10}", "Health", playerStats.hPoints);
+            string playerDefense = String.Format("{0,10}{1,10}", "Defense", playerStats.dPoints);
 
-            string enemyHealth = String.Format("{0,5}{1,15}", health, "Health");
-            string enemyDefense = String.Format("{0,5}{1,15}", health-otherNumber, "Defense");
+            string enemyHealth = String.Format("{0,5}{1,15}", enemyStats.hPoints, "Health");
+            string enemyDefense = String.Format("{0,5}{1,15}", enemyStats.dPoints, "Defense");
             // lock (statsLock)
             // {
+
             ConsoleColor backup = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
  
@@ -1090,6 +1105,8 @@ namespace DashBoard
             // Init the Player and Enemy
             InitPlayerAndEnemy();
 
+            // we init the gameStats
+            InitStats();
             PrintHead();
 
             DrawBackground();
@@ -1102,18 +1119,18 @@ namespace DashBoard
             // hide the cursor
             Console.CursorVisible = false;
 
-
+            #region backgroundSong
             // test the sound
             // PlaySound(2);
 
             //  Let's do it...
             //  [1] Sound at the beginning
-                //  MakeSomeNoise(2);
+            //  MakeSomeNoise(2);
             //  [2] Sound in the background
-                // wir brauchen erst nen Song
-            InitASong();
-            PlayThisSong(theBackgroundSong);
-            
+            // wir brauchen erst nen Song
+            // InitASong();
+            // PlayThisSong(theBackgroundSong);
+            #endregion
             // start Timer
             StartTimer();
 

@@ -19,38 +19,34 @@ namespace DashBoard
         /// <summary>
         /// Health Points
         /// </summary>
-        int hPoints;
+        public int hPoints;
 
-        public int HPoints
-        {
-            get
-            {
-                return hPoints;
-            }
-            set
-            {
-                hPoints = value;
-            }
-        }
+        // public int HPoints { get => hPoints; set => hPoints = value; }
+        //public int HPoints
+        //{
+        //    get
+        //    {
+        //        return hPoints;
+        //    }
+        //    set
+        //    {
+        //        hPoints = value;
+        //    }
+        //}
 
 
         /// <summary>
         /// Attack Points
         /// </summary>
-        int aPoints;
+        public int aPoints;
 
-        public int APoints { get => aPoints; set => aPoints = value; }
+        //public int APoints { get => aPoints; set => aPoints = value; }
 
         /// <summary>
         /// The Strength of the Defense
         /// </summary>
-        int dPoints;
+        public int dPoints;
 
-        /// <summary>
-        /// Public get; set; int dPoints
-        /// </summary>
-        public int DPoints { get => dPoints; set => dPoints = value; }
-
-
+        //public int DPoints { get => dPoints; set => dPoints = value; }
     }
 }

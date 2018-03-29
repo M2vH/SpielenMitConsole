@@ -49,6 +49,9 @@ namespace DashBoard
         /// </summary>
         public Design outfit;
 
+        //
+        // public Stats stats;
+        
         //  print a monster at pos x,y
         //  lock the printing of a Monster 
         /// <summary>
@@ -239,22 +242,26 @@ namespace DashBoard
                 Thread.Sleep(50);
                 HideMonster(pos_x, pos_y);
                 PrintMonster();
-                Program.PrintStats();
+
+
             }
 
         }
 
-        public void HitMonster(Monster _me, Monster _oponent)
+        public void HitMonster(Stats _me, Stats _oponent)
         {
             // get defense of _monster
             // calc damage ( myAttack - hisDefense = theDamage )
             // write new health at _monster ( hisHealth -= theDamage  )
             // do _monster.PrintStats()
+            lock (Program.printlock)
+            {
             int damage = 0;
-            damage = _me.outfit.stats.APoints - _oponent.outfit.stats.DPoints;
-            _oponent.outfit.stats.HPoints -= damage;
+            damage = _me.aPoints - _oponent.dPoints;
+            _oponent.hPoints -= damage;
             
             Program.PrintStats();
+            }
         }
     }
 }
