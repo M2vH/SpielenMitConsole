@@ -12,33 +12,46 @@ namespace DashBoard
         #region Alle Variablen werden hier deklariert
         // Set the default screen params
         /// <summary>
-        /// Set the console window
+        /// The console window
         /// <value>width</value>
         /// </summary>
         public static int x = 101;
         /// <summary>
-        /// Set the console window
+        /// The console window
         /// <value>height</value>
         /// </summary>
         public static int y = 30;
 
+        /// <summary>
+        /// The top y-coordinate of the field
+        /// </summary>
+        /// <remarks>Field is window (y) - dashboard. Value increases when dashboard is printed</remarks>
         public static int top = 0;
-
-
-
         #endregion
 
 
-
+        /// <summary>
+        /// The lock object to protect console printing
+        /// </summary>
+        /// <example>lock (printlock){ ...the protected code }</example>
         public static object printlock = new object();
 
         // declare 3 different types of monster...
         /// <summary>
         /// The "Goble".
-        /// <remarks>The anxious monster. It's quick, weak, but resistant</remarks>
+        /// <remarks>The anxious monster. Medium speed, low attac, top resistant</remarks>
         /// </summary>
         static Design goble;
-        static Design frodo, angry;
+        /// <summary>
+        /// The "Frodo".
+        /// <remarks>The ugly monster. High speed, medium attac, low resistant</remarks>
+        /// </summary>
+        static Design frodo;
+        /// <summary>
+        /// The "Angry".
+        /// <remarks>The bad monster. low speed, top attac, medium resistant</remarks>
+        /// </summary>
+        static Design angry;
         
         // ...and declare a variable to store them
         /// <summary>
@@ -314,13 +327,7 @@ namespace DashBoard
         static void Move(Monster _player)
         {
 
-            /* Instantiate a monster;
-            
-            Monster player = CreatePlayer("(° °)", " ~*~ ", " ] [ ", "The fast Goblin");
-            */
-
-            /*  We ceate a monster with an existing design
-             *  
+            /*  We receive a monster for the player with an existing design
              */
             player = _player;
 
@@ -440,7 +447,7 @@ namespace DashBoard
 
         /* 
         * The Background
-        * store the background in 2-dimensional char array
+        * ToDo: create struct with int x, int y, background {symbol, foregroundColor}
         */
 
         // var to store the background in
@@ -449,18 +456,13 @@ namespace DashBoard
         // create a new ForegroundColor for background printing
         public static ConsoleColor gameBackground = ConsoleColor.DarkMagenta;
 
-        /* ToDo: create a background struct
-        //  to store the colors
-        */
-
         // Draw a random background
         /// <summary>
-        /// Draws a background randomly out of given symbols
+        /// Draw a random background from given symbols
         /// </summary>
         static void DrawBackground()
         {
             // draw a background
-            // random o, O, Q and a lot of ' ';
             // Console.SetCursorPosition(0, top);
 
             Random random = new Random();
@@ -753,8 +755,16 @@ namespace DashBoard
 
         /*  
          *  Get a weighted random direction
+         *  
+         *  ToDo: Create a weight formula
+         *  
          */
 
+        /// <summary>
+        /// Calculates a weighted random enemy movement
+        /// </summary>
+        /// <remarks>Weighted movement into left part of field</remarks>
+        /// <returns>An int array with next x,y coords</returns>
         static int[] RandomMove()
         {
             int[] goHere = new int[] { 0, 0 };
@@ -793,7 +803,7 @@ namespace DashBoard
         public static Monster player;
 
         /// <summary>
-        /// Inits a player and an enemy
+        /// Inits a player and his enemy
         /// </summary>
         /// <remarks>The player is random and the enemy is different than player</remarks>
         static void InitPlayerAndEnemy()
@@ -845,8 +855,8 @@ namespace DashBoard
          *  ToDo: let each monster sound different.
          */
         public static int[] sound_1 = { 300, 750 };
-        public static int[] sound_2 = { 1640, 500 };
-        public static int[] sound_3 = { 1020, 500 };
+        public static int[] sound_2 = { 600, 750 };
+        public static int[] sound_3 = { 900, 750 };
 
         // The async call of the fight sound function
         /// <summary>
@@ -904,12 +914,12 @@ namespace DashBoard
          */ 
 
         
-        public static Note[] theBackgroundSong = new Note[16];
+        public static Sound[] theBackgroundSong = new Sound[16];
 
-        static Note n_1 = new Note { f = 37, d = 1 };
-        static Note n_2 = new Note { f = 37, d = 1 };           
-        static Note n_3 = new Note { f = 37, d = 1 };
-        static Note n_4 = new Note { f = 37, d = 1 };  
+        static Sound n_1 = new Sound { f = 37, d = 1 };
+        static Sound n_2 = new Sound { f = 37, d = 1 };           
+        static Sound n_3 = new Sound { f = 37, d = 1 };
+        static Sound n_4 = new Sound { f = 37, d = 1 };  
 
         /// <summary>
         /// Erzeugt einen "Song".
@@ -954,12 +964,12 @@ namespace DashBoard
         /// </summary>
         /// <param name="_newSong"></param>
         /// <returns></returns>
-        static Task PlaySongAsync(Note[] _newSong)
+        static Task PlaySongAsync(Sound[] _newSong)
         {
             return Task.Run( () => PlaySong(_newSong) );
         }
 
-        static void PlaySong(Note[] newSong)
+        static void PlaySong(Sound[] newSong)
         {
             while (playSong)
             {
@@ -973,7 +983,7 @@ namespace DashBoard
             }
         }
 
-        public static async void PlayThisSong(Note[] _song)
+        public static async void PlayThisSong(Sound[] _song)
         {
             await PlaySongAsync(_song);
         }

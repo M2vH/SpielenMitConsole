@@ -10,7 +10,7 @@ namespace DashBoard
     /// Enthält Frequenz und Dauer.
     /// </summary>
     /// <remarks>Beide Parameter müssen vom Typ int sein.</remarks>
-    struct Note
+    struct Sound
     {
         /// <summary>
         /// The frequency.
@@ -20,13 +20,6 @@ namespace DashBoard
         /// The duration of the note.
         /// </summary>
         public int d;
-        // int[] sound;
-
-        //public int[] GetNote()
-        //{
-        //    sound = new int[] { f, d };
-        //    return sound;
-        //}
 
         /// <summary>
         /// Create a note
@@ -38,6 +31,7 @@ namespace DashBoard
             f = _f;
             d = _d;
         }
+
 
 
     }

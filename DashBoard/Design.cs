@@ -27,8 +27,10 @@ namespace DashBoard
         /// <remarks>Must be a clear bright ConsoleColor</remarks>
         ///</summary>
         public ConsoleColor designColor;
-        
-        // ToDo: Add a constructor for this struct.
-    
+
+        public Sound fightSound {
+            get { return fightSound; }
+            set { fightSound = value; }
+        }
     }
 }
