@@ -1039,25 +1039,45 @@ namespace DashBoard
             //  Console.SetCursorPosition(2,1);
             //  Console.Write(output);
             String clear = String.Format("{0,20}", " ");
+            int atLine = 1;
+            int left = 2;
+            int right = 78;
             int health = player.outfit.stats.HPoints;
-            string left = String.Format("{0}{1,20}", "Health", health);
-            string right = String.Format("{0,5}{1,15}", health, "Health");
+            int otherNumber = 455;
+            string playerHealth = String.Format("{0,10}{1,10}", "Health", health);
+            string playerDefense = String.Format("{0,10}{1,10}", "Defense", health-otherNumber);
+
+            string enemyHealth = String.Format("{0,5}{1,15}", health, "Health");
+            string enemyDefense = String.Format("{0,5}{1,15}", health-otherNumber, "Defense");
             // lock (statsLock)
             // {
-                ConsoleColor backup = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.White;
-    
-                Console.SetCursorPosition(2, 1);
-                Console.Write(clear);
-                Console.SetCursorPosition(2,1);
-                Console.Write(left);
-    
-                Console.SetCursorPosition(78, 1);
-                Console.Write(clear);
-                Console.SetCursorPosition(78, 1);
-                Console.Write(right);
-    
-                Console.ForegroundColor = backup;
+            ConsoleColor backup = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Green;
+ 
+            Console.SetCursorPosition(left, atLine);
+            Console.Write(clear);
+            Console.SetCursorPosition(left, atLine);
+            Console.Write(playerHealth);
+ 
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.SetCursorPosition(left, atLine+1);
+            Console.Write(clear);
+            Console.SetCursorPosition(left, atLine+1);
+            Console.Write(playerDefense);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.SetCursorPosition(right, atLine);
+            Console.Write(clear);
+            Console.SetCursorPosition(right, atLine);
+            Console.Write(enemyHealth);
+
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.SetCursorPosition(right, atLine+1);
+            Console.Write(clear);
+            Console.SetCursorPosition(right, atLine+1);
+            Console.Write(enemyDefense);
+
+            Console.ForegroundColor = backup;
             // }
         }
 
