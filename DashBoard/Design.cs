@@ -28,6 +28,9 @@ namespace DashBoard
         ///</summary>
         public ConsoleColor designColor;
 
+        /// <summary>
+        /// The monster spezific sound
+        /// </summary>
         public Sound fightSound {
             get { return fightSound; }
             set { fightSound = value; }
