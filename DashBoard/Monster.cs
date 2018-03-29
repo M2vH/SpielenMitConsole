@@ -9,24 +9,53 @@ namespace DashBoard
 {
     struct Monster
     {
-        
-        
         // store top left corner of monster
-        int start_x, start_y;
-        
+        /// <summary>
+        /// The x of top left coordinates of the monster print.
+        /// </summary>
+        /// <remarks>Is relative to monster position</remarks>
+        int start_x;
+        /// <summary>
+        /// The y of top left coordinates of the monster print.
+        /// </summary>
+        /// <remarks>Is relative to monster position</remarks>
+        int start_y;
+
         // store actual position of monster
-        public int pos_x, pos_y;
+        /// <summary>
+        /// Store actual x position
+        /// </summary>
+        public int pos_x;
+        /// <summary>
+        /// Store actual x position
+        /// </summary>
+        public int pos_y;
 
         // store name to personalize monster
+        /// <summary>
+        /// String to store the name of the monster
+        /// </summary>
         public string name;
 
         // store the symbols to draw the monster 
+        /// <summary>
+        /// Holds the parts of the monster.
+        /// </summary>
+        /// <remarks>Element[0] for the head, [4] for the fighting</remarks>
         public string[] parts;
 
+        /// <summary>
+        /// Contains the monster design
+        /// </summary>
         public Design outfit;
 
         //  print a monster at pos x,y
         //  lock the printing of a Monster 
+        /// <summary>
+        /// Print the monster at position
+        /// </summary>
+        /// <param name="x">x-coordinate of monster center</param>
+        /// <param name="y">y-coordinate of monster center</param>
         public void PrintMonster(int x, int y)
         {
             // store aktual position of monster
@@ -80,6 +109,10 @@ namespace DashBoard
         }
 
         // print a monster and return true when printed;
+        /// <summary>
+        /// Print the monster at stored position
+        /// </summary>
+        /// <returns></returns>
         public bool PrintMonster()
         {
             bool feedback = false;
@@ -92,9 +125,15 @@ namespace DashBoard
         }
 
         //  Hide Monster
-        //  hide the monster
-        //  recover the background
-        //  lock the printing
+            //  recover the background
+            //  lock the printing
+        /// <summary>
+        /// Hide the monster
+        /// </summary>
+        /// <remarks>Hide the monster by re-printing background at given position.
+        /// Locks the Thread while printing.</remarks>
+        /// <param name="x">x-coordinate of monster position</param>
+        /// <param name="y">y-coordinate of monster position</param>
         public void HideMonster(int x, int y)
         {
             // set cursor to top left corner of monster
@@ -164,9 +203,12 @@ namespace DashBoard
 
         //  let it fight
         //  switch parts[3] and parts[1]
+        /// <summary>
+        /// Prints the "fighting" part of monster
+        /// </summary>
+        /// <remarks>Calls the fight sound function</remarks>
         public void Fight()
         {
-
             lock (Program.printlock)
             {
                 Program.MakeSomeNoise(1);
@@ -174,14 +216,12 @@ namespace DashBoard
                 parts[1] = parts[3];
                 PrintMonster();
                 parts[1] = store;
+                // display fight for 50ms
                 Thread.Sleep(50);
                 HideMonster(pos_x,pos_y);
                 PrintMonster();
-
             }
-
         }
-
     }
 }
 

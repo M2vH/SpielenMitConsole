@@ -224,7 +224,7 @@ namespace DashBoard
 
             //Console.SetCursorPosition(center, 2);
             //Console.Write(centertext);
-            CenterText(2, "This is my text!");
+            CenterText(2, "You fight against: " + enemy.monster.name);
             DrawBox(3);
 
             DrawLine(4);
@@ -306,6 +306,11 @@ namespace DashBoard
 
         // make a play
         // ! only cursor is moving !
+        /// <summary>
+        /// Start the game
+        /// </summary>
+        /// <remarks>Runs until Key.L is pressed</remarks>
+        /// <param name="_player">The player monster</param>
         static void Move(Monster _player)
         {
 
@@ -442,14 +447,16 @@ namespace DashBoard
         public static string[] background = new string[y - 1];
 
         // create a new ForegroundColor for background printing
-
         public static ConsoleColor gameBackground = ConsoleColor.DarkMagenta;
 
-        /* ToDo create a background struct
+        /* ToDo: create a background struct
         //  to store the colors
         */
 
         // Draw a random background
+        /// <summary>
+        /// Draws a background randomly out of given symbols
+        /// </summary>
         static void DrawBackground()
         {
             // draw a background
@@ -502,6 +509,9 @@ namespace DashBoard
          *  We run a Timer and print a countdown in its own thread.
          */
 
+        /// <summary>
+        /// The countdown timer object
+        /// </summary>
         static Timer mytimer;
 
         // We call this function when the timer thread callback is ready
@@ -509,19 +519,36 @@ namespace DashBoard
 
         //  we count every timer callback call
         //  init invokeCount;
+        /// <summary>
+        /// Object to store how often Countdowntimer calls.
+        /// </summary>
         static int invokeCount = 0;
 
         // we want to run for given amount of seconds;
+        /// <summary>
+        /// The maximum Countdown Time in seconds
+        /// </summary>
         static int maxCount = 120;
 
         // we store countdown here;
         // and init remaining time with maximum seconds
+        /// <summary>
+        /// Object to store the extant time
+        /// </summary>
         static int remainTime = maxCount;
 
         // the string we want to print
+        /// <summary>
+        /// The string in the printout of the Countdown
+        /// </summary>
         static String timeText;
 
         // this function is the callback for the timer
+        /// <summary>
+        /// The callback function for countdown timer
+        /// </summary>
+        /// <remarks>Prints the Countdown string</remarks>
+        /// <param name="stateInfo">The Timer Event handle</param>
         static void PrintTime(Object stateInfo)
         {
             // yes, we can
@@ -531,6 +558,10 @@ namespace DashBoard
             timeText = String.Format("{0,-16}{1,5} : {2}", "Time remaining",
                                         arg1: (remainTime / 60).ToString(),
                                         arg2: (remainTime % 60).ToString("D2"));
+
+            // Clear the dashboard with Key.Space
+            string clear = String.Format("{0,50}", " ");
+            CenterText(2, clear);
 
             // print the Countdown in the center of our dashboard
             CenterText(2, timeText);
@@ -547,11 +578,17 @@ namespace DashBoard
 
 
         // we clean up the thread
+        /// <summary>
+        /// Kill the Timer Thread when Key.L ends the game
+        /// </summary>
         static void KillTimer()
         {
             mytimer.Dispose();
         }
 
+        /// <summary>
+        /// Fire Countdown event every 1000ms
+        /// </summary>
         static void StartTimer() {
             mytimer = new Timer(PrintTime, autoEvent, 1000, 1000);
 
@@ -563,6 +600,12 @@ namespace DashBoard
          *  
          *  [1] CreateEnemy()
          */
+         /// <summary>
+         /// Create an enemy different from Player
+         /// </summary>
+         /// <remarks>Set enemy start position to random position</remarks>
+         /// <param name="_player">The player monster</param>
+         /// <returns>Returns an enemy monster</returns>
         public static Monster CreateEnemy(Monster _player)
         {
             //  get the design of player
@@ -586,21 +629,36 @@ namespace DashBoard
          */
 
         //  The Monster Timer objects;
+        /// <summary>
+        /// The Timer object for enemy movement
+        /// </summary>
         static Timer monsterMove;
 
+        /// <summary>
+        /// The callback when enemy move event is ready
+        /// </summary>
         static AutoResetEvent resetMonsterTimer = new AutoResetEvent(true);
 
         //  <void> StartEnemyTimer(int _millis);
+        /// <summary>
+        /// Starts a Timer after 1000ms for monster movement
+        /// </summary>
+        /// <param name="_millis">Frequency of monster movement</param>
         static void StartEnemyTimer(int _millis)
         {
             monsterMove = new Timer(MoveMonster, resetMonsterTimer, 1000, _millis);
             resetMonsterTimer.WaitOne();
         }
 
-        
+
         //  the Timer CallBack Funktion
         //  This function is called,
         //  when Timer ticks happen.
+        /// <summary>
+        /// The Monster Timer Event Callback
+        /// </summary>
+        /// <remarks>Moves the monster. Is Callback function for Timer Event</remarks>
+        /// <param name="_stateInfo">The Event Handle</param>
         static void MoveMonster(Object _stateInfo)
         {
             AutoResetEvent resetMoveMonster = (AutoResetEvent)_stateInfo;
@@ -615,9 +673,9 @@ namespace DashBoard
             int new_y = 0;
             int pos_x = enemy.monster.pos_x;
             int pos_y = enemy.monster.pos_y;
-            bool moveImpossible = true;
+            bool moveIsPossible = true;
 
-            while (moveImpossible)
+            while (moveIsPossible)
             {
                 move = RandomMove();
                 // erst hauen, dann laufen;
@@ -650,7 +708,7 @@ namespace DashBoard
                 }
                 else
                 {
-                    moveImpossible = true;
+                    moveIsPossible = true;
                 }
 
             }
@@ -659,15 +717,6 @@ namespace DashBoard
  
             // give waiting threads a chance to work
             resetMoveMonster.Set();
-
-            // if shit happens
-            // monsterMove.Dispose();
-
-            //  Get random direction;
-            //  int[] RandomMove()
-            //  Hide the enemy
-            //  Calc new position;
-            //  set position of monster
 
         }
 
@@ -739,6 +788,14 @@ namespace DashBoard
          * Player comes in random outfit
          * and Enemy is different then Player
          */
+
+        public static Enemy enemy;
+        public static Monster player;
+
+        /// <summary>
+        /// Inits a player and an enemy
+        /// </summary>
+        /// <remarks>The player is random and the enemy is different than player</remarks>
         static void InitPlayerAndEnemy()
         {
             // Create a player...
@@ -770,14 +827,13 @@ namespace DashBoard
             enemy = new Enemy();
             enemy.CreateEnemyFromOponent();
             enemy.monster.PrintMonster();
-
-
         }
         
-        public static Enemy enemy;
-        public static Monster player;
-
+        /// <summary>
+        /// An object to store the distance between player and enemy.
+        /// </summary>
         public static Distance dist = new Distance();
+        
         /* --> The Game  <--
          * 
          * Keep the Main() as clean as possible
@@ -785,11 +841,12 @@ namespace DashBoard
          */
 
         /*  The sound machine
-         *  Implementation of async background sound.
+         *  Implementation of async fighting sound.
+         *  ToDo: let each monster sound different.
          */
-        public static int[] sound_1 = { 1320, 2000 };
-        public static int[] sound_2 = { 1640, 50 };
-        public static int[] sound_3 = { 1020, 50 };
+        public static int[] sound_1 = { 300, 750 };
+        public static int[] sound_2 = { 1640, 500 };
+        public static int[] sound_3 = { 1020, 500 };
 
         // The async call of the fight sound function
         /// <summary>
@@ -846,7 +903,6 @@ namespace DashBoard
          *      Trauriges Smiley
          */ 
 
-        // public static Song backgroundSong = new Song { };
         
         public static Note[] theBackgroundSong = new Note[16];
 
@@ -929,6 +985,9 @@ namespace DashBoard
         {
 
             InitGame();
+            // Init the Player and Enemy
+            InitPlayerAndEnemy();
+
             PrintHead();
 
             DrawBackground();
@@ -947,18 +1006,15 @@ namespace DashBoard
 
             //  Let's do it...
             //  [1] Sound at the beginning
-            //  MakeSomeNoise(2);
+                //  MakeSomeNoise(2);
             //  [2] Sound in the background
-
-            // wir brauchen erst nen Song
+                // wir brauchen erst nen Song
             InitASong();
             PlayThisSong(theBackgroundSong);
             
             // start Timer
             StartTimer();
 
-            // Init the Enemy
-            InitPlayerAndEnemy();
 
             // Start the timerbased enemy movement
             StartEnemyTimer(1500);
