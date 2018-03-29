@@ -31,9 +31,9 @@ namespace DashBoard
         /// <summary>
         /// The monster spezific sound
         /// </summary>
-        public Sound fightSound {
-            get { return fightSound; }
-            set { fightSound = value; }
+        public Sound FightSound {
+            get { return FightSound; }
+            set { FightSound = value; }
         }
     }
 }

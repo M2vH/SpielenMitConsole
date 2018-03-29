@@ -89,19 +89,22 @@ namespace DashBoard
             goble = new Design {
                 designName = "Goble",
                 designColor = ConsoleColor.White,
-                designElements = new string[] { "(°;°)", " ~▓~ ", " ] [ ", "0-▓-0" },
+                designElements = new string[] { "(°;°)", " ~▓~ ", " ] [ ", "O-▓-O" },
+                FightSound = new Sound { ASound = sound_1 },
             };
 
             frodo = new Design {
                 designName = "Frodo",
                 designColor = ConsoleColor.Yellow,
-                designElements = new string[] { "{O.O}", " /▓\\ ", " { } ", "0-▓-0" },
+                designElements = new string[] { "{O.O}", " /▓\\ ", " { } ", "o-▓-o" },
+                FightSound = new Sound { ASound = sound_2 },
             };
 
             angry = new Design {
                 designName = "Angry",
                 designColor = ConsoleColor.Green,
                 designElements = new string[] { "[-.-]", " '▓' ", " U U ", "0-▓-0" },
+                FightSound = new Sound { ASound = sound_3 },
             };
 
             theDesigns = new Design[] { goble, frodo, angry };

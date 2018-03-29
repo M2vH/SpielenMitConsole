@@ -21,6 +21,11 @@ namespace DashBoard
         /// </summary>
         public int d;
 
+        public int[] ASound
+        {
+            get { return ASound; }
+            set { ASound = value; }
+        }
         /// <summary>
         /// Create a note
         /// </summary>
