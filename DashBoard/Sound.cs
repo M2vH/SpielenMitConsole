@@ -23,8 +23,12 @@ namespace DashBoard
 
         public int[] ASound
         {
-            get { return ASound; }
-            set { ASound = value; }
+            get { return new int[] {f,d }; }
+            set
+            {
+                f = value[0];
+                d = value[1];
+            }
         }
         /// <summary>
         /// Create a note

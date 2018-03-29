@@ -207,20 +207,40 @@ namespace DashBoard
         /// Prints the "fighting" part of monster
         /// </summary>
         /// <remarks>Calls the fight sound function</remarks>
-        public void Fight()
+
+        #region old Fight()
+            //  public void Fight()
+            //  {
+            //      lock (Program.printlock)
+            //      {
+            //          Program.MakeSomeNoise(1);
+            //          string store = parts[1];
+            //          parts[1] = parts[3];
+            //          PrintMonster();
+            //          parts[1] = store;
+            //          // display fight for 50ms
+            //          Thread.Sleep(50);
+            //          HideMonster(pos_x,pos_y);
+            //          PrintMonster();
+            //      }
+            //  }
+        #endregion
+
+        public void Fight(Monster _monster)
         {
             lock (Program.printlock)
             {
-                Program.MakeSomeNoise(1);
+                Program.MakeSomeNoise(1, _monster.outfit.FightSound);
                 string store = parts[1];
                 parts[1] = parts[3];
                 PrintMonster();
                 parts[1] = store;
                 // display fight for 50ms
                 Thread.Sleep(50);
-                HideMonster(pos_x,pos_y);
+                HideMonster(pos_x, pos_y);
                 PrintMonster();
             }
+
         }
     }
 }

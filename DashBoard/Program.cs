@@ -75,6 +75,7 @@ namespace DashBoard
             Console.BufferHeight = y;
             Console.BackgroundColor = ConsoleColor.Black;
 
+            #region Monster design
             //  Monster Designs;
             /*
             |   Goble   Frodo   Angry
@@ -85,6 +86,7 @@ namespace DashBoard
             |    ] [     { }     U U 
             |
              */
+            #endregion
 
             goble = new Design {
                 designName = "Goble",
@@ -112,7 +114,7 @@ namespace DashBoard
         }
 
         /// <summary>
-        /// Center the cursor.
+        /// Center the cursor into center of field.
         /// </summary>
         static void Center()
         {
@@ -176,6 +178,12 @@ namespace DashBoard
         //  print a box 
         //  (left and right border)
         //  |                    |  //  length = 100)
+
+        /// <summary>
+        /// Prints the left and right border of dashboard.
+        /// <remarks> |-- 100 --| </remarks>
+        /// </summary>
+        /// <param name="line"></param>
         static void DrawBox(int line)
         {
             string symbol = (string)symbols[3];
@@ -425,7 +433,7 @@ namespace DashBoard
                                     // player.pos_y = Console.CursorTop;
 
                                     // we can fight;
-                                    player.Fight();
+                                    player.Fight(player);
                                 }
                                 break;
                             }
@@ -646,7 +654,8 @@ namespace DashBoard
 
         //  <void> StartEnemyTimer(int _millis);
         /// <summary>
-        /// Starts a Timer after 1000ms for monster movement
+        /// Starts a Timer after 1000ms for monster movement.
+        /// <remarks>1500 is really slow, 200 is maximum quick</remarks>
         /// </summary>
         /// <param name="_millis">Frequency of monster movement</param>
         static void StartEnemyTimer(int _millis)
@@ -690,7 +699,7 @@ namespace DashBoard
                     int r = random.Next(2, 14);
                     if ((r % 2) == 0)
                     {
-                    enemy.monster.Fight();
+                    enemy.monster.Fight(enemy.monster);
                     }
                 }
                 new_x = pos_x + move[0];
@@ -867,10 +876,11 @@ namespace DashBoard
         /// </summary>
         /// <remarks>Takes an number for intervals</remarks>
         /// <param name="_i">Sound id played "_i" times</param>
+        /// <param name="_sound">Sound of monster design</param>
         /// <returns></returns>
-        static Task PlaySoundAsync(int _i)
+        static Task PlaySoundAsync(int _i, Sound _sound)
         {
-            return Task.Run(() => PlaySound(_i));
+            return Task.Run(() => PlaySound(_i, _sound));
         }
 
         // The sound function
@@ -878,19 +888,21 @@ namespace DashBoard
         /// The sound for the fight.
         /// </summary>
         /// <param name="_i">Sound is played _i times</param>
-        static void PlaySound(int _i)
+        /// <param name="_sound">Sound of monster design</param>
+        static void PlaySound(int _i, Sound _sound)
         {
-            //  System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             for (int i = 0; i < _i; i++)
             {
-                //  sw.Start();
-                Console.Beep(sound_1[0], sound_1[1]);
-                if (_i > 0)
+                sw.Start();
+                //  Console.Beep(sound_1[0], sound_1[1]);
+                Console.Beep(_sound.ASound[0], _sound.ASound[1]);
+                if (_i > 1)
                 {
-                    //  sw.Stop();
-                    //  CenterText(1,sw.ElapsedMilliseconds.ToString());
                     Thread.Sleep(sound_1[1]);
                 }
+                sw.Stop();
+                CenterText(1,sw.ElapsedMilliseconds.ToString());
             }
         }
 
@@ -899,13 +911,14 @@ namespace DashBoard
         /// Play a sound asyncronuos.
         /// </summary>
         /// <param name="_i">Sound id played "_i" times</param>
-        public static async void MakeSomeNoise(int _i)
+        /// <param name="_sound">Sound of monster design</param>
+        public static async void MakeSomeNoise(int _i, Sound _sound)
         {
             if (_i < 1)
             {
                 _i = 1;
             }
-            await PlaySoundAsync(_i);
+            await PlaySoundAsync(_i, _sound);
         }
 
         #region Play a sound in the background async
@@ -1030,7 +1043,7 @@ namespace DashBoard
 
 
             // Start the timerbased enemy movement
-            StartEnemyTimer(1500);
+            StartEnemyTimer(500);
             //  StartEnemyTimer(500);
 
             // next time we call it GameLoop
