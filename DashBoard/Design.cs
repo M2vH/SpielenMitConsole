@@ -37,5 +37,12 @@ namespace DashBoard
             get { return fightSound; }
             set { fightSound = value; }
         }
+
+        /// <summary>
+        /// The statistics for the design
+        /// </summary>
+        public Stats stats;
+
+
     }
 }

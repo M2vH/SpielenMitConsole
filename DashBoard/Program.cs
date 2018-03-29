@@ -93,6 +93,13 @@ namespace DashBoard
                 designColor = ConsoleColor.White,
                 designElements = new string[] { "(°;°)", " ~▓~ ", " ] [ ", "O-▓-O" },
                 FightSound = new Sound { ASound = sound_1 },
+                // top resistance: 30
+                stats = new Stats
+                {
+                    HPoints = 500,
+                    APoints = 40,
+                    DPoints = 30,
+                }
             };
 
             frodo = new Design {
@@ -100,6 +107,13 @@ namespace DashBoard
                 designColor = ConsoleColor.Yellow,
                 designElements = new string[] { "{O.O}", " /▓\\ ", " { } ", "o-▓-o" },
                 FightSound = new Sound { ASound = sound_2 },
+                // low resistance: 10
+                stats = new Stats
+                {
+                    HPoints = 500,
+                    APoints = 50,
+                    DPoints = 10,
+                }
             };
 
             angry = new Design {
@@ -107,6 +121,13 @@ namespace DashBoard
                 designColor = ConsoleColor.Green,
                 designElements = new string[] { "[-.-]", " '▓' ", " U U ", "0-▓-0" },
                 FightSound = new Sound { ASound = sound_3 },
+                // medium resistance: 20
+                stats = new Stats
+                {
+                    HPoints = 500,
+                    APoints = 60,
+                    DPoints = 20,
+                },
             };
 
             theDesigns = new Design[] { goble, frodo, angry };
