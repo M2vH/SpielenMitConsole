@@ -27,8 +27,6 @@ namespace DashBoard
         /// </summary>
         /// <remarks>Field is window (y) - dashboard. Value increases when dashboard is printed</remarks>
         public static int top = 0;
-        #endregion
-
 
         /// <summary>
         /// The lock object to protect console printing
@@ -59,6 +57,9 @@ namespace DashBoard
         /// </summary>
         static Design[] theDesigns;
 
+
+        #endregion
+
         /// <summary>
         /// Init the game. 
         /// Set concole size and color.
@@ -86,7 +87,6 @@ namespace DashBoard
             |    ] [     { }     U U 
             |
              */
-            #endregion
 
             goble = new Design {
                 designName = "Goble",
@@ -129,10 +129,13 @@ namespace DashBoard
                     DPoints = 20,
                 },
             };
+            #endregion
 
             theDesigns = new Design[] { goble, frodo, angry };
 
         }
+
+
 
         /// <summary>
         /// Center the cursor into center of field.
@@ -1026,7 +1029,39 @@ namespace DashBoard
         }
         #endregion
 
+        #region Display the Statistics
+        public static object statsLock = new object();
 
+        public static void PrintStats()
+        {
+            //  string.Format("{0,20}","---");
+            //  string output = String.Format("Text{0,10} text{1,10}", arg1, arg2);
+            //  Console.SetCursorPosition(2,1);
+            //  Console.Write(output);
+            String clear = String.Format("{0,20}", " ");
+            int health = player.outfit.stats.HPoints;
+            string left = String.Format("{0}{1,20}", "Health", health);
+            string right = String.Format("{0,5}{1,15}", health, "Health");
+            // lock (statsLock)
+            // {
+                ConsoleColor backup = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.White;
+    
+                Console.SetCursorPosition(2, 1);
+                Console.Write(clear);
+                Console.SetCursorPosition(2,1);
+                Console.Write(left);
+    
+                Console.SetCursorPosition(78, 1);
+                Console.Write(clear);
+                Console.SetCursorPosition(78, 1);
+                Console.Write(right);
+    
+                Console.ForegroundColor = backup;
+            // }
+        }
+
+        #endregion
 
         static void Main(string[] args)
         {
