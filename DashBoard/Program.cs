@@ -1035,10 +1035,10 @@ namespace DashBoard
             n_3.f = 400;
             n_4.f = 1200;
 
-            n_1.d = 200;
-            n_2.d = 200;
-            n_3.d = 200;
-            n_4.d = 50;
+            n_1.d = 800;
+            n_2.d = 800;
+            n_3.d = 800;
+            n_4.d = 800;
 
             // Note[]notes = new Note[16];
             theBackgroundSong[0] = n_1;
