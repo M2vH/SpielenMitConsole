@@ -1066,6 +1066,9 @@ namespace DashBoard
             // lock (statsLock)
             // {
 
+            lock (printlock)
+            {
+
             ConsoleColor backup = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
  
@@ -1093,6 +1096,7 @@ namespace DashBoard
             Console.Write(enemyDefense);
 
             Console.ForegroundColor = backup;
+            }
             // }
         }
 

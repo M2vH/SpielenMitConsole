@@ -260,8 +260,8 @@ namespace DashBoard
             damage = _me.aPoints - _oponent.dPoints;
             _oponent.hPoints -= damage;
             
-            Program.PrintStats();
             }
+            Program.PrintStats();
         }
     }
 }
