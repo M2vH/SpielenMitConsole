@@ -49,7 +49,7 @@ namespace DashBoard
         /// </summary>
         public Design outfit;
 
-        //
+        // keine Veränderung;
         // public Stats stats;
         
         //  print a monster at pos x,y
@@ -233,7 +233,8 @@ namespace DashBoard
         {
             lock (Program.printlock)
             {
-                Program.MakeSomeNoise(1, _monster.outfit.FightSound);
+                // Sorry, that Console Sound s*cks
+                // Program.MakeSomeNoise(1, _monster.outfit.FightSound);
                 string store = parts[1];
                 parts[1] = parts[3];
                 PrintMonster();
@@ -248,6 +249,7 @@ namespace DashBoard
 
         }
 
+        // ToDo: Delete this method ?
         public void HitMonster(Stats _me, Stats _oponent)
         {
             // get defense of _monster
@@ -256,12 +258,30 @@ namespace DashBoard
             // do _monster.PrintStats()
             lock (Program.printlock)
             {
-            int damage = 0;
-            damage = _me.aPoints - _oponent.dPoints;
-            _oponent.hPoints -= damage;
+                int damage = 0;
+                damage = _me.aPoints - _oponent.dPoints;
+                // _oponent.hPoints -= damage;
+                _oponent.SetHPoints(damage);
             
             }
             Program.PrintStats();
+        }
+
+        public void HitMonster(Stats _me, Stats _oponent, bool _enemyWasHit)
+        {
+            int damage = 0;
+            if (_enemyWasHit)
+            {
+                damage = _me.aPoints - _oponent.dPoints;
+                _oponent.SetHPoints(damage);
+            }
+            else
+            {
+                damage = _oponent.aPoints - _me.dPoints;
+                _me.SetHPoints(damage);
+            }
+            Program.PrintStats(_me, _oponent);
+
         }
     }
 }

@@ -149,11 +149,18 @@ namespace DashBoard
         /// <summary>
         /// Closing the game. Display "Press any key...".
         /// </summary>
-        static void Close()
+        public static void Close()
         {
-            Center();
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("Press any key ...");
+            //  Center();   //
+            int here = y - top / 2;
+            lock (printlock)
+            {
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            string grats = "The Winner is... " + winner.name;
+            CenterText(here,grats);
+            CenterText(++here, "Press any key ...");
+            }
             Console.ReadLine();
 
         }
@@ -240,7 +247,7 @@ namespace DashBoard
         /// <summary>
         /// We print the layout of the dashboard.
         /// </summary>
-        static void PrintHead()
+        static void PrintDashboard()
         {
             //  Define some strings
             String line = String.Format("{0}{1,50}{2,50}", symbols[0], symbols[1], symbols[2]);
@@ -359,7 +366,7 @@ namespace DashBoard
         /// </summary>
         /// <remarks>Runs until Key.L is pressed</remarks>
         /// <param name="_player">The player monster</param>
-        static void Move(Monster _player)
+        static void PlayTheGame(Monster _player)
         {
 
             /*  We receive a monster for the player with an existing design
@@ -459,11 +466,11 @@ namespace DashBoard
                                     // we can fight;
                                     player.Fight(player);
 
-                                    // if (dist.distance < 4)
-                                    // {
+                                    if (dist.distance < 4)
+                                    {
                                         // player.HitMonster(player.outfit.stats, enemy.monster.outfit.stats);
-                                        player.HitMonster(playerStats, enemyStats);
-                                    //  }
+                                        player.HitMonster(playerStats, enemyStats, true);
+                                    }
                                 }
                                 break;
                             }
@@ -482,7 +489,43 @@ namespace DashBoard
                     }
                 } // end of lock
 
+                // we check if one is dead
+                if (enemyStats.GetHPoints() <= 0 || playerStats.GetHPoints() <= 0)
+                {
+                    play = false;
+                    KillTimer();
+                    // monsterMove.Dispose();
+                    
+                }
+
             } while (play);
+
+
+            // in a close fight both can die!
+            if (enemyStats.GetHPoints() <= 0 && playerStats.GetHPoints() <= 0)
+            {
+                winner.name = "Nobody. Everybody is DEAD!";
+            }
+            
+            // who is the winner?
+            if (enemyStats.GetHPoints() <= 0)
+            {
+                winner = player;
+                // Hide the looser
+                enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
+                // Display the player again to avoid fractals
+                player.PrintMonster();
+                monsterMove.Dispose();
+            }
+            else
+            {
+                winner = enemy.monster;
+                player.HideMonster(player.pos_x, player.pos_y);
+                // Even he is hidden, we must put him aside.
+                player.pos_x = 0;
+                player.pos_y = 0;
+                monsterMove.Change(0, 1500);
+            }
         }
 
 
@@ -633,7 +676,7 @@ namespace DashBoard
         /// Fire Countdown event every 1000ms
         /// </summary>
         static void StartTimer() {
-            mytimer = new Timer(PrintTime, autoEvent, 1000, 1000);
+            mytimer = new Timer(PrintTime, autoEvent, 2000, 1000);
 
             autoEvent.WaitOne();
 
@@ -730,7 +773,8 @@ namespace DashBoard
                     if ((r % 2) == 0)
                     {
                         enemy.monster.Fight(enemy.monster);
-                        enemy.monster.HitMonster(enemyStats,playerStats);
+                        // enemy.monster.HitMonster(enemyStats,playerStats);
+                        enemy.monster.HitMonster(playerStats,enemyStats,false);
                     }
                 }
                 new_x = pos_x + move[0];
@@ -747,7 +791,11 @@ namespace DashBoard
                     //  Print the distance. 
                     //  ToDo -> Distance Printout
                     //  put it into seperate timer
-                    dist.PrintTheDist();
+                    //
+                    // until that check for health
+                    // in PrintTheDist();
+                   
+                        dist.PrintTheDist();
                     
                     break;
                 }
@@ -844,6 +892,7 @@ namespace DashBoard
 
         public static Enemy enemy;
         public static Monster player;
+        public static Monster winner;
 
         /// <summary>
         /// Inits a player and his enemy
@@ -925,15 +974,15 @@ namespace DashBoard
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             for (int i = 0; i < _i; i++)
             {
-                sw.Start();
+                // sw.Start();
                 //  Console.Beep(sound_1[0], sound_1[1]);
                 Console.Beep(_sound.ASound[0], _sound.ASound[1]);
                 if (_i > 1)
                 {
                     Thread.Sleep(sound_1[1]);
                 }
-                sw.Stop();
-                CenterText(1,sw.ElapsedMilliseconds.ToString());
+                // sw.Stop();
+                // CenterText(1,sw.ElapsedMilliseconds.ToString());
             }
         }
 
@@ -1038,14 +1087,21 @@ namespace DashBoard
 
         #region Display the Statistics
 
-        public static Stats playerStats = new Stats();
-        public static Stats enemyStats = new Stats();
+        public static Stats playerStats;    //  = new Stats();
+        public static Stats enemyStats;     //   = new Stats();
 
         public static void InitStats()
         {
             playerStats = player.outfit.stats;
             enemyStats = enemy.monster.outfit.stats;
         }
+
+        public static void UpdateStats(Stats _player, Stats _enemy)
+        {
+            playerStats = _player;
+            enemyStats = _enemy;
+        }
+
         public static void PrintStats()
         {
             //  string.Format("{0,20}","---");
@@ -1061,7 +1117,7 @@ namespace DashBoard
             string playerHealth = String.Format("{0,10}{1,10}", "Health", playerStats.hPoints);
             string playerDefense = String.Format("{0,10}{1,10}", "Defense", playerStats.dPoints);
 
-            string enemyHealth = String.Format("{0,5}{1,15}", enemyStats.hPoints, "Health");
+            string enemyHealth = String.Format("{0,5}{1,15}", enemyStats.GetHPoints(), "Health");
             string enemyDefense = String.Format("{0,5}{1,15}", enemyStats.dPoints, "Defense");
             // lock (statsLock)
             // {
@@ -1100,6 +1156,73 @@ namespace DashBoard
             // }
         }
 
+        public static void PrintStats(Stats _player, Stats _enemy)
+        {
+            //  string.Format("{0,20}","---");
+            //  string output = String.Format("Text{0,10} text{1,10}", arg1, arg2);
+            //  Console.SetCursorPosition(2,1);
+            //  Console.Write(output);
+            String clear = String.Format("{0,20}", " ");
+            int atLine = 1;
+            int left = 2;
+            int right = 78;
+            // int health = player.outfit.stats.HPoints;
+            // int otherNumber = 455;
+            string playerHealth = String.Format("{0,-10}{1,10}", "Health", _player.GetHPoints());
+            string playerDefense = String.Format("{0,-10}{1,10}", "Defense", _player.dPoints);
+            string playerAttack = String.Format("{0,-10}{1,10}", "Attack", _player.aPoints);
+
+            string enemyHealth = String.Format("{0,-5}{1,15}", _enemy.GetHPoints(), "Health");
+            string enemyDefense = String.Format("{0,-5}{1,15}", _enemy.dPoints, "Defense");
+            string enemyAttack = String.Format("{0,-5}{1,15}", _enemy.aPoints, "Defense");
+
+            // don't forget to update the Stats objects
+            UpdateStats(_player, _enemy);
+
+            lock (printlock)
+            {
+
+                ConsoleColor backup = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Green;
+
+                Console.SetCursorPosition(left, atLine);
+                Console.Write(clear);
+                Console.SetCursorPosition(left, atLine);
+                Console.Write(playerHealth);
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.SetCursorPosition(left, atLine + 1);
+                Console.Write(clear);
+                Console.SetCursorPosition(left, atLine + 1);
+                Console.Write(playerDefense);
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(left, atLine + 2);
+                Console.Write(clear);
+                Console.SetCursorPosition(left, atLine + 2);
+                Console.Write(playerAttack);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.SetCursorPosition(right, atLine);
+                Console.Write(clear);
+                Console.SetCursorPosition(right, atLine);
+                Console.Write(enemyHealth);
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.SetCursorPosition(right, atLine + 1);
+                Console.Write(clear);
+                Console.SetCursorPosition(right, atLine + 1);
+                Console.Write(enemyDefense);
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(right, atLine + 2);
+                Console.Write(clear);
+                Console.SetCursorPosition(right, atLine + 2);
+                Console.Write(enemyAttack);
+
+                Console.ForegroundColor = backup;
+            }
+        }
         #endregion
 
         static void Main(string[] args)
@@ -1111,13 +1234,19 @@ namespace DashBoard
 
             // we init the gameStats
             InitStats();
-            PrintHead();
 
+            // we print the dashboard
+            PrintDashboard();
+
+            // we print the stats
+            PrintStats(playerStats, enemyStats);
+
+            // we print a background in the field
             DrawBackground();
 
             Center();
 
-            // Init the choices
+            // we init the movement choices of the monster
             InitChoices();
 
             // hide the cursor
@@ -1135,18 +1264,18 @@ namespace DashBoard
             // InitASong();
             // PlayThisSong(theBackgroundSong);
             #endregion
-            // start Timer
+            
+            // we start a Countdown Timer
             StartTimer();
-
 
             // Start the timerbased enemy movement
             StartEnemyTimer(500);
-            //  StartEnemyTimer(500);
 
             // next time we call it GameLoop
-            Move(player);
+            PlayTheGame(player);
 
-            // Relax for 1/2 a second
+            // The Game is over
+                // Relax for 1/2 a second
             Thread.Sleep(500);
 
             // show a nice cursor;

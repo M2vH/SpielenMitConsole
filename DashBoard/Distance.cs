@@ -17,12 +17,22 @@ namespace DashBoard
         public void PrintTheDist(int _dist)
         {
             text = String.Format("Actual Distance:{0,4}", _dist);
+            //if (Program.enemyStats.GetHPoints() <= 0 && Program.playerStats.GetHPoints() <= 0)
+            //{
+            //    // blanc it out because game is over
+            //    text = String.Format("{0,30}" , " ");
+            //}
             Program.CenterText(3, text);
         }
         public void PrintTheDist()
         {
             CalcDistance();
             text = String.Format("{0,-21}{1,5:D2}","Actual Distance", distance);
+            //if (Program.enemyStats.GetHPoints() <= 0 && Program.playerStats.GetHPoints() <= 0)
+            //{
+            //    // blanc it out because game is over
+            //    text = String.Format("{0,30}", " ");
+            //}
             Program.CenterText(3, text);
         }
         void CalcDistance()

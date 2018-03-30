@@ -20,6 +20,14 @@ namespace DashBoard
         /// Health Points
         /// </summary>
         public int hPoints;
+        public void SetHPoints(int _damage)
+        {
+            hPoints -= _damage;
+        }
+        public int GetHPoints()
+        {
+            return hPoints;
+        }
 
         // public int HPoints { get => hPoints; set => hPoints = value; }
         //public int HPoints
