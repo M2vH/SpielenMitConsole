@@ -20,6 +20,11 @@ namespace DashBoard
         /// Health Points
         /// </summary>
         public int hPoints;
+
+        /// <summary>
+        /// Reduce health points
+        /// </summary>
+        /// <param name="_damage">amount of healthpoints to reduce</param>
         public void SetHPoints(int _damage)
         {
             hPoints -= _damage;

@@ -906,6 +906,10 @@ namespace DashBoard
             //  [2]...from random design
              int r = random.Next(0, theDesigns.Length);
              player = CreatePlayer(theDesigns[r], theDesigns[r].designName);
+#if DEBUG
+            int reduction = 400;
+            player.outfit.stats.SetHPoints(reduction);
+#endif
 
             /* Create an enemy...
             *  [1] this works
@@ -928,6 +932,9 @@ namespace DashBoard
             */
             enemy = new Enemy();
             enemy.CreateEnemyFromOponent();
+#if DEBUG
+            enemy.monster.outfit.stats.SetHPoints(reduction);
+#endif
             enemy.monster.PrintMonster();
         }
         
@@ -1028,10 +1035,10 @@ namespace DashBoard
             n_3.f = 400;
             n_4.f = 1200;
 
-            n_1.d = 250;
-            n_2.d = 250;
-            n_3.d = 250;
-            n_4.d = 500;
+            n_1.d = 200;
+            n_2.d = 200;
+            n_3.d = 200;
+            n_4.d = 50;
 
             // Note[]notes = new Note[16];
             theBackgroundSong[0] = n_1;
@@ -1073,15 +1080,23 @@ namespace DashBoard
         /// <param name="_endless">Set to true for endless sound</param>
         static void PlaySong(Sound[] newSong, bool _endless)
         {
+            AutoResetEvent songEvent = new AutoResetEvent(true);
             while (playSong)
             {
                 int duration = 16;
-                for (int i = 0; i < duration; i++)
+
+                // block the threads for the next acustic applepie
+                songEvent.Reset();
+                lock (printlock)
                 {
-                    Console.Beep(newSong[i].f, newSong[i].d);
+                    for (int i = 0; i < duration; i++)
+                    {
+                        Console.Beep(newSong[i].f, newSong[i].d);
+                    }
                 }
                 
-                Thread.Sleep(500);
+                // Thread.Sleep(500);
+                songEvent.Set();
                 playSong = _endless;
             }
         }
@@ -1237,6 +1252,10 @@ namespace DashBoard
 
             InitGame();
             // Init the Player and Enemy
+
+            // we print a background in the field
+            DrawBackground();
+
             InitPlayerAndEnemy();
 
             // we init the gameStats
@@ -1247,9 +1266,6 @@ namespace DashBoard
 
             // we print the stats
             PrintStats(playerStats, enemyStats);
-
-            // we print a background in the field
-            DrawBackground();
 
             Center();
 
@@ -1291,8 +1307,9 @@ namespace DashBoard
             PlaySong(theBackgroundSong, false);
             
             // show a nice cursor;
-            Console.CursorSize = 1;
-            Console.CursorVisible = true;
+            // Nope
+            // Console.CursorSize = 1;
+            // Console.CursorVisible = true;
 
             // A chance to Exit and close shell
             Close();
