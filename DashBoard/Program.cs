@@ -1023,15 +1023,15 @@ namespace DashBoard
         public static void InitASong()
         {
 
-            n_1.f = 1020;
-            n_2.f = 2400;
-            n_3.f = 1300;
-            n_4.f = 1900;
+            n_1.f = 200;
+            n_2.f = 800;
+            n_3.f = 400;
+            n_4.f = 1200;
 
-            n_1.d = 500;
-            n_2.d = 500;
-            n_3.d = 500;
-            n_4.d = 1000;
+            n_1.d = 250;
+            n_2.d = 250;
+            n_3.d = 250;
+            n_4.d = 500;
 
             // Note[]notes = new Note[16];
             theBackgroundSong[0] = n_1;
@@ -1056,16 +1056,22 @@ namespace DashBoard
         public static bool playSong = false;
 
         /// <summary>
-        /// The asyncron version of PlaySong(Song)
+        /// The asyncron Task of PlaySong(Song)
         /// </summary>
         /// <param name="_newSong"></param>
-        /// <returns></returns>
-        static Task PlaySongAsync(Sound[] _newSong)
+        /// <returns>Delegate of PlaySong()</returns>
+        /// <param name="_endless">Set to true for endless noise ;-)</param>
+        static Task PlaySongAsync(Sound[] _newSong, bool _endless)
         {
-            return Task.Run( () => PlaySong(_newSong) );
+            return Task.Run( () => PlaySong(_newSong, _endless) );
         }
 
-        static void PlaySong(Sound[] newSong)
+        /// <summary>
+        /// The PlaySong plays a given song
+        /// </summary>
+        /// <param name="newSong">The song to play</param>
+        /// <param name="_endless">Set to true for endless sound</param>
+        static void PlaySong(Sound[] newSong, bool _endless)
         {
             while (playSong)
             {
@@ -1074,14 +1080,15 @@ namespace DashBoard
                 {
                     Console.Beep(newSong[i].f, newSong[i].d);
                 }
-
+                
                 Thread.Sleep(500);
+                playSong = _endless;
             }
         }
 
-        public static async void PlayThisSong(Sound[] _song)
+        public static async void PlayThisSong(Sound[] _song, bool _endless)
         {
-            await PlaySongAsync(_song);
+            await PlaySongAsync(_song, _endless);
         }
         #endregion
 
@@ -1278,6 +1285,11 @@ namespace DashBoard
                 // Relax for 1/2 a second
             Thread.Sleep(500);
 
+            //  maybe some sound at the end ???
+            InitASong();
+            playSong = true;
+            PlaySong(theBackgroundSong, false);
+            
             // show a nice cursor;
             Console.CursorSize = 1;
             Console.CursorVisible = true;
