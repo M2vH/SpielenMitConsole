@@ -151,15 +151,52 @@ namespace MonsterHunter
         /// </summary>
         public static void Close()
         {
+            // in a close fight both can die!
+            if (enemyStats.GetHPoints() <= 0 && playerStats.GetHPoints() <= 0)
+            {
+                winner.name = "Nobody. Everybody is DEAD!";
+            }
+
+            // who is the winner?
+            if (enemyStats.GetHPoints() <= 0)
+            {
+                winner = player;
+                // Hide the looser
+                enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
+                // Display the player again to avoid fractals
+                player.PrintMonster();
+
+                // stop the enemy timer
+                enemyTimer.Dispose();
+            }
+            else
+            {
+                winner = enemy.monster;
+                player.HideMonster(player.pos_x, player.pos_y);
+                // Even he is hidden, we must put him aside.
+                player.pos_x = 10;
+                player.pos_y = 10;
+
+                // display winner to avoid fractals
+                enemy.monster.PrintMonster();
+                
+                // enemy stops moving when winner
+                    // slow down the enemy movement
+                    // enemyTimer.Change(0, 1500);
+            }
+
+
+
             //  Center();   //
             int here = y - top / 2;
             lock (printlock)
             {
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            string grats = "The Winner is... " + winner.name;
-            CenterText(here,grats);
-            CenterText(++here, "Press any key ...");
+                ConsoleColor red = ConsoleColor.Red;
+                Thread.Sleep(500);
+                string grats = "The Winner is... " + winner.name;
+                CenterText(here,grats,red);
+                Thread.Sleep(2000);
+                CenterText(++here, "Press any key ...", red);
             }
             Console.ReadLine();
 
@@ -237,6 +274,25 @@ namespace MonsterHunter
             {
                 ConsoleColor memo = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.White;
+                Console.SetCursorPosition(start, line);
+                Console.Write(foo);
+                Console.ForegroundColor = memo;
+            }
+
+        }
+
+        //  print foo at the center of a line, 
+        //  usinf color parameter
+        //  (center of line is calculated)
+        //  |         foo        |
+        public static void CenterText(int line, string foo, ConsoleColor _color)
+        {
+            int start = (x - foo.Length) / 2;
+
+            lock (printlock)
+            {
+                ConsoleColor memo = Console.ForegroundColor;
+                Console.ForegroundColor = _color;
                 Console.SetCursorPosition(start, line);
                 Console.Write(foo);
                 Console.ForegroundColor = memo;
@@ -377,18 +433,38 @@ namespace MonsterHunter
             while (play)
             {
 
-                // we check if one is dead
+                // we check if player is dead
                 if (playerStats.GetHPoints() <= 0 || player.outfit.stats.GetHPoints() <= 0)
                 {
+                    // we dont want to run anymore
                     play = false;
-                    KillTimer();
+                    // we stop the countdown
+                    KillCountdown();
+
+                    // we DONT stop the enemy, because his thread will run
+                    // until enemy is looser.
+                    //StopEnemy();
+
+                    // dont display a dead player
                     player.HideMonster(player.pos_x, player.pos_y);
+
+                    // leave this loop
                     break;
-                    // monsterMove.Dispose();
 
                 }
+                // player is alive
                 else
                 {
+                    // we check if he is winner
+                    if (enemyStats.GetHPoints() <= 0)
+                    {
+                        // player has won;
+                        // stop the clock;
+                        KillCountdown();
+                        break;
+
+                    }
+                    
                     //  we need a monster;
                     //  PrintTheMonster(pos_x, pos_y);
                     player.PrintMonster(player.pos_x, player.pos_y);
@@ -396,9 +472,10 @@ namespace MonsterHunter
                     ConsoleKeyInfo key;
                     key = Console.ReadKey(true);
 
+                    // protect next steps against other threads
                     lock (printlock)
-                {
-                    switch (key.Key)
+                    {
+                        switch (key.Key)
                     {
                         // monster size is x = 5, y = 3
                         // min/max cursor positions are:
@@ -459,9 +536,9 @@ namespace MonsterHunter
                         case ConsoleKey.L:
                             {
                                 play = false;
-                                KillTimer();
+                                KillCountdown();
                                 // Stop the enemy's moving
-                                monsterMove.Change(0,2000);
+                                enemyTimer.Change(0,2000);
                                 break;
                             }
                         case ConsoleKey.H:
@@ -499,39 +576,13 @@ namespace MonsterHunter
                             }
 
                     }
-                } // end of lock
+                    } // end of lock
 
-                }
+                } // end of else
 
-            } 
+            } // end of while
 
-
-            // in a close fight both can die!
-            if (enemyStats.GetHPoints() <= 0 && playerStats.GetHPoints() <= 0)
-            {
-                winner.name = "Nobody. Everybody is DEAD!";
-            }
-            
-            // who is the winner?
-            if (enemyStats.GetHPoints() <= 0)
-            {
-                winner = player;
-                // Hide the looser
-                enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
-                // Display the player again to avoid fractals
-                player.PrintMonster();
-                monsterMove.Dispose();
-            }
-            else
-            {
-                winner = enemy.monster;
-                player.HideMonster(player.pos_x, player.pos_y);
-                // Even he is hidden, we must put him aside.
-                player.pos_x = 0;
-                player.pos_y = 0;
-                monsterMove.Change(0, 1500);
-            }
-        }
+        } // end of function
 
 
         /* 
@@ -603,7 +654,7 @@ namespace MonsterHunter
         /// <summary>
         /// The countdown timer object
         /// </summary>
-        static Timer mytimer;
+        static Timer countdown;
 
         // We call this function when the timer thread callback is ready
         static AutoResetEvent autoEvent = new AutoResetEvent(true);
@@ -663,7 +714,7 @@ namespace MonsterHunter
             if (invokeCount == maxCount)
             {
                 secondAuto.Set();
-                KillTimer();
+                KillCountdown();
             }
         }
 
@@ -672,16 +723,16 @@ namespace MonsterHunter
         /// <summary>
         /// Kill the Timer Thread when Key.L ends the game
         /// </summary>
-        static void KillTimer()
+        static void KillCountdown()
         {
-            mytimer.Dispose();
+            countdown.Dispose();
         }
 
         /// <summary>
         /// Fire Countdown event every 1000ms
         /// </summary>
         static void StartTimer() {
-            mytimer = new Timer(PrintTime, autoEvent, 2000, 1000);
+            countdown = new Timer(PrintTime, autoEvent, 2000, 1000);
 
             autoEvent.WaitOne();
 
@@ -723,7 +774,7 @@ namespace MonsterHunter
         /// <summary>
         /// The Timer object for enemy movement
         /// </summary>
-        static Timer monsterMove;
+        static Timer enemyTimer;
 
         /// <summary>
         /// The callback when enemy move event is ready
@@ -738,7 +789,7 @@ namespace MonsterHunter
         /// <param name="_millis">Frequency of monster movement</param>
         static void StartEnemyTimer(int _millis)
         {
-            monsterMove = new Timer(MoveMonster, resetMonsterTimer, 1000, _millis);
+            enemyTimer = new Timer(MoveMonster, resetMonsterTimer, 1000, _millis);
             resetMonsterTimer.WaitOne();
         }
 
@@ -759,7 +810,7 @@ namespace MonsterHunter
              *  We will be called every <int>_millis
              */
 
-            // Check, if move is possible
+            // we store some data
             int[] move = { 0,0};
             int new_x = 0;
             int new_y = 0;
@@ -769,11 +820,23 @@ namespace MonsterHunter
 
             while (moveIsPossible)
             {
+                // Is enemy still alive?
+                if (playerStats.GetHPoints() <= 0 || enemyStats.GetHPoints() <= 0)
+                {
+                    moveIsPossible = false;
+                    KillCountdown();
+                    //if (playerStats.GetHPoints() <= 0)
+                    //{
+                    //    // player is dead
+                    //    StopPlayer();
+                    //}
+                    break;
 
+                }
 
                 move = RandomMove();
                 // erst hauen, dann laufen;
-                // und nur nebeneinander;
+                // und nur nebeneinander kämpfen;
                 if (dist.GetDistance() < 5 && dist.diff_y < 4)
                 {
                     int r = random.Next(2, 14);
@@ -788,36 +851,38 @@ namespace MonsterHunter
                 new_y = pos_y + move[1];
 
                 // min_x < new_x < max_x
+                // is next move inside the field?
                 if ((2 < new_x && new_x < x - 3  ) && (top + 1 < new_y && new_y < y - 2  ))
                 {
+                    // we are inside field
                     enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
                     enemy.monster.pos_x += move[0];
                     enemy.monster.pos_y += move[1];
                     enemy.monster.PrintMonster();
 
-                    //  Print the distance. 
-                    //  ToDo -> Distance Printout
-                    //  put it into seperate timer
-                    //
-                    // until that check for health
-                    // in PrintTheDist();
                    
                     // check for health
                     // if both alive, print distance,
-                    if (player.outfit.stats.GetHPoints() > 0 || enemy.monster.outfit.stats.GetHPoints() > 0)
+                    if (playerStats.GetHPoints() > 0 &&  enemyStats.GetHPoints() > 0)
                     {
                         dist.PrintTheDist();
                         break;
                     }
                     else
                     {
-                        KillTimer();
+                        // someone is dead
+                        KillCountdown();
                         play = false;
                         moveIsPossible = false;
+                        // if player is NOT moving, he will not
+                        // recognize he is dead.
+                            // The hard way;
+                            // we must catch exception
+                        // StopPlayer();
+                        break;
                     }
 
                     
-                    break;
                 }
                 else
                 {
@@ -825,10 +890,8 @@ namespace MonsterHunter
                 }
 
 
-            }
+            } // end of while
 
-
- 
             // give waiting threads a chance to work
             resetMoveMonster.Set();
 
@@ -1038,7 +1101,7 @@ namespace MonsterHunter
          */
 
 
-        static ASong backgroundSong = new ASong();
+        // static ASong backgroundSong = new ASong();
                 
         
 
@@ -1228,17 +1291,24 @@ namespace MonsterHunter
         }
         #endregion
 
+        #region GameThread
+
+        static Thread thePlayer = new Thread(StartPlayer);
+        static Thread theEnemy = new Thread(StartEnemy);
+
+        #endregion
+
+        // static bool playSong = false;
+
         static void Main(string[] args)
         {
-
-            // Thread theGame = new Thread(StartGame);
-
+            // console preparation
             InitGame();
-            // Init the Player and Enemy
 
             // we print a background in the field
             DrawBackground();
 
+            // Init the Player and Enemy
             InitPlayerAndEnemy();
 
             // we init the gameStats
@@ -1247,12 +1317,10 @@ namespace MonsterHunter
             // we print the dashboard
             PrintDashboard();
 
-            // we print the stats
+            // we print the starting stats
             PrintStats(playerStats, enemyStats);
 
-            Center();
-
-            // we init the movement choices of the monster
+            // we init the movement choices of the enemy
             InitChoices();
 
             // hide the cursor
@@ -1274,40 +1342,97 @@ namespace MonsterHunter
             // we start a Countdown Timer
             StartTimer();
 
-            // Start the timerbased enemy movement
-            StartEnemyTimer(500);
 
             // next time we call it GameLoop
             // PlayTheGame(player);
             // we start a seperate Thread;
-            // theGame.Start();
+            thePlayer.Start();
+
+            theEnemy.Start();
             
-            // The Game is over
-                // Relax for 1/2 a second
+            
+            // The Game is running
+            // Relax for 1/2 a second
+            
             Thread.Sleep(500);
 
-
-
             //  maybe some sound at the end ???
-            backgroundSong.InitASong();
-            
+            // backgroundSong.InitASong();
+
             // InitASong();
             // playSong = true;
-            PlaySong(backgroundSong.TheSong, false);
-            
+            // PlaySong(backgroundSong.TheSong, playSong);
+
             // show a nice cursor;
             // Nope
             // Console.CursorSize = 1;
             // Console.CursorVisible = true;
 
+            // we wait for the player Thread.
+            thePlayer.Join();
             // A chance to Exit and close shell
             Close();
+
             
         }
 
-        private static void StartGame()
+        private static void StartPlayer()
         {
-            PlayTheGame(player);
+            try
+            {
+                PlayTheGame(player);
+
+            }
+            catch (ThreadAbortException ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine("We killed the thread " + ex);
+            }
+        }
+
+        private static void StopPlayer()
+        {
+            try
+            {
+                thePlayer.Join();
+
+            }
+            catch (ThreadAbortException ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine("We killed the thread "+ ex);
+            }
+            player.HideMonster(player.pos_x, player.pos_y);
+            // player.pos_x = 5;
+            // player.pos_y = 5;
+            // playSong = false;
+            // Close();
+        }
+
+        /// <summary>
+        /// The delegate for the enemy thread
+        /// </summary>
+        private static void StartEnemy()
+        {
+            // Start the timerbased enemy movement
+            try
+            {
+                StartEnemyTimer(500);
+
+            }
+            catch (ThreadAbortException ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine("The thread was killed. " + ex);
+            }
+        }
+
+        private static void StopEnemy()
+        {
+            theEnemy.Join();
+            enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
+            // playSong = false;
+            // Close();
         }
     }
 }

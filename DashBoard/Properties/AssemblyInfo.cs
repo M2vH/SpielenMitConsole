@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("DashBoard")]
+[assembly: AssemblyTitle("MonsterHunter")]
 [assembly: AssemblyDescription("Play a Monster Hunter Console Game ")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("M2vH - Marco M. von Hagen")]
-[assembly: AssemblyProduct("DashBoard")]
+[assembly: AssemblyProduct("MonsterHunter")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
