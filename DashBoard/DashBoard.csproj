@@ -110,6 +110,7 @@
     <Compile Include="Direction.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="Design.cs" />
+    <Compile Include="Song.cs" />
     <Compile Include="Sound.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -139,6 +140,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AsciiArtLayout.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

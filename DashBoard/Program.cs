@@ -449,7 +449,6 @@ namespace DashBoard
                                 KillTimer();
                                 // Stop the enemy's moving
                                 monsterMove.Dispose();
-                                playSong = false;
                                 break;
                             }
                         case ConsoleKey.H:
@@ -1014,56 +1013,15 @@ namespace DashBoard
          *      funktioniert in der Console leider nicht.
          *      
          *      Trauriges Smiley
-         */ 
+         */
 
+
+        static ASong backgroundSong = new ASong();
+                
         
-        public static Sound[] theBackgroundSong = new Sound[16];
-
-        static Sound n_1 = new Sound { f = 37, d = 1 };
-        static Sound n_2 = new Sound { f = 37, d = 1 };           
-        static Sound n_3 = new Sound { f = 37, d = 1 };
-        static Sound n_4 = new Sound { f = 37, d = 1 };  
 
         /// <summary>
-        /// Erzeugt einen "Song".
-        /// </summary>
-        public static void InitASong()
-        {
-
-            n_1.f = 200;
-            n_2.f = 800;
-            n_3.f = 400;
-            n_4.f = 1200;
-
-            n_1.d = 800;
-            n_2.d = 800;
-            n_3.d = 800;
-            n_4.d = 800;
-
-            // Note[]notes = new Note[16];
-            theBackgroundSong[0] = n_1;
-            theBackgroundSong[1] = n_2;
-            theBackgroundSong[2] = n_1;
-            theBackgroundSong[3] = n_2;
-            theBackgroundSong[4] = n_1;
-            theBackgroundSong[5] = n_2;
-            theBackgroundSong[6] = n_3;
-            theBackgroundSong[7] = n_4;
-
-            theBackgroundSong[8] = n_2;
-            theBackgroundSong[9] = n_3;
-            theBackgroundSong[10] = n_2;
-            theBackgroundSong[11] = n_3;
-            theBackgroundSong[12] = n_2;
-            theBackgroundSong[13] = n_3;
-            theBackgroundSong[14] = n_1;
-            theBackgroundSong[15] = n_4;
-
-        }
-        public static bool playSong = false;
-
-        /// <summary>
-        /// The asyncron Task of PlaySong(Song)
+        /// The asyncron Task of PlaySong(ASong)
         /// </summary>
         /// <param name="_newSong"></param>
         /// <returns>Delegate of PlaySong()</returns>
@@ -1081,7 +1039,8 @@ namespace DashBoard
         static void PlaySong(Sound[] newSong, bool _endless)
         {
             AutoResetEvent songEvent = new AutoResetEvent(true);
-            while (playSong)
+            bool play = true;
+            while (play)
             {
                 int duration = 16;
 
@@ -1097,7 +1056,7 @@ namespace DashBoard
                 
                 // Thread.Sleep(500);
                 songEvent.Set();
-                playSong = _endless;
+                play = _endless;
             }
         }
 
@@ -1283,7 +1242,7 @@ namespace DashBoard
             //  [1] Sound at the beginning
             //  MakeSomeNoise(2);
             //  [2] Sound in the background
-            // wir brauchen erst nen Song
+            // wir brauchen erst nen ASong
             // InitASong();
             // PlayThisSong(theBackgroundSong);
             #endregion
@@ -1301,10 +1260,14 @@ namespace DashBoard
                 // Relax for 1/2 a second
             Thread.Sleep(500);
 
+
+
             //  maybe some sound at the end ???
-            InitASong();
-            playSong = true;
-            PlaySong(theBackgroundSong, false);
+            backgroundSong.InitASong();
+            
+            // InitASong();
+            // playSong = true;
+            PlaySong(backgroundSong.TheSong, false);
             
             // show a nice cursor;
             // Nope
