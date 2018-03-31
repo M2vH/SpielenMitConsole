@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DashBoard
+namespace MonsterHunter
 {
     /// <summary>
     /// A struct to generate a song.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DashBoard
+namespace MonsterHunter
 {
     /// <summary>
     /// A struct that stores the design.

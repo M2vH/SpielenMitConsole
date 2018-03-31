@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DashBoard
+namespace MonsterHunter
 {
     class Program
     {
@@ -1231,6 +1231,8 @@ namespace DashBoard
         static void Main(string[] args)
         {
 
+            // Thread theGame = new Thread(StartGame);
+
             InitGame();
             // Init the Player and Enemy
 
@@ -1276,8 +1278,10 @@ namespace DashBoard
             StartEnemyTimer(500);
 
             // next time we call it GameLoop
-            PlayTheGame(player);
-
+            // PlayTheGame(player);
+            // we start a seperate Thread;
+            // theGame.Start();
+            
             // The Game is over
                 // Relax for 1/2 a second
             Thread.Sleep(500);
@@ -1299,6 +1303,11 @@ namespace DashBoard
             // A chance to Exit and close shell
             Close();
             
+        }
+
+        private static void StartGame()
+        {
+            PlayTheGame(player);
         }
     }
 }
