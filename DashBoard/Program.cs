@@ -1132,13 +1132,13 @@ namespace MonsterHunter
 
                 // block the threads for the next acustic applepie
                 songEvent.Reset();
-                lock (printlock)
-                {
+                // lock (printlock)
+                // {
                     for (int i = 0; i < duration; i++)
                     {
                         Console.Beep(newSong[i].f, newSong[i].d);
                     }
-                }
+                // }
                 
                 // Thread.Sleep(500);
                 songEvent.Set();

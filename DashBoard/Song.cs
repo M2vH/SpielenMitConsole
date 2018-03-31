@@ -34,13 +34,13 @@ namespace MonsterHunter
 
             n_1.f = 600;
             n_2.f = 800;
-            n_3.f = 400;
+            n_3.f = 1600;
             n_4.f = 1200;
 
             n_1.d = 200;
             n_2.d = 200;
             n_3.d = 200;
-            n_4.d = 300;
+            n_4.d = 400;
 
             // Note[]notes = new Note[16];
             theInitSong[0] = n_1;
