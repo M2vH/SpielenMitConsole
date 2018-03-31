@@ -1324,6 +1324,15 @@ namespace MonsterHunter
 
         static void Main(string[] args)
         {
+            // try printing a welcome
+            Welcome hello = new Welcome();
+            hello.FillWellcome();
+            hello.PrintWelcome(x,y);
+
+
+            string blanc = String.Format("{0,30}","Press ENTER to start!");
+            CenterText(30, blanc, ConsoleColor.Red);
+            Console.ReadLine();
             // console preparation
             InitGame();
 

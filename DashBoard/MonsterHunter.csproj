@@ -120,6 +120,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Stats.cs" />
+    <Compile Include="Welcome.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -142,7 +143,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AsciiArtLayout.txt" />
+    <Content Include="AsciiArtLayout.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
