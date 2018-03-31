@@ -199,6 +199,7 @@ namespace MonsterHunter
                 CenterText(++here, "Press any key ...", red);
             }
             Console.ReadLine();
+            playSong = false;
 
         }
 
@@ -1101,7 +1102,7 @@ namespace MonsterHunter
          */
 
 
-        // static ASong backgroundSong = new ASong();
+        static ASong backgroundSong = new ASong();
                 
         
 
@@ -1124,7 +1125,7 @@ namespace MonsterHunter
         static void PlaySong(Sound[] newSong, bool _endless)
         {
             AutoResetEvent songEvent = new AutoResetEvent(true);
-            bool play = true;
+            bool play = _endless;
             while (play)
             {
                 int duration = 16;
@@ -1141,7 +1142,7 @@ namespace MonsterHunter
                 
                 // Thread.Sleep(500);
                 songEvent.Set();
-                play = _endless;
+                play=playSong;
             }
         }
 
@@ -1295,10 +1296,31 @@ namespace MonsterHunter
 
         static Thread thePlayer = new Thread(StartPlayer);
         static Thread theEnemy = new Thread(StartEnemy);
+        static Thread theSong = new Thread(PlayMySong);
+
+        private static void PlayMySong()
+        {
+            try
+            {
+                //  maybe some sound at the end ???
+                backgroundSong.InitASong();
+
+                //InitASong();
+
+                // playSong = true;
+                PlaySong(backgroundSong.TheSong, playSong);
+
+            }
+            catch (ThreadAbortException ex)
+            {
+                System.Diagnostics.Debug.WriteLine("We killed the song. " + ex);
+                
+            }
+        }
 
         #endregion
 
-        // static bool playSong = false;
+        static bool playSong = true;
 
         static void Main(string[] args)
         {
@@ -1355,13 +1377,7 @@ namespace MonsterHunter
             // Relax for 1/2 a second
             
             Thread.Sleep(500);
-
-            //  maybe some sound at the end ???
-            // backgroundSong.InitASong();
-
-            // InitASong();
-            // playSong = true;
-            // PlaySong(backgroundSong.TheSong, playSong);
+            theSong.Start();
 
             // show a nice cursor;
             // Nope
