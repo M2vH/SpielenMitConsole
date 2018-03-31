@@ -27,7 +27,14 @@ namespace DashBoard
         /// <param name="_damage">amount of healthpoints to reduce</param>
         public void SetHPoints(int _damage)
         {
-            hPoints -= _damage;
+            if (hPoints < _damage)
+            {
+                hPoints = 0;
+            }
+            else
+            {
+                hPoints -= _damage;
+            }
         }
         public int GetHPoints()
         {

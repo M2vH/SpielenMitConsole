@@ -359,6 +359,7 @@ namespace DashBoard
             return start;
         }
 
+        static bool play = true;
         // make a play
         // ! only cursor is moving !
         /// <summary>
@@ -373,17 +374,29 @@ namespace DashBoard
              */
             player = _player;
 
-            bool play = true;
-            do
+            while (play)
             {
-                //  we need a monster;
-                //  PrintTheMonster(pos_x, pos_y);
-                player.PrintMonster(player.pos_x, player.pos_y);
 
-                ConsoleKeyInfo key;
-                key = Console.ReadKey(true);
+                // we check if one is dead
+                if (playerStats.GetHPoints() <= 0 || player.outfit.stats.GetHPoints() <= 0)
+                {
+                    play = false;
+                    KillTimer();
+                    player.HideMonster(player.pos_x, player.pos_y);
+                    break;
+                    // monsterMove.Dispose();
 
-                lock (printlock)
+                }
+                else
+                {
+                    //  we need a monster;
+                    //  PrintTheMonster(pos_x, pos_y);
+                    player.PrintMonster(player.pos_x, player.pos_y);
+
+                    ConsoleKeyInfo key;
+                    key = Console.ReadKey(true);
+
+                    lock (printlock)
                 {
                     switch (key.Key)
                     {
@@ -448,7 +461,7 @@ namespace DashBoard
                                 play = false;
                                 KillTimer();
                                 // Stop the enemy's moving
-                                monsterMove.Dispose();
+                                monsterMove.Change(0,2000);
                                 break;
                             }
                         case ConsoleKey.H:
@@ -488,16 +501,9 @@ namespace DashBoard
                     }
                 } // end of lock
 
-                // we check if one is dead
-                if (enemyStats.GetHPoints() <= 0 || playerStats.GetHPoints() <= 0)
-                {
-                    play = false;
-                    KillTimer();
-                    // monsterMove.Dispose();
-                    
                 }
 
-            } while (play);
+            } 
 
 
             // in a close fight both can die!
@@ -763,6 +769,8 @@ namespace DashBoard
 
             while (moveIsPossible)
             {
+
+
                 move = RandomMove();
                 // erst hauen, dann laufen;
                 // und nur nebeneinander;
@@ -794,7 +802,20 @@ namespace DashBoard
                     // until that check for health
                     // in PrintTheDist();
                    
+                    // check for health
+                    // if both alive, print distance,
+                    if (player.outfit.stats.GetHPoints() > 0 || enemy.monster.outfit.stats.GetHPoints() > 0)
+                    {
                         dist.PrintTheDist();
+                        break;
+                    }
+                    else
+                    {
+                        KillTimer();
+                        play = false;
+                        moveIsPossible = false;
+                    }
+
                     
                     break;
                 }
@@ -802,6 +823,7 @@ namespace DashBoard
                 {
                     moveIsPossible = true;
                 }
+
 
             }
 
