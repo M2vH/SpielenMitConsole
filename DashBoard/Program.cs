@@ -188,7 +188,7 @@ namespace MonsterHunter
 
 
             //  Center();   //
-            int here = y - top / 2;
+            int here = y - 5  - top / 2;
             lock (printlock)
             {
                 playSong = false;
@@ -1336,6 +1336,7 @@ namespace MonsterHunter
 
             string blanc = String.Format("{0}","Press ENTER to start!");
             CenterText(25, blanc, ConsoleColor.Red);
+            Console.CursorVisible = false;
             Console.ReadLine();
             // playSong = false;
             // theSong.Join();
