@@ -1124,14 +1124,14 @@ namespace MonsterHunter
         /// <param name="_endless">Set to true for endless sound</param>
         static void PlaySong(Sound[] newSong, bool _endless)
         {
-            AutoResetEvent songEvent = new AutoResetEvent(true);
+            // AutoResetEvent songEvent = new AutoResetEvent(true);
             bool play = _endless;
             while (play)
             {
                 int duration = 16;
 
                 // block the threads for the next acustic applepie
-                songEvent.Reset();
+                // songEvent.Reset();
                 // lock (printlock)
                 // {
                     for (int i = 0; i < duration; i++)
@@ -1141,7 +1141,7 @@ namespace MonsterHunter
                 // }
                 
                 // Thread.Sleep(500);
-                songEvent.Set();
+                // songEvent.Set();
                 play=playSong;
             }
         }
@@ -1332,10 +1332,13 @@ namespace MonsterHunter
             hello.FillWellcome();
             hello.PrintWelcome(x,y);
 
+            // theSong.Start();
 
             string blanc = String.Format("{0}","Press ENTER to start!");
             CenterText(25, blanc, ConsoleColor.Red);
             Console.ReadLine();
+            // playSong = false;
+            // theSong.Join();
             // we print a background in the field
             DrawBackground();
 
@@ -1386,7 +1389,6 @@ namespace MonsterHunter
             // Relax for 1/2 a second
             
             Thread.Sleep(500);
-            theSong.Start();
 
             // show a nice cursor;
             // Nope
