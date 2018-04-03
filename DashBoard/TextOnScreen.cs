@@ -7,7 +7,7 @@ using System.IO;
 
 namespace MonsterHunter
 {
-    struct Welcome
+    struct TextOnScreen
     {
         private string path;
 
@@ -26,7 +26,7 @@ namespace MonsterHunter
 
         public void FillWellcome()
         {
-            path = "AsciiArtLayout.txt";
+            path = "Welcome.txt";
             string[] welcome = File.ReadAllLines(path);
 
             lines = new List<string>();

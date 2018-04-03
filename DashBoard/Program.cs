@@ -1328,7 +1328,7 @@ namespace MonsterHunter
             InitGame();
 
             // try printing a welcome
-            Welcome hello = new Welcome();
+            TextOnScreen hello = new TextOnScreen();
             hello.FillWellcome();
             hello.PrintWelcome(x,y);
 
