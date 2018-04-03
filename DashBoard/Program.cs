@@ -191,15 +191,15 @@ namespace MonsterHunter
             int here = y - top / 2;
             lock (printlock)
             {
+                playSong = false;
                 ConsoleColor red = ConsoleColor.Red;
                 Thread.Sleep(500);
                 string grats = "The Winner is... " + winner.name;
                 CenterText(here,grats,red);
                 Thread.Sleep(2000);
-                CenterText(++here, "Press any key ...", red);
+                CenterText(++here, "Press ENTER to close game ", red);
+                Console.ReadLine();
             }
-            Console.ReadLine();
-            playSong = false;
 
         }
 
@@ -1324,18 +1324,18 @@ namespace MonsterHunter
 
         static void Main(string[] args)
         {
+            // console preparation
+            InitGame();
+
             // try printing a welcome
             Welcome hello = new Welcome();
             hello.FillWellcome();
             hello.PrintWelcome(x,y);
 
 
-            string blanc = String.Format("{0,30}","Press ENTER to start!");
-            CenterText(30, blanc, ConsoleColor.Red);
+            string blanc = String.Format("{0}","Press ENTER to start!");
+            CenterText(25, blanc, ConsoleColor.Red);
             Console.ReadLine();
-            // console preparation
-            InitGame();
-
             // we print a background in the field
             DrawBackground();
 

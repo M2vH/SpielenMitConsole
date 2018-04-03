@@ -98,7 +98,7 @@ namespace MonsterHunter
                 {
                     Console.SetCursorPosition(i, j);
                     Console.ForegroundColor = (ConsoleColor)random.Next(1, 7);
-                    Console.Write(Fill[random.Next(0,3)]);
+                    Console.Write(Fill[random.Next(0,4)]);
 
                 }
             }
