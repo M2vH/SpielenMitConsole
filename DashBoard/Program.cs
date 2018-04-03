@@ -1386,7 +1386,7 @@ namespace MonsterHunter
             // Relax for 1/2 a second
             
             Thread.Sleep(500);
-            theSong.Start();
+            // theSong.Start();
 
             // show a nice cursor;
             // Nope
