@@ -505,11 +505,12 @@ namespace MonsterHunter
 
                                             // we can fight;
                                             Game.player.Fight(Game.player);
+                                            Sound.PlaySound(1, Game.player.outfit.FightSound);
 
                                             if (Game.dist.distance < 4)
                                             {
-                                                // player.HitMonster(player.outfit.stats, enemy.monster.outfit.stats);
                                                 Game.player.HitMonster(Game.playerStats, Game.enemyStats, true);
+                                                
                                             }
                                         }
                                         break;

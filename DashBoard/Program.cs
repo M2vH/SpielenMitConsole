@@ -48,7 +48,7 @@ namespace MonsterHunter
                 designName = "Goble",
                 designColor = ConsoleColor.White,
                 designElements = new string[] { "(°;°)", " ~▓~ ", " ] [ ", "O-▓-O" },
-                FightSound = new Sound { ASound = sound_1 },
+                FightSound = Sound.low ,
                 // top resistance: 30
                 stats = new Stats
                 {
@@ -63,7 +63,7 @@ namespace MonsterHunter
                 designName = "Frodo",
                 designColor = ConsoleColor.Yellow,
                 designElements = new string[] { "{O.O}", " /▓\\ ", " { } ", "o-▓-o" },
-                FightSound = new Sound { ASound = sound_2 },
+                FightSound = Sound.mid ,
                 // low resistance: 10
                 stats = new Stats
                 {
@@ -78,7 +78,7 @@ namespace MonsterHunter
                 designName = "Angry",
                 designColor = ConsoleColor.Green,
                 designElements = new string[] { "[-.-]", " '▓' ", " U U ", "0-▓-0" },
-                FightSound = new Sound { ASound = sound_3 },
+                FightSound = Sound.high,
                 // medium resistance: 20
                 stats = new Stats
                 {
@@ -173,45 +173,6 @@ namespace MonsterHunter
 
 
 
-        /*  Create an enemy at random position
-         *  
-         *  [1] CreateEnemy()
-         */
-        /// <summary>
-        /// Create an enemy different from Player
-        /// </summary>
-        /// <remarks>Set enemy start position to random position</remarks>
-        /// <param name="_player">The player monster</param>
-        /// <returns>Returns an enemy monster</returns>
-        public static Monster CreateEnemy(Monster _player)
-        {
-            //  get the design of player
-            //  and select different one
-            int id = 0;
-            Design enemyDesign = Game.theDesigns[id];
-            while (enemyDesign.designName == _player.outfit.designName)
-            {
-                id = Game.random.Next(Game.theDesigns.Length - 1);
-                enemyDesign = Game.theDesigns[id];
-            }
-
-            // store a random start position
-            int[] here = Monster.RandomStartPos();
-            Monster enemy = Player.CreatePlayer(enemyDesign, here[0], here[1], "The incredible " + enemyDesign.designName);
-            return enemy;
-        }
-
-        /*  
-         *  The Monster Movement Timing
-         */
-
-
-
-
-        /* Init Player and Enemy
-         * Player comes in random outfit
-         * and Enemy is different then Player
-         */
 
         /* --> The Game  <--
          * 
@@ -219,72 +180,13 @@ namespace MonsterHunter
          * 
          */
 
-        /*  The sound machine
-         *  Implementation of async fighting sound.
-         *  ToDo: let each monster sound different.
-         */
-        public static int[] sound_1 = { 300, 750 };
-        public static int[] sound_2 = { 600, 750 };
-        public static int[] sound_3 = { 900, 750 };
-
-        // The async call of the fight sound function
-        /// <summary>
-        /// The asyncronuos Task of the PlaySound.
-        /// </summary>
-        /// <remarks>Takes an number for intervals</remarks>
-        /// <param name="_i">Sound id played "_i" times</param>
-        /// <param name="_sound">Sound of monster design</param>
-        /// <returns></returns>
-        static Task PlaySoundAsync(int _i, Sound _sound)
-        {
-            return Task.Run(() => PlaySound(_i, _sound));
-        }
-
-        // The sound function
-        /// <summary>
-        /// The sound for the fight.
-        /// </summary>
-        /// <param name="_i">Sound is played _i times</param>
-        /// <param name="_sound">Sound of monster design</param>
-        static void PlaySound(int _i, Sound _sound)
-        {
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            for (int i = 0; i < _i; i++)
-            {
-                // sw.Start();
-                //  Console.Beep(sound_1[0], sound_1[1]);
-                Console.Beep(_sound.ASound[0], _sound.ASound[1]);
-                if (_i > 1)
-                {
-                    Thread.Sleep(sound_1[1]);
-                }
-                // sw.Stop();
-                // CenterText(1,sw.ElapsedMilliseconds.ToString());
-            }
-        }
-
-        // play it async
-        /// <summary>
-        /// Play a sound asyncronuos.
-        /// </summary>
-        /// <param name="_i">Sound id played "_i" times</param>
-        /// <param name="_sound">Sound of monster design</param>
-        public static async void MakeSomeNoise(int _i, Sound _sound)
-        {
-            if (_i < 1)
-            {
-                _i = 1;
-            }
-            await PlaySoundAsync(_i, _sound);
-        }
 
 
+        #region GameThreads
 
-        #region GameThread
-
-        static Thread thePlayer = new Thread(Player.StartPlayer);
-        static Thread theEnemy = new Thread(StartEnemy);
-        static Thread theSong = new Thread(Song.PlayMySong);
+        public static Thread thePlayer = new Thread(Player.StartPlayer);
+        public static Thread theEnemy = new Thread(Enemy.StartEnemy);
+        public static Thread theSong = new Thread(Song.PlayMySong);
 
 
         #endregion
@@ -359,56 +261,7 @@ namespace MonsterHunter
 
             Thread.Sleep(500);
 
-            // show a nice cursor;
-            // Nope
-            // Console.CursorSize = 1;
-            // Console.CursorVisible = true;
-
-            // Waiting for the player Thread?
-            // No, each will check for health
-            // and call CloseTheGame() to end the game.
-            // thePlayer.Join();
-            // theEnemy.Join();
-
-            // A chance to Exit and close shell
-            // CloseTheGame();
-
-
         }
 
-        /// <summary>
-        /// The delegate for the enemy thread
-        /// </summary>
-        private static void StartEnemy()
-        {
-            // Start the timerbased enemy movement
-            try
-            {
-                Enemy.StartEnemyTimer(500);
-
-            }
-            catch (ThreadAbortException ex)
-            {
-
-                System.Diagnostics.Debug.WriteLine("The thread was killed. " + ex);
-            }
-        }
-
-        private static void StopEnemy()
-        {
-            try
-            {
-                theEnemy.Join();
-                Game.enemy.monster.HideMonster(Game.enemy.monster.pos_x, Game.enemy.monster.pos_y);
-
-            }
-            catch (ThreadAbortException ex)
-            {
-
-                System.Diagnostics.Debug.WriteLine("Stop Enemy: " + ex);
-            }
-            // playSong = false;
-            Game.CloseTheGame();
-        }
     }
 }

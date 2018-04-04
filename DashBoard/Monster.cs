@@ -328,6 +328,7 @@ namespace MonsterHunter
                             Game.enemy.monster.Fight(Game.enemy.monster);
                             // enemy.monster.HitMonster(enemyStats,playerStats);
                             Game.enemy.monster.HitMonster(Game.playerStats, Game.enemyStats, false);
+                            Sound.PlaySound(1, Game.enemy.monster.outfit.FightSound);
                         }
                     }
                     new_x = pos_x + move[0];

@@ -30,20 +30,10 @@ namespace MonsterHunter
         {
             Sound[] theInitSong = new Sound[16];
 
-            n_1 = new Sound { f = 37, d = 1 };
-            n_2 = new Sound { f = 37, d = 1 };
-            n_3 = new Sound { f = 37, d = 1 };
-            n_4 = new Sound { f = 37, d = 1 };
-
-            n_1.f = 600;
-            n_2.f = 800;
-            n_3.f = 1600;
-            n_4.f = 1200;
-
-            n_1.d = 200;
-            n_2.d = 200;
-            n_3.d = 200;
-            n_4.d = 400;
+            n_1 = new Sound(600,200);
+            n_2 = new Sound(700,200);
+            n_3 = new Sound(800,200);
+            n_4 = new Sound(900,200);
 
             // Note[]notes = new Note[16];
             theInitSong[0] = n_1;
@@ -111,7 +101,7 @@ namespace MonsterHunter
                 // {
                 for (int i = 0; i < duration; i++)
                 {
-                    Console.Beep(newSong[i].f, newSong[i].d);
+                    Console.Beep(newSong[i].Freq(), newSong[i].Dur());
                 }
                 // }
 
