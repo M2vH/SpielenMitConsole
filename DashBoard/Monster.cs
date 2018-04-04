@@ -51,7 +51,7 @@ namespace MonsterHunter
 
         // keine Veränderung;
         // public Stats stats;
-        
+
         //  print a monster at pos x,y
         //  lock the printing of a Monster 
         /// <summary>
@@ -83,7 +83,7 @@ namespace MonsterHunter
                 {
                     Console.ForegroundColor = outfit.designColor;
                 }
-                
+
                 // [1] printing the head
                 //      set cursor to start_x, start_y
                 Console.SetCursorPosition(start_x, start_y);
@@ -128,8 +128,8 @@ namespace MonsterHunter
         }
 
         //  Hide Monster
-            //  recover the background
-            //  lock the printing
+        //  recover the background
+        //  lock the printing
         /// <summary>
         /// Hide the monster
         /// </summary>
@@ -179,7 +179,7 @@ namespace MonsterHunter
             {
                 // set a new ForegroundColor
                 Console.ForegroundColor = Program.gameBackground;
-                
+
                 // [1] printing the head
                 Console.SetCursorPosition(pos_x - 2, pos_y - 1);
                 Console.Write(blanc_bg[0]);
@@ -208,27 +208,9 @@ namespace MonsterHunter
         //  switch parts[3] and parts[1]
         /// <summary>
         /// Prints the "fighting" part of monster
-        /// </summary>
         /// <remarks>Calls the fight sound function</remarks>
-
-        #region old Fight()
-            //  public void Fight()
-            //  {
-            //      lock (Program.printlock)
-            //      {
-            //          Program.MakeSomeNoise(1);
-            //          string store = parts[1];
-            //          parts[1] = parts[3];
-            //          PrintMonster();
-            //          parts[1] = store;
-            //          // display fight for 50ms
-            //          Thread.Sleep(50);
-            //          HideMonster(pos_x,pos_y);
-            //          PrintMonster();
-            //      }
-            //  }
-        #endregion
-
+        /// </summary>
+        /// <param name="_monster">the monster that will fight</param>
         public void Fight(Monster _monster)
         {
             lock (Program.printlock)
@@ -236,7 +218,16 @@ namespace MonsterHunter
                 // Sorry, that Console Sound s*cks
                 // Program.MakeSomeNoise(1, _monster.outfit.FightSound);
                 string store = parts[1];
-                parts[1] = parts[3];
+                try
+                {
+                    parts[1] = parts[3];
+
+                }
+                catch (IndexOutOfRangeException ex)
+                {
+
+                    System.Diagnostics.Debug.WriteLine("We have no 'fighting' layout." + ex);
+                }
                 PrintMonster();
                 parts[1] = store;
                 // display fight for 50ms
@@ -262,7 +253,7 @@ namespace MonsterHunter
                 damage = _me.aPoints - _oponent.dPoints;
                 // _oponent.hPoints -= damage;
                 _oponent.SetHPoints(damage);
-            
+
             }
             Program.PrintStats();
         }

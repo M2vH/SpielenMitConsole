@@ -207,55 +207,6 @@ namespace MonsterHunter
        
         // ToDo: Question? Where are the CreateMonster functions placed best?
 
-        /* Function <Monster>CreateMonster(string head, string body, string legs)
-        // Instantiates a monster with parts as parameter
-        */
-        static Monster CreatePlayer(string _head, string _body, string _legs, string _name)
-        {
-            Monster player = new Monster
-            {
-                parts = new string[3],
-                name = _name,
-                pos_x = x / 3,
-                pos_y = (y + top) / 2,
-            };
-            player.parts[0] = _head;
-            player.parts[1] = _body;
-            player.parts[2] = _legs;
-
-            return player;
-        }
-
-        /*  Function <Monster>CreatePlayer(Design _design, string _name)
-        //  Creates a gamer monster with a given <Design> at default position
-        */
-        static Monster CreatePlayer(Design _design, string _name)
-        {
-            Monster monster = new Monster
-            {
-                outfit = _design,
-                name = _name,
-                pos_x = x / 3,
-                pos_y = (y + top) / 2,
-
-            };
-            return monster;
-        }
-
-        /*  <Monster> CreatePlayer(Design _design, int _x, int _y, string _name)
-         *  Creates a Monster at a given position;
-         */
-        static Monster CreatePlayer(Design _design, int _x, int _y, string _name)
-        {
-            Monster monster = new Monster
-            {
-                outfit = _design,
-                name = _name,
-                pos_x = _x,
-                pos_y = _y,
-            };
-            return monster;
-        }
 
         /*  Function < int[] > RandomStartPos()
          *  Calculates a random position in the right side of the field
@@ -307,7 +258,7 @@ namespace MonsterHunter
                         // we dont want to run anymore
                         play = false;
                         // we stop the countdown
-                        KillCountdown();
+                        GameTools.KillCountdown();
 
                         // we DONT stop the enemy, because his thread will run
                         // until enemy is looser.
@@ -329,7 +280,7 @@ namespace MonsterHunter
                         {
                             // player has won;
                             // stop the clock;
-                            KillCountdown();
+                            GameTools.KillCountdown();
                             CloseTheGame();
                             break;
 
@@ -406,7 +357,7 @@ namespace MonsterHunter
                                 case ConsoleKey.L:
                                     {
                                         play = false;
-                                        KillCountdown();
+                                        GameTools.KillCountdown();
                                         // Stop the enemy's moving
                                         enemyTimer.Change(0, 2000);
                                         CloseTheGame();
@@ -519,103 +470,6 @@ namespace MonsterHunter
 
 
 
-        /*  The Timer
-         *  We run a Timer and print a countdown in its own thread.
-         */
-
-        /// <summary>
-        /// The countdown timer object
-        /// </summary>
-        static Timer countdown;
-
-        // We call this function when the timer thread callback is ready
-        static AutoResetEvent autoEvent = new AutoResetEvent(true);
-
-        //  we count every timer callback call
-        //  init invokeCount;
-        /// <summary>
-        /// Object to store how often Countdowntimer calls.
-        /// </summary>
-        static int invokeCount = 0;
-
-        // we want to run for given amount of seconds;
-        /// <summary>
-        /// The maximum Countdown Time in seconds
-        /// </summary>
-        static int maxCount = 120;
-
-        // we store countdown here;
-        // and init remaining time with maximum seconds
-        /// <summary>
-        /// Object to store the extant time
-        /// </summary>
-        static int remainTime = maxCount;
-
-        // the string we want to print
-        /// <summary>
-        /// The string in the printout of the Countdown
-        /// </summary>
-        static String timeText;
-
-        // this function is the callback for the timer
-        /// <summary>
-        /// The callback function for countdown timer
-        /// </summary>
-        /// <remarks>Prints the Countdown string</remarks>
-        /// <param name="stateInfo">The Timer Event handle</param>
-        static void PrintTime(Object stateInfo)
-        {
-            // yes, we can
-            ++invokeCount;
-            --remainTime;
-
-            timeText = String.Format("{0,-16}{1,5} : {2}", "Time remaining",
-                                        arg1: (remainTime / 60).ToString(),
-                                        arg2: (remainTime % 60).ToString("D2"));
-
-            // Clear the dashboard with Key.Space
-            string clear = String.Format("{0,50}", " ");
-            Dashboard.CenterText(2, clear);
-
-            // print the Countdown in the center of our dashboard
-            Dashboard.CenterText(2, timeText);
-
-            // We send signals to waiting threads
-            AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
-
-            if (invokeCount == maxCount)
-            {
-                secondAuto.Set();
-                KillCountdown();
-            }
-        }
-
-
-        // we clean up the thread
-        /// <summary>
-        /// Kill the Timer Thread when Key.L ends the game
-        /// </summary>
-        static void KillCountdown()
-        {
-            countdown.Dispose();
-        }
-
-        /// <summary>
-        /// Fire Countdown event every 1000ms
-        /// </summary>
-        static void StartTimer()
-        {
-            try
-            {
-                countdown = new Timer(PrintTime, autoEvent, 2000, 1000);
-                autoEvent.WaitOne();
-            }
-            catch (ThreadAbortException ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Catch: StartTimer " + ex);
-            }
-
-        }
 
         /*  Create an enemy at random position
          *  
@@ -641,7 +495,7 @@ namespace MonsterHunter
 
             // store a random start position
             int[] here = RandomStartPos();
-            Monster enemy = CreatePlayer(enemyDesign, here[0], here[1], "The incredible " + enemyDesign.designName);
+            Monster enemy = Player.CreatePlayer(enemyDesign, here[0], here[1], "The incredible " + enemyDesign.designName);
             return enemy;
         }
 
@@ -658,7 +512,7 @@ namespace MonsterHunter
         /// <summary>
         /// The callback when enemy move event is ready
         /// </summary>
-        static AutoResetEvent resetMonsterTimer = new AutoResetEvent(true);
+        static AutoResetEvent resetEnemyTimer = new AutoResetEvent(true);
 
         //  <void> StartEnemyTimer(int _millis);
         /// <summary>
@@ -671,8 +525,8 @@ namespace MonsterHunter
 
             try
             {
-                enemyTimer = new Timer(MoveMonster, resetMonsterTimer, 1000, _millis);
-                resetMonsterTimer.WaitOne();
+                enemyTimer = new Timer(MoveMonster, resetEnemyTimer, 1000, _millis);
+                resetEnemyTimer.WaitOne();
 
             }
             catch (ThreadAbortException ex)
@@ -716,7 +570,7 @@ namespace MonsterHunter
                     if (playerStats.GetHPoints() <= 0 || enemyStats.GetHPoints() <= 0)
                     {
                         moveIsPossible = false;
-                        KillCountdown();
+                        GameTools.KillCountdown();
                         if (playerStats.GetHPoints() <= 0)
                         {
                             // player is dead
@@ -763,7 +617,7 @@ namespace MonsterHunter
                         else
                         {
                             // someone is dead
-                            KillCountdown();
+                            GameTools.KillCountdown();
                             play = false;
                             moveIsPossible = false;
                             // if player is NOT moving, he will not
@@ -888,7 +742,7 @@ namespace MonsterHunter
             //  player = CreatePlayer(angry, "Angry");
             //  [2]...from random design
             int r = random.Next(0, theDesigns.Length);
-            player = CreatePlayer(theDesigns[r], theDesigns[r].designName);
+            player = Player.CreatePlayer(theDesigns[r], theDesigns[r].designName);
 #if DEBUG
             int reduction = 400;
             player.outfit.stats.SetHPoints(reduction);
@@ -1273,7 +1127,7 @@ namespace MonsterHunter
             #endregion
 
             // we start a Countdown Timer
-            StartTimer();
+            GameTools.StartCountdown();
 
 
             // next time we call it GameLoop

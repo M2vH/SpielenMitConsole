@@ -109,8 +109,10 @@
     <Compile Include="Distance.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="GameTools.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="Design.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Song.cs" />
     <Compile Include="Sound.cs" />
     <Compile Include="Program.cs" />
