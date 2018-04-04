@@ -44,7 +44,7 @@ namespace MonsterHunter
             Console.Write(drawline);
 
             // reduce playgound
-            Program.top += 1;
+            Window.top += 1;
 
 
         }
@@ -66,7 +66,7 @@ namespace MonsterHunter
             Console.Write(drawbox);
 
             // reduce playground
-            Program.top += 1;
+            Window.top += 1;
         }
 
         //  print foo at the center of a line, 
@@ -74,9 +74,9 @@ namespace MonsterHunter
         //  |         foo        |
         public static void CenterText(int line, string foo)
         {
-            int start = (Program.x - foo.Length) / 2;
+            int start = (Window.x - foo.Length) / 2;
 
-            lock (Program.printlock)
+            lock (Game.printlock)
             {
                 ConsoleColor memo = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.White;
@@ -93,9 +93,9 @@ namespace MonsterHunter
         //  |         foo        |
         public static void CenterText(int line, string foo, ConsoleColor _color)
         {
-            int start = (Program.x - foo.Length) / 2;
+            int start = (Window.x - foo.Length) / 2;
 
-            lock (Program.printlock)
+            lock (Game.printlock)
             {
                 ConsoleColor memo = Console.ForegroundColor;
                 Console.ForegroundColor = _color;

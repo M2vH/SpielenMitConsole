@@ -74,7 +74,7 @@ namespace MonsterHunter
             //      store default color;
             ConsoleColor color_backup = Console.ForegroundColor;
 
-            lock (Program.printlock)
+            lock (Game.printlock)
             {
                 // if outfit.designColor is set, (it's not Black)
                 // set ForegroundColor to outfit.designColor;
@@ -175,7 +175,7 @@ namespace MonsterHunter
             //      store default color;
             ConsoleColor color_backup = Console.ForegroundColor;
 
-            lock (Program.printlock)
+            lock (Game.printlock)
             {
                 // set a new ForegroundColor
                 Console.ForegroundColor = Program.gameBackground;
@@ -213,7 +213,7 @@ namespace MonsterHunter
         /// <param name="_monster">the monster that will fight</param>
         public void Fight(Monster _monster)
         {
-            lock (Program.printlock)
+            lock (Game.printlock)
             {
                 // Sorry, that Console Sound s*cks
                 // Program.MakeSomeNoise(1, _monster.outfit.FightSound);
@@ -247,7 +247,7 @@ namespace MonsterHunter
             // calc damage ( myAttack - hisDefense = theDamage )
             // write new health at _monster ( hisHealth -= theDamage  )
             // do _monster.PrintStats()
-            lock (Program.printlock)
+            lock (Game.printlock)
             {
                 int damage = 0;
                 damage = _me.aPoints - _oponent.dPoints;
@@ -274,6 +274,177 @@ namespace MonsterHunter
             Game.PrintStats(_me, _oponent);
 
         }
+        //  the Timer CallBack Funktion
+        //  This function is called,
+        //  when Timer ticks happen.
+        /// <summary>
+        /// The Monster Timer Event Callback
+        /// </summary>
+        /// <remarks>Moves the monster. Is Callback function for Timer Event</remarks>
+        /// <param name="_stateInfo">The Event Handle</param>
+        public static void MoveMonster(Object _stateInfo)
+        {
+            AutoResetEvent resetMoveMonster = (AutoResetEvent)_stateInfo;
+
+            /*  
+             *  We will be called every <int>_millis
+             */
+
+            // we store some data
+            int[] move = { 0, 0 };
+            int new_x = 0;
+            int new_y = 0;
+            int pos_x = Game.enemy.monster.pos_x;
+            int pos_y = Game.enemy.monster.pos_y;
+            bool moveIsPossible = true;
+
+            try
+            {
+
+                while (moveIsPossible)
+                {
+                    // Is enemy still alive?
+                    if (Game.playerStats.GetHPoints() <= 0 || Game.enemyStats.GetHPoints() <= 0)
+                    {
+                        moveIsPossible = false;
+                        Game.KillCountdown();
+                        if (Game.playerStats.GetHPoints() <= 0)
+                        {
+                            // player is dead
+                            Player.StopPlayer();
+                            break;
+                        }
+
+                    }
+
+                    move = RandomMove();
+                    // erst hauen, dann laufen;
+                    // und nur nebeneinander kämpfen;
+                    if (Game.dist.GetDistance() < 5 && Game.dist.diff_y < 4)
+                    {
+                        int r = Game.random.Next(2, 14);
+                        if ((r % 2) == 0)
+                        {
+                            Game.enemy.monster.Fight(Game.enemy.monster);
+                            // enemy.monster.HitMonster(enemyStats,playerStats);
+                            Game.enemy.monster.HitMonster(Game.playerStats, Game.enemyStats, false);
+                        }
+                    }
+                    new_x = pos_x + move[0];
+                    new_y = pos_y + move[1];
+
+                    // min_x < new_x < max_x
+                    // is next move inside the field?
+                    if ((2 < new_x && new_x < Window.x - 3) && (Window.top + 1 < new_y && new_y < Window.y - 2))
+                    {
+                        // we are inside field
+                        Game.enemy.monster.HideMonster(Game.enemy.monster.pos_x, Game.enemy.monster.pos_y);
+                        Game.enemy.monster.pos_x += move[0];
+                        Game.enemy.monster.pos_y += move[1];
+                        Game.enemy.monster.PrintMonster();
+
+
+                        // check for health
+                        // if both alive, print distance,
+                        if (Game.playerStats.GetHPoints() > 0 && Game.enemyStats.GetHPoints() > 0)
+                        {
+                            Game.dist.PrintTheDist();
+                            break;
+                        }
+                        else
+                        {
+                            // someone is dead
+                            Game.KillCountdown();
+                            Game.play = false;
+                            moveIsPossible = false;
+                            // if player is NOT moving, he will not
+                            // recognize he is dead.
+                            // The hard way;
+                            // we must catch exception
+                            // StopPlayer();
+                            break;
+                        }
+
+
+                    }
+                    else
+                    {
+                        moveIsPossible = true;
+                    }
+
+
+                } // end of while
+            }
+            catch (ThreadAbortException ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine("Catch: MovePlayer() " + ex);
+            }
+
+
+            // give waiting threads a chance to work
+            resetMoveMonster.Set();
+
+        }
+
+        /// <summary>
+        /// Calculates a weighted random enemy movement
+        /// </summary>
+        /// <remarks>Weighted movement into left part of field</remarks>
+        /// <returns>An int array with next x,y coords</returns>
+        static int[] RandomMove()
+        {
+            int[] goHere = new int[] { 0, 0 };
+            int selected = Game.random.Next(1, 20);
+
+            if (selected >= 0 && selected < 3)  // 
+            {
+                goHere = Choice.goTo[0].coord;
+            }
+            else if (selected >= 3 && selected < 9)
+            {
+                goHere = Choice.goTo[1].coord;
+            }
+            else if (9 <= selected && selected < 17)
+            {
+                goHere = Choice.goTo[2].coord;
+            }
+            else if (17 <= selected && selected < 20)
+            {
+                goHere = Choice.goTo[3].coord;
+            }
+            else if (selected == 20)
+            {
+                goHere = Choice.goTo[4].coord;
+            }
+
+            return goHere;
+        }
+
+        /*  Function < int[] > RandomStartPos()
+ *  Calculates a random position in the right side of the field
+ *  Returns an int[]
+ */
+        public static int[] RandomStartPos()
+        {
+            int[] start = new int[2];
+
+            // pos x min/max
+            int x_min = Window.x / 2 + 4;  // 4 steps right from middle
+            int x_max = Window.x - 4;      // 4 steps left from outer right
+
+            // pos y min/max
+            int y_min = Window.top + 4;          // 4 steps below top
+            int y_max = Window.y - 4;      // 4 steps above bottom
+
+            start[0] = Game.random.Next(x_min, x_max);
+            start[1] = Game.random.Next(y_min, y_max);
+
+            return start;
+        }
+
+
+
     }
 }
 

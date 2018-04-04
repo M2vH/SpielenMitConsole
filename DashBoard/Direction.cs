@@ -23,8 +23,6 @@ namespace MonsterHunter
          *                                                  19
          */
 
-        // public Direction[] movement;
-
         public int[]
             up,
             right_up, 
@@ -36,6 +34,26 @@ namespace MonsterHunter
             left_up,
             stay
             ;
-        
+
+        /*
+ *  Monster Movement goTo
+ *  
+ *  Looks like the most stupid way
+ *  
+ */
+        public static Direction to = new Direction
+        {
+            up = new int[] { 0, -1 },
+            right_up = new int[2] { 1, -1 },
+            right = new int[] { 1, 0 },
+            right_down = new int[] { 1, 1 },
+            down = new int[] { 0, 1 },
+            left_down = new int[] { -1, 1 },
+            left = new int[] { -1, 0 },
+            left_up = new int[] { -1, -1 },
+            stay = new int[] { 0, 0 }
+        };
+
+
     }
 }

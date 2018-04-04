@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MonsterHunter
@@ -23,8 +24,8 @@ namespace MonsterHunter
             {
                 parts = new string[3],
                 name = _name,
-                pos_x = Program.x / 3,
-                pos_y = (Program.y + Program.top) / 2,
+                pos_x = Window.x / 3,
+                pos_y = (Window.y + Window.top) / 2,
             };
             player.parts[0] = _head;
             player.parts[1] = _body;
@@ -48,8 +49,8 @@ namespace MonsterHunter
             {
                 outfit = _design,
                 name = _name,
-                pos_x = Program.x / 3,
-                pos_y = (Program.y + Program.top) / 2,
+                pos_x = Window.x / 3,
+                pos_y = (Window.y + Window.top) / 2,
 
             };
             return monster;
@@ -77,6 +78,37 @@ namespace MonsterHunter
             };
             return monster;
         }
+
+        public static void StartPlayer()
+        {
+            try
+            {
+                Game.PlayTheGame(Game.player);
+            }
+            catch (ThreadAbortException ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Catch: StartPlayer " + ex);
+            }
+        }
+
+        public static void StopPlayer()
+        {
+            try
+            {
+                // thePlayer.Abort();
+                Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
+                // player.pos_x = 5;
+                // player.pos_y = 5;
+                // playSong = false;
+                Game.CloseTheGame();
+            }
+            catch (ThreadAbortException ex)
+            {
+                System.Diagnostics.Debug.WriteLine("We killed the thread " + ex);
+            }
+        }
+
+
 
     }
 }

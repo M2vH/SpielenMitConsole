@@ -103,7 +103,9 @@ namespace MonsterHunter
                 }
             }
 
-            foreach(string line in lines)
+
+            // print the ASCII text
+            foreach (string line in lines)
             {
                 char[] symbols = new char[line.Length];
                 symbols = line.ToCharArray();

@@ -109,7 +109,7 @@
     <Compile Include="Distance.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Direction.cs" />
-    <Compile Include="GameTools.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="Design.cs" />
     <Compile Include="Player.cs" />
@@ -124,6 +124,7 @@
     </Compile>
     <Compile Include="Stats.cs" />
     <Compile Include="TextOnScreen.cs" />
+    <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
