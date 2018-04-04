@@ -152,7 +152,7 @@ namespace MonsterHunter
         /// <summary>
         /// Closing the game. Display "Press any key...".
         /// </summary>
-        public static void Close()
+        public static void CloseTheGame()
         {
             // in a close fight both can die!
             if (enemyStats.GetHPoints() <= 0 && playerStats.GetHPoints() <= 0)
@@ -183,14 +183,12 @@ namespace MonsterHunter
                 // display winner to avoid fractals
                 enemy.monster.PrintMonster();
 
-                // enemy stops moving when winner
+                // enemy stops moving when winner;
                 // slow down the enemy movement
                 // enemyTimer.Change(0, 1500);
             }
 
 
-
-            //  Center();   //
             int here = y - 5 - top / 2;
             lock (printlock)
             {
@@ -457,7 +455,7 @@ namespace MonsterHunter
                         player.HideMonster(player.pos_x, player.pos_y);
 
                         // leave this loop
-                        Close();
+                        CloseTheGame();
                         break;
 
                     }
@@ -470,7 +468,7 @@ namespace MonsterHunter
                             // player has won;
                             // stop the clock;
                             KillCountdown();
-                            Close();
+                            CloseTheGame();
                             break;
 
                         }
@@ -549,6 +547,7 @@ namespace MonsterHunter
                                         KillCountdown();
                                         // Stop the enemy's moving
                                         enemyTimer.Change(0, 2000);
+                                        CloseTheGame();
                                         break;
                                     }
                                 case ConsoleKey.H:
@@ -1441,12 +1440,12 @@ namespace MonsterHunter
 
             // Waiting for the player Thread?
             // No, each will check for health
-            // and call Close() to end the game.
+            // and call CloseTheGame() to end the game.
             // thePlayer.Join();
             // theEnemy.Join();
 
             // A chance to Exit and close shell
-            // Close();
+            // CloseTheGame();
 
 
         }
@@ -1467,17 +1466,17 @@ namespace MonsterHunter
         {
             try
             {
-                thePlayer.Abort();
+                // thePlayer.Abort();
+                player.HideMonster(player.pos_x, player.pos_y);
+                // player.pos_x = 5;
+                // player.pos_y = 5;
+                // playSong = false;
+                CloseTheGame();
             }
             catch (ThreadAbortException ex)
             {
                 System.Diagnostics.Debug.WriteLine("We killed the thread " + ex);
             }
-            player.HideMonster(player.pos_x, player.pos_y);
-            // player.pos_x = 5;
-            // player.pos_y = 5;
-            // playSong = false;
-            Close();
         }
 
         /// <summary>
@@ -1512,7 +1511,7 @@ namespace MonsterHunter
                 System.Diagnostics.Debug.WriteLine("Stop Enemy: " + ex);
             }
             // playSong = false;
-            Close();
+            CloseTheGame();
         }
     }
 }
