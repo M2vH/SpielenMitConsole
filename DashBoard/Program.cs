@@ -199,8 +199,8 @@ namespace MonsterHunter
                 Thread.Sleep(500);
                 string grats = "The Winner is... " + winner.name;
                 CenterText(here, grats, red);
-                Thread.Sleep(2000);
                 CenterText(++here, "Press ENTER to close game ", red);
+                Thread.Sleep(2000);
                 Console.ReadLine();
             }
 
@@ -431,161 +431,173 @@ namespace MonsterHunter
         static void PlayTheGame(Monster _player)
         {
 
-            /*  We receive a monster for the player with an existing design
-             */
-            player = _player;
-
-            while (play)
+            try
             {
 
-                // we check if player is dead
-                if (playerStats.GetHPoints() <= 0 || player.outfit.stats.GetHPoints() <= 0)
+                /*  We receive a monster for the player with an existing design
+                 */
+                player = _player;
+
+                while (play)
                 {
-                    // we dont want to run anymore
-                    play = false;
-                    // we stop the countdown
-                    KillCountdown();
 
-                    // we DONT stop the enemy, because his thread will run
-                    // until enemy is looser.
-                    //StopEnemy();
-
-                    // dont display a dead player
-                    player.HideMonster(player.pos_x, player.pos_y);
-
-                    // leave this loop
-                    break;
-
-                }
-                // player is alive
-                else
-                {
-                    // we check if he is winner
-                    if (enemyStats.GetHPoints() <= 0)
+                    // we check if player is dead
+                    if (playerStats.GetHPoints() <= 0 || player.outfit.stats.GetHPoints() <= 0)
                     {
-                        // player has won;
-                        // stop the clock;
+                        // we dont want to run anymore
+                        play = false;
+                        // we stop the countdown
                         KillCountdown();
+
+                        // we DONT stop the enemy, because his thread will run
+                        // until enemy is looser.
+                        //StopEnemy();
+
+                        // dont display a dead player
+                        player.HideMonster(player.pos_x, player.pos_y);
+
+                        // leave this loop
+                        Close();
                         break;
 
                     }
-
-                    //  we need a monster;
-                    //  PrintTheMonster(pos_x, pos_y);
-                    player.PrintMonster(player.pos_x, player.pos_y);
-
-                    ConsoleKeyInfo key;
-                    key = Console.ReadKey(true);
-
-                    // protect next steps against other threads
-                    lock (printlock)
+                    // player is alive
+                    else
                     {
-                        switch (key.Key)
+                        // we check if he is winner
+                        if (enemyStats.GetHPoints() <= 0)
                         {
-                            // monster size is x = 5, y = 3
-                            // min/max cursor positions are:
-                            // left = 2;            // monster left is 2 pixel from middle
-                            // right = x - 2 - 2;   // -2 for the monster size, -2 for the OutOfRange Exception
-                            // upper = int top + 1;     // top is set when dashboard is printed;
-                            // bottom = y - 1 - 1;  // -1 for the monster size, -1 for the excepiton
-                            case ConsoleKey.W:
-                            case ConsoleKey.UpArrow:
-                                {
-                                    // if we are not at the top:
-                                    // ( ! top is set when board is created !);
-                                    if (player.pos_y > top + 1)
-                                    {
-                                        player.HideMonster(player.pos_x, player.pos_y);
-                                        // Console.CursorTop = Console.CursorTop - 1;
-                                        player.pos_y--;
-                                    }
-                                    break;
-                                }
-                            case ConsoleKey.D:
-                            case ConsoleKey.RightArrow:
-                                {
-                                    // if we are not at the outer right
-                                    // move right;
-                                    if (player.pos_x < x - 4)
-                                    {
-                                        player.HideMonster(player.pos_x, player.pos_y);
-                                        // Console.CursorLeft += 1;
-                                        player.pos_x++;
-                                    }
-                                    break;
-                                }
-                            case ConsoleKey.S:
-                            case ConsoleKey.DownArrow:
-                                {
-                                    // if we are not at bottom:
-                                    if (player.pos_y < y - 3)
-                                    {
-                                        player.HideMonster(player.pos_x, player.pos_y);
-                                        // Console.CursorTop += 1;
-                                        player.pos_y++;
-                                    }
-                                    break;
-                                }
-                            case ConsoleKey.A:
-                            case ConsoleKey.LeftArrow:
-                                {
-                                    // if we are not at the outer left
-                                    if (player.pos_x > 2)
-                                    {
-                                        player.HideMonster(player.pos_x, player.pos_y);
-                                        // Console.CursorLeft -= 1;
-                                        player.pos_x--;
-                                    }
-                                    break;
-                                }
-                            case ConsoleKey.L:
-                                {
-                                    play = false;
-                                    KillCountdown();
-                                    // Stop the enemy's moving
-                                    enemyTimer.Change(0, 2000);
-                                    break;
-                                }
-                            case ConsoleKey.H:
-                                {
-                                    // we lock this section
-                                    lock (printlock)
-                                    {
-                                        // jump into middle of screen
-                                        // player.HideMonster(player.pos_x, player.pos_y);
-                                        // Center();
-                                        // player.pos_x = Console.CursorLeft;
-                                        // player.pos_y = Console.CursorTop;
-
-                                        // we can fight;
-                                        player.Fight(player);
-
-                                        if (dist.distance < 4)
-                                        {
-                                            // player.HitMonster(player.outfit.stats, enemy.monster.outfit.stats);
-                                            player.HitMonster(playerStats, enemyStats, true);
-                                        }
-                                    }
-                                    break;
-                                }
-                            case ConsoleKey.Spacebar:
-                                {
-                                    // let the monster fight;
-                                    // ToDo: create a monster.fight()
-                                    break;
-                                }
-                            default:
-                                {
-                                    // Center();
-                                    break;
-                                }
+                            // player has won;
+                            // stop the clock;
+                            KillCountdown();
+                            Close();
+                            break;
 
                         }
-                    } // end of lock
 
-                } // end of else
+                        //  we need a monster;
+                        //  PrintTheMonster(pos_x, pos_y);
+                        player.PrintMonster(player.pos_x, player.pos_y);
 
-            } // end of while
+                        ConsoleKeyInfo key;
+                        key = Console.ReadKey(true);
+
+                        // protect next steps against other threads
+                        lock (printlock)
+                        {
+                            switch (key.Key)
+                            {
+                                // monster size is x = 5, y = 3
+                                // min/max cursor positions are:
+                                // left = 2;            // monster left is 2 pixel from middle
+                                // right = x - 2 - 2;   // -2 for the monster size, -2 for the OutOfRange Exception
+                                // upper = int top + 1;     // top is set when dashboard is printed;
+                                // bottom = y - 1 - 1;  // -1 for the monster size, -1 for the excepiton
+                                case ConsoleKey.W:
+                                case ConsoleKey.UpArrow:
+                                    {
+                                        // if we are not at the top:
+                                        // ( ! top is set when board is created !);
+                                        if (player.pos_y > top + 1)
+                                        {
+                                            player.HideMonster(player.pos_x, player.pos_y);
+                                            // Console.CursorTop = Console.CursorTop - 1;
+                                            player.pos_y--;
+                                        }
+                                        break;
+                                    }
+                                case ConsoleKey.D:
+                                case ConsoleKey.RightArrow:
+                                    {
+                                        // if we are not at the outer right
+                                        // move right;
+                                        if (player.pos_x < x - 4)
+                                        {
+                                            player.HideMonster(player.pos_x, player.pos_y);
+                                            // Console.CursorLeft += 1;
+                                            player.pos_x++;
+                                        }
+                                        break;
+                                    }
+                                case ConsoleKey.S:
+                                case ConsoleKey.DownArrow:
+                                    {
+                                        // if we are not at bottom:
+                                        if (player.pos_y < y - 3)
+                                        {
+                                            player.HideMonster(player.pos_x, player.pos_y);
+                                            // Console.CursorTop += 1;
+                                            player.pos_y++;
+                                        }
+                                        break;
+                                    }
+                                case ConsoleKey.A:
+                                case ConsoleKey.LeftArrow:
+                                    {
+                                        // if we are not at the outer left
+                                        if (player.pos_x > 2)
+                                        {
+                                            player.HideMonster(player.pos_x, player.pos_y);
+                                            // Console.CursorLeft -= 1;
+                                            player.pos_x--;
+                                        }
+                                        break;
+                                    }
+                                case ConsoleKey.L:
+                                    {
+                                        play = false;
+                                        KillCountdown();
+                                        // Stop the enemy's moving
+                                        enemyTimer.Change(0, 2000);
+                                        break;
+                                    }
+                                case ConsoleKey.H:
+                                    {
+                                        // we lock this section
+                                        lock (printlock)
+                                        {
+                                            // jump into middle of screen
+                                            // player.HideMonster(player.pos_x, player.pos_y);
+                                            // Center();
+                                            // player.pos_x = Console.CursorLeft;
+                                            // player.pos_y = Console.CursorTop;
+
+                                            // we can fight;
+                                            player.Fight(player);
+
+                                            if (dist.distance < 4)
+                                            {
+                                                // player.HitMonster(player.outfit.stats, enemy.monster.outfit.stats);
+                                                player.HitMonster(playerStats, enemyStats, true);
+                                            }
+                                        }
+                                        break;
+                                    }
+                                case ConsoleKey.Spacebar:
+                                    {
+                                        // let the monster fight;
+                                        // ToDo: create a monster.fight()
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        // Center();
+                                        break;
+                                    }
+
+                            }
+                        } // end of lock
+
+                    } // end of else
+
+                } // end of while
+            }
+            catch (ThreadAbortException ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine("Catch: PlayTheGame " + ex);
+            }
+
 
         } // end of function
 
@@ -738,9 +750,15 @@ namespace MonsterHunter
         /// </summary>
         static void StartTimer()
         {
-            countdown = new Timer(PrintTime, autoEvent, 2000, 1000);
-
-            autoEvent.WaitOne();
+            try
+            {
+                countdown = new Timer(PrintTime, autoEvent, 2000, 1000);
+                autoEvent.WaitOne();
+            }
+            catch (ThreadAbortException ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Catch: StartTimer " + ex);
+            }
 
         }
 
@@ -795,8 +813,18 @@ namespace MonsterHunter
         /// <param name="_millis">Frequency of monster movement</param>
         static void StartEnemyTimer(int _millis)
         {
-            enemyTimer = new Timer(MoveMonster, resetMonsterTimer, 1000, _millis);
-            resetMonsterTimer.WaitOne();
+
+            try
+            {
+                enemyTimer = new Timer(MoveMonster, resetMonsterTimer, 1000, _millis);
+                resetMonsterTimer.WaitOne();
+
+            }
+            catch (ThreadAbortException ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine("Catch: StartEnemyTimer " + ex);
+            }
         }
 
 
@@ -824,79 +852,89 @@ namespace MonsterHunter
             int pos_y = enemy.monster.pos_y;
             bool moveIsPossible = true;
 
-            while (moveIsPossible)
+            try
             {
-                // Is enemy still alive?
-                if (playerStats.GetHPoints() <= 0 || enemyStats.GetHPoints() <= 0)
+
+                while (moveIsPossible)
                 {
-                    moveIsPossible = false;
-                    KillCountdown();
-                    if (playerStats.GetHPoints() <= 0)
+                    // Is enemy still alive?
+                    if (playerStats.GetHPoints() <= 0 || enemyStats.GetHPoints() <= 0)
                     {
-                        // player is dead
-                        StopPlayer();
-                        break;
+                        moveIsPossible = false;
+                        KillCountdown();
+                        if (playerStats.GetHPoints() <= 0)
+                        {
+                            // player is dead
+                            StopPlayer();
+                            break;
+                        }
+
                     }
 
-                }
-
-                move = RandomMove();
-                // erst hauen, dann laufen;
-                // und nur nebeneinander kämpfen;
-                if (dist.GetDistance() < 5 && dist.diff_y < 4)
-                {
-                    int r = random.Next(2, 14);
-                    if ((r % 2) == 0)
+                    move = RandomMove();
+                    // erst hauen, dann laufen;
+                    // und nur nebeneinander kämpfen;
+                    if (dist.GetDistance() < 5 && dist.diff_y < 4)
                     {
-                        enemy.monster.Fight(enemy.monster);
-                        // enemy.monster.HitMonster(enemyStats,playerStats);
-                        enemy.monster.HitMonster(playerStats, enemyStats, false);
+                        int r = random.Next(2, 14);
+                        if ((r % 2) == 0)
+                        {
+                            enemy.monster.Fight(enemy.monster);
+                            // enemy.monster.HitMonster(enemyStats,playerStats);
+                            enemy.monster.HitMonster(playerStats, enemyStats, false);
+                        }
                     }
-                }
-                new_x = pos_x + move[0];
-                new_y = pos_y + move[1];
+                    new_x = pos_x + move[0];
+                    new_y = pos_y + move[1];
 
-                // min_x < new_x < max_x
-                // is next move inside the field?
-                if ((2 < new_x && new_x < x - 3) && (top + 1 < new_y && new_y < y - 2))
-                {
-                    // we are inside field
-                    enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
-                    enemy.monster.pos_x += move[0];
-                    enemy.monster.pos_y += move[1];
-                    enemy.monster.PrintMonster();
-
-
-                    // check for health
-                    // if both alive, print distance,
-                    if (playerStats.GetHPoints() > 0 && enemyStats.GetHPoints() > 0)
+                    // min_x < new_x < max_x
+                    // is next move inside the field?
+                    if ((2 < new_x && new_x < x - 3) && (top + 1 < new_y && new_y < y - 2))
                     {
-                        dist.PrintTheDist();
-                        break;
+                        // we are inside field
+                        enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
+                        enemy.monster.pos_x += move[0];
+                        enemy.monster.pos_y += move[1];
+                        enemy.monster.PrintMonster();
+
+
+                        // check for health
+                        // if both alive, print distance,
+                        if (playerStats.GetHPoints() > 0 && enemyStats.GetHPoints() > 0)
+                        {
+                            dist.PrintTheDist();
+                            break;
+                        }
+                        else
+                        {
+                            // someone is dead
+                            KillCountdown();
+                            play = false;
+                            moveIsPossible = false;
+                            // if player is NOT moving, he will not
+                            // recognize he is dead.
+                            // The hard way;
+                            // we must catch exception
+                            // StopPlayer();
+                            break;
+                        }
+
+
                     }
                     else
                     {
-                        // someone is dead
-                        KillCountdown();
-                        play = false;
-                        moveIsPossible = false;
-                        // if player is NOT moving, he will not
-                        // recognize he is dead.
-                        // The hard way;
-                        // we must catch exception
-                        // StopPlayer();
-                        break;
+                        moveIsPossible = true;
                     }
 
 
-                }
-                else
-                {
-                    moveIsPossible = true;
-                }
+                } // end of while
+            }
+            catch (ThreadAbortException ex)
+            {
 
+                System.Diagnostics.Debug.WriteLine("Catch: MovePlayer() " + ex);
+            }
 
-            } // end of while
 
             // give waiting threads a chance to work
             resetMoveMonster.Set();
@@ -1401,12 +1439,14 @@ namespace MonsterHunter
             // Console.CursorSize = 1;
             // Console.CursorVisible = true;
 
-            // Waiting for the player Thread.
-                thePlayer.Join();
+            // Waiting for the player Thread?
+            // No, each will check for health
+            // and call Close() to end the game.
+            // thePlayer.Join();
             // theEnemy.Join();
 
             // A chance to Exit and close shell
-            Close();
+            // Close();
 
 
         }
@@ -1416,12 +1456,10 @@ namespace MonsterHunter
             try
             {
                 PlayTheGame(player);
-
             }
             catch (ThreadAbortException ex)
             {
-
-                System.Diagnostics.Debug.WriteLine("We killed the thread " + ex);
+                System.Diagnostics.Debug.WriteLine("Catch: StartPlayer " + ex);
             }
         }
 
@@ -1430,18 +1468,16 @@ namespace MonsterHunter
             try
             {
                 thePlayer.Abort();
-
             }
             catch (ThreadAbortException ex)
             {
-
                 System.Diagnostics.Debug.WriteLine("We killed the thread " + ex);
             }
             player.HideMonster(player.pos_x, player.pos_y);
             // player.pos_x = 5;
             // player.pos_y = 5;
             // playSong = false;
-            // Close();
+            Close();
         }
 
         /// <summary>
@@ -1476,7 +1512,7 @@ namespace MonsterHunter
                 System.Diagnostics.Debug.WriteLine("Stop Enemy: " + ex);
             }
             // playSong = false;
-            // Close();
+            Close();
         }
     }
 }
