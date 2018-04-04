@@ -30,7 +30,7 @@ namespace MonsterHunter
         public void CreateEnemyFromOponent()
         {
             position = Program.RandomStartPos();
-            monster = Program.CreateEnemy(Program.player);
+            monster = Program.CreateEnemy(Game.player);
         }
 
         

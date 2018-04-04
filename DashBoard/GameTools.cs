@@ -8,8 +8,12 @@ using System.Threading;
 namespace MonsterHunter
 {
     
-struct GameTools
+struct Game
     {
+        public static Enemy enemy;
+        public static Monster player;
+        public static Monster winner;
+
         /// <summary>
         /// The countdown timer object
         /// </summary>
@@ -110,8 +114,8 @@ struct GameTools
 
         public static void InitStats()
         {
-            playerStats = Program.player.outfit.stats;
-            enemyStats = Program.enemy.monster.outfit.stats;
+            playerStats = Game.player.outfit.stats;
+            enemyStats = Game.enemy.monster.outfit.stats;
         }
 
         public static void UpdateStats(Stats _player, Stats _enemy)
@@ -242,6 +246,61 @@ struct GameTools
             }
         }
         #endregion
+        /// <summary>
+        /// Closing the game. Display "Press any key...".
+        /// </summary>
+        public static void CloseTheGame()
+        {
+            // in a close fight both can die!
+            if (enemyStats.GetHPoints() <= 0 && playerStats.GetHPoints() <= 0)
+            {
+                winner.name = "Nobody. Everybody is DEAD!";
+            }
+
+            // who is the winner?
+            if (enemyStats.GetHPoints() <= 0)
+            {
+                winner = player;
+                // Hide the looser
+                enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
+                // Display the player again to avoid fractals
+                player.PrintMonster();
+
+                // stop the enemy timer
+                Program.enemyTimer.Dispose();
+            }
+            else
+            {
+                winner = enemy.monster;
+                player.HideMonster(player.pos_x, player.pos_y);
+                // Even he is hidden, we must put him aside.
+                player.pos_x = 10;
+                player.pos_y = 10;
+
+                // display winner to avoid fractals
+                enemy.monster.PrintMonster();
+
+                // enemy stops moving when winner;
+                // slow down the enemy movement
+                // enemyTimer.Change(0, 1500);
+            }
+
+
+            int here = Program.y - 5 - Program.top / 2;
+            lock (Program.printlock)
+            {
+                Song.playSong = false;
+                ConsoleColor red = ConsoleColor.Red;
+                Thread.Sleep(500);
+                string grats = "The Winner is... " + winner.name;
+                Dashboard.CenterText(here, grats, red);
+                Dashboard.CenterText(++here, "Press ENTER to close game ", red);
+                Thread.Sleep(2000);
+                Console.ReadLine();
+            }
+
+        }
+
 
 
     }

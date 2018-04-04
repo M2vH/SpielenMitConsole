@@ -255,7 +255,7 @@ namespace MonsterHunter
                 _oponent.SetHPoints(damage);
 
             }
-            GameTools.PrintStats();
+            Game.PrintStats();
         }
 
         public void HitMonster(Stats _me, Stats _oponent, bool _enemyWasHit)
@@ -271,7 +271,7 @@ namespace MonsterHunter
                 damage = _oponent.aPoints - _me.dPoints;
                 _me.SetHPoints(damage);
             }
-            GameTools.PrintStats(_me, _oponent);
+            Game.PrintStats(_me, _oponent);
 
         }
     }

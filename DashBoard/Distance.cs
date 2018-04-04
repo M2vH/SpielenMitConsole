@@ -37,8 +37,8 @@ namespace MonsterHunter
         }
         void CalcDistance()
         {
-            diff_x = Math.Abs((int)(Program.player.pos_x - Program.enemy.monster.pos_x));
-            diff_y = Math.Abs((int)(Program.player.pos_y - Program.enemy.monster.pos_y));
+            diff_x = Math.Abs((int)(Game.player.pos_x - Game.enemy.monster.pos_x));
+            diff_y = Math.Abs((int)(Game.player.pos_y - Game.enemy.monster.pos_y));
 
             distance = (int)Math.Sqrt((double)(diff_x * diff_x + diff_y * diff_y));
         }

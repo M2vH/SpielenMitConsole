@@ -57,10 +57,6 @@ namespace MonsterHunter
         /// </summary>
         static Design[] theDesigns;
 
-        public static Enemy enemy;
-        public static Monster player;
-        public static Monster winner;
-
 
         #endregion
 
@@ -197,28 +193,28 @@ namespace MonsterHunter
 
                 /*  We receive a monster for the player with an existing design
                  */
-                player = _player;
+                Game.player = _player;
 
                 while (play)
                 {
 
                     // we check if player is dead
-                    if (GameTools.playerStats.GetHPoints() <= 0 || player.outfit.stats.GetHPoints() <= 0)
+                    if (Game.playerStats.GetHPoints() <= 0 || Game.player.outfit.stats.GetHPoints() <= 0)
                     {
                         // we dont want to run anymore
                         play = false;
                         // we stop the countdown
-                        GameTools.KillCountdown();
+                        Game.KillCountdown();
 
                         // we DONT stop the enemy, because his thread will run
                         // until enemy is looser.
                         //StopEnemy();
 
                         // dont display a dead player
-                        player.HideMonster(player.pos_x, player.pos_y);
+                        Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
 
                         // leave this loop
-                        CloseTheGame();
+                        Game.CloseTheGame();
                         break;
 
                     }
@@ -226,19 +222,19 @@ namespace MonsterHunter
                     else
                     {
                         // we check if he is winner
-                        if (GameTools.enemyStats.GetHPoints() <= 0)
+                        if (Game.enemyStats.GetHPoints() <= 0)
                         {
                             // player has won;
                             // stop the clock;
-                            GameTools.KillCountdown();
-                            CloseTheGame();
+                            Game.KillCountdown();
+                            Game.CloseTheGame();
                             break;
 
                         }
 
                         //  we need a monster;
                         //  PrintTheMonster(pos_x, pos_y);
-                        player.PrintMonster(player.pos_x, player.pos_y);
+                        Game.player.PrintMonster(Game.player.pos_x, Game.player.pos_y);
 
                         ConsoleKeyInfo key;
                         key = Console.ReadKey(true);
@@ -259,11 +255,11 @@ namespace MonsterHunter
                                     {
                                         // if we are not at the top:
                                         // ( ! top is set when board is created !);
-                                        if (player.pos_y > top + 1)
+                                        if (Game.player.pos_y > top + 1)
                                         {
-                                            player.HideMonster(player.pos_x, player.pos_y);
+                                            Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
                                             // Console.CursorTop = Console.CursorTop - 1;
-                                            player.pos_y--;
+                                            Game.player.pos_y--;
                                         }
                                         break;
                                     }
@@ -272,11 +268,11 @@ namespace MonsterHunter
                                     {
                                         // if we are not at the outer right
                                         // move right;
-                                        if (player.pos_x < x - 4)
+                                        if (Game.player.pos_x < x - 4)
                                         {
-                                            player.HideMonster(player.pos_x, player.pos_y);
+                                            Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
                                             // Console.CursorLeft += 1;
-                                            player.pos_x++;
+                                            Game.player.pos_x++;
                                         }
                                         break;
                                     }
@@ -284,11 +280,11 @@ namespace MonsterHunter
                                 case ConsoleKey.DownArrow:
                                     {
                                         // if we are not at bottom:
-                                        if (player.pos_y < y - 3)
+                                        if (Game.player.pos_y < y - 3)
                                         {
-                                            player.HideMonster(player.pos_x, player.pos_y);
+                                            Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
                                             // Console.CursorTop += 1;
-                                            player.pos_y++;
+                                            Game.player.pos_y++;
                                         }
                                         break;
                                     }
@@ -296,21 +292,21 @@ namespace MonsterHunter
                                 case ConsoleKey.LeftArrow:
                                     {
                                         // if we are not at the outer left
-                                        if (player.pos_x > 2)
+                                        if (Game.player.pos_x > 2)
                                         {
-                                            player.HideMonster(player.pos_x, player.pos_y);
+                                            Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
                                             // Console.CursorLeft -= 1;
-                                            player.pos_x--;
+                                            Game.player.pos_x--;
                                         }
                                         break;
                                     }
                                 case ConsoleKey.L:
                                     {
                                         play = false;
-                                        GameTools.KillCountdown();
+                                        Game.KillCountdown();
                                         // Stop the enemy's moving
                                         enemyTimer.Change(0, 2000);
-                                        CloseTheGame();
+                                        Game.CloseTheGame();
                                         break;
                                     }
                                 case ConsoleKey.H:
@@ -326,12 +322,12 @@ namespace MonsterHunter
                                             // player.pos_y = Console.CursorTop;
 
                                             // we can fight;
-                                            player.Fight(player);
+                                            Game.player.Fight(Game.player);
 
                                             if (dist.distance < 4)
                                             {
                                                 // player.HitMonster(player.outfit.stats, enemy.monster.outfit.stats);
-                                                player.HitMonster(GameTools.playerStats, GameTools.enemyStats, true);
+                                                Game.player.HitMonster(Game.playerStats, Game.enemyStats, true);
                                             }
                                         }
                                         break;
@@ -453,11 +449,11 @@ namespace MonsterHunter
          *  The Monster Movement Timing
          */
 
-        //  The Monster Timer objects;
+        //  The Enemy Timer objects;
         /// <summary>
         /// The Timer object for enemy movement
         /// </summary>
-        static Timer enemyTimer;
+        public static Timer enemyTimer;
 
         /// <summary>
         /// The callback when enemy move event is ready
@@ -507,8 +503,8 @@ namespace MonsterHunter
             int[] move = { 0, 0 };
             int new_x = 0;
             int new_y = 0;
-            int pos_x = enemy.monster.pos_x;
-            int pos_y = enemy.monster.pos_y;
+            int pos_x = Game.enemy.monster.pos_x;
+            int pos_y = Game.enemy.monster.pos_y;
             bool moveIsPossible = true;
 
             try
@@ -517,11 +513,11 @@ namespace MonsterHunter
                 while (moveIsPossible)
                 {
                     // Is enemy still alive?
-                    if (GameTools.playerStats.GetHPoints() <= 0 || GameTools.enemyStats.GetHPoints() <= 0)
+                    if (Game.playerStats.GetHPoints() <= 0 || Game.enemyStats.GetHPoints() <= 0)
                     {
                         moveIsPossible = false;
-                        GameTools.KillCountdown();
-                        if (GameTools.playerStats.GetHPoints() <= 0)
+                        Game.KillCountdown();
+                        if (Game.playerStats.GetHPoints() <= 0)
                         {
                             // player is dead
                             StopPlayer();
@@ -538,9 +534,9 @@ namespace MonsterHunter
                         int r = random.Next(2, 14);
                         if ((r % 2) == 0)
                         {
-                            enemy.monster.Fight(enemy.monster);
+                            Game.enemy.monster.Fight(Game.enemy.monster);
                             // enemy.monster.HitMonster(enemyStats,playerStats);
-                            enemy.monster.HitMonster(GameTools.playerStats, GameTools.enemyStats, false);
+                            Game.enemy.monster.HitMonster(Game.playerStats, Game.enemyStats, false);
                         }
                     }
                     new_x = pos_x + move[0];
@@ -551,15 +547,15 @@ namespace MonsterHunter
                     if ((2 < new_x && new_x < x - 3) && (top + 1 < new_y && new_y < y - 2))
                     {
                         // we are inside field
-                        enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
-                        enemy.monster.pos_x += move[0];
-                        enemy.monster.pos_y += move[1];
-                        enemy.monster.PrintMonster();
+                        Game.enemy.monster.HideMonster(Game.enemy.monster.pos_x, Game.enemy.monster.pos_y);
+                        Game.enemy.monster.pos_x += move[0];
+                        Game.enemy.monster.pos_y += move[1];
+                        Game.enemy.monster.PrintMonster();
 
 
                         // check for health
                         // if both alive, print distance,
-                        if (GameTools.playerStats.GetHPoints() > 0 && GameTools.enemyStats.GetHPoints() > 0)
+                        if (Game.playerStats.GetHPoints() > 0 && Game.enemyStats.GetHPoints() > 0)
                         {
                             dist.PrintTheDist();
                             break;
@@ -567,7 +563,7 @@ namespace MonsterHunter
                         else
                         {
                             // someone is dead
-                            GameTools.KillCountdown();
+                            Game.KillCountdown();
                             play = false;
                             moveIsPossible = false;
                             // if player is NOT moving, he will not
@@ -688,10 +684,10 @@ namespace MonsterHunter
             //  player = CreatePlayer(angry, "Angry");
             //  [2]...from random design
             int r = random.Next(0, theDesigns.Length);
-            player = Player.CreatePlayer(theDesigns[r], theDesigns[r].designName);
+            Game.player = Player.CreatePlayer(theDesigns[r], theDesigns[r].designName);
 #if DEBUG
             int reduction = 400;
-            player.outfit.stats.SetHPoints(reduction);
+            Game.player.outfit.stats.SetHPoints(reduction);
 #endif
 
             /* Create an enemy...
@@ -713,12 +709,12 @@ namespace MonsterHunter
             *  we need a callback
             *  MoveTheMonster(enemy, 500, 500);
             */
-            enemy = new Enemy();
-            enemy.CreateEnemyFromOponent();
+            Game.enemy = new Enemy();
+            Game.enemy.CreateEnemyFromOponent();
 #if DEBUG
-            enemy.monster.outfit.stats.SetHPoints(reduction);
+            Game.enemy.monster.outfit.stats.SetHPoints(reduction);
 #endif
-            enemy.monster.PrintMonster();
+            Game.enemy.monster.PrintMonster();
         }
 
         /// <summary>
@@ -828,13 +824,13 @@ namespace MonsterHunter
             InitPlayerAndEnemy();
 
             // we init the gameStats
-            GameTools.InitStats();
+            Game.InitStats();
 
             // we print the dashboard
             Dashboard.PrintDashboard();
 
             // we print the starting stats
-            GameTools.PrintStats(GameTools.playerStats, GameTools.enemyStats);
+            Game.PrintStats(Game.playerStats, Game.enemyStats);
 
             // we init the movement choices of the enemy
             InitChoices();
@@ -856,7 +852,7 @@ namespace MonsterHunter
             #endregion
 
             // we start a Countdown Timer
-            GameTools.StartCountdown();
+            Game.StartCountdown();
 
 
             // next time we call it GameLoop
@@ -893,7 +889,7 @@ namespace MonsterHunter
         {
             try
             {
-                PlayTheGame(player);
+                PlayTheGame(Game.player);
             }
             catch (ThreadAbortException ex)
             {
@@ -906,11 +902,11 @@ namespace MonsterHunter
             try
             {
                 // thePlayer.Abort();
-                player.HideMonster(player.pos_x, player.pos_y);
+                Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
                 // player.pos_x = 5;
                 // player.pos_y = 5;
                 // playSong = false;
-                CloseTheGame();
+                Game.CloseTheGame();
             }
             catch (ThreadAbortException ex)
             {
@@ -941,7 +937,7 @@ namespace MonsterHunter
             try
             {
                 theEnemy.Join();
-                enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
+                Game.enemy.monster.HideMonster(Game.enemy.monster.pos_x, Game.enemy.monster.pos_y);
 
             }
             catch (ThreadAbortException ex)
@@ -950,7 +946,7 @@ namespace MonsterHunter
                 System.Diagnostics.Debug.WriteLine("Stop Enemy: " + ex);
             }
             // playSong = false;
-            CloseTheGame();
+            Game.CloseTheGame();
         }
     }
 }

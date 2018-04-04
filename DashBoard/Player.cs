@@ -8,9 +8,6 @@ namespace MonsterHunter
 {
     struct Player
     {
-
-
-
         /// <summary>
         /// Create a monster out of parts as parameter 
         /// <remarks>Actual max size is 5 symbols.</remarks>
