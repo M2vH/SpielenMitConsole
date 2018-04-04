@@ -196,153 +196,15 @@ namespace MonsterHunter
                 ConsoleColor red = ConsoleColor.Red;
                 Thread.Sleep(500);
                 string grats = "The Winner is... " + winner.name;
-                CenterText(here, grats, red);
-                CenterText(++here, "Press ENTER to close game ", red);
+                Dashboard.CenterText(here, grats, red);
+                Dashboard.CenterText(++here, "Press ENTER to close game ", red);
                 Thread.Sleep(2000);
                 Console.ReadLine();
             }
 
         }
 
-        /*  SECTION "BoardHead"
-         *  + -------------------------- +
-         *  | left                 right |
-         *  + -------------------------- +
-         */
-
-        //  ToDo -> Copy String.Format sample into ReadMe.txt
-        //  init board_head
-        //  "{0,50:---}"
-        //  string.Format("{0,50}","---");
-        //
-        //  "{0,50}"
-        //  int a = 50;
-        //  "{0," + a +"}"
-        //  string.Format("{0," + a +"}","---");
-
-        static string[] symbols = { "+", "xxxxx xxxxx", "-", "|" };
-        static char filler = '-';
-
-        /// <summary>
-        /// print a line
-        /// +--------------------+  //  length=100
-        /// 
-        /// </summary>
-        /// <param name="line"></param>
-        static void DrawLine(int line)
-        {
-            //String drawline = "{0}{1,100}";
-            //Console.Write(drawline, symbol[0], symbol[0].PadLeft(100, filler));
-            // Convert it into String.Format();
-            string symbol = (string)symbols[0];
-            String drawline = String.Format("{0}{1,100}", symbol, symbol.PadLeft(100, filler));
-            Console.SetCursorPosition(0, line);
-            Console.Write(drawline);
-
-            // reduce playgound
-            top += 1;
-
-
-        }
-
-        //  print a box 
-        //  (left and right border)
-        //  |                    |  //  length = 100)
-
-        /// <summary>
-        /// Prints the left and right border of dashboard.
-        /// <remarks> |-- 100 --| </remarks>
-        /// </summary>
-        /// <param name="line"></param>
-        static void DrawBox(int line)
-        {
-            string symbol = (string)symbols[3];
-            String drawbox = String.Format("{0}{0,100}", symbol);
-            Console.SetCursorPosition(0, line);
-            Console.Write(drawbox);
-
-            // reduce playground
-            top += 1;
-        }
-
-        //  print foo at the center of a line, 
-        //  (center of line is calculated)
-        //  |         foo        |
-        public static void CenterText(int line, string foo)
-        {
-            int start = (x - foo.Length) / 2;
-
-            lock (printlock)
-            {
-                ConsoleColor memo = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.SetCursorPosition(start, line);
-                Console.Write(foo);
-                Console.ForegroundColor = memo;
-            }
-
-        }
-
-        //  print foo at the center of a line, 
-        //  usinf color parameter
-        //  (center of line is calculated)
-        //  |         foo        |
-        public static void CenterText(int line, string foo, ConsoleColor _color)
-        {
-            int start = (x - foo.Length) / 2;
-
-            lock (printlock)
-            {
-                ConsoleColor memo = Console.ForegroundColor;
-                Console.ForegroundColor = _color;
-                Console.SetCursorPosition(start, line);
-                Console.Write(foo);
-                Console.ForegroundColor = memo;
-            }
-
-        }
-
-        /// <summary>
-        /// We print the layout of the dashboard.
-        /// </summary>
-        static void PrintDashboard()
-        {
-            //  Define some strings
-            String line = String.Format("{0}{1,50}{2,50}", symbols[0], symbols[1], symbols[2]);
-
-            String line_2 = String.Format("{0}{1,50}{2,50}", symbols[0], symbols[2], symbols[1]);
-
-            // we calc the center
-            //  center is row/2 - text.length / 2
-            //int center = (x - symbols[1].Length) / 2;
-
-            //String centertext = String.Format("{0}", symbols[1]);
-            //String textbox = String.Format("{0}{0,100}", symbols[3]);
-
-            //  ** Print it out  **
-            //  Set Cursor to upper left corner;
-            Console.SetCursorPosition(0, 0);
-
-            // we have a DrawLine(int line);
-            //Console.Write(drawline, symbol[0], symbol[0].PadLeft(100, filler));
-            DrawLine(0);
-
-            //Console.SetCursorPosition(0, 1);
-            //Console.Write(line_2);
-            DrawBox(1);
-
-            //Console.SetCursorPosition(0, 2);
-            //Console.Write(textbox);
-            DrawBox(2);
-
-            //Console.SetCursorPosition(center, 2);
-            //Console.Write(centertext);
-            CenterText(2, "You fight against: " + enemy.monster.name);
-            DrawBox(3);
-
-            DrawLine(4);
-        }
-
+       
         // ToDo: Question? Where are the CreateMonster functions placed best?
 
         /* Function <Monster>CreateMonster(string head, string body, string legs)
@@ -551,6 +413,7 @@ namespace MonsterHunter
                                         break;
                                     }
                                 case ConsoleKey.H:
+                                case ConsoleKey.Spacebar:
                                     {
                                         // we lock this section
                                         lock (printlock)
@@ -572,18 +435,11 @@ namespace MonsterHunter
                                         }
                                         break;
                                     }
-                                case ConsoleKey.Spacebar:
-                                    {
-                                        // let the monster fight;
-                                        // ToDo: create a monster.fight()
-                                        break;
-                                    }
                                 default:
                                     {
                                         // Center();
                                         break;
                                     }
-
                             }
                         } // end of lock
 
@@ -719,10 +575,10 @@ namespace MonsterHunter
 
             // Clear the dashboard with Key.Space
             string clear = String.Format("{0,50}", " ");
-            CenterText(2, clear);
+            Dashboard.CenterText(2, clear);
 
             // print the Countdown in the center of our dashboard
-            CenterText(2, timeText);
+            Dashboard.CenterText(2, timeText);
 
             // We send signals to waiting threads
             AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
@@ -1377,7 +1233,7 @@ namespace MonsterHunter
             // theSong.Start();
 
             string blanc = String.Format("{0}", "Press ENTER to start!");
-            CenterText(25, blanc, ConsoleColor.Red);
+            Dashboard.CenterText(25, blanc, ConsoleColor.Red);
             Console.CursorVisible = false;
             Console.ReadLine();
             // playSong = false;
@@ -1392,7 +1248,7 @@ namespace MonsterHunter
             InitStats();
 
             // we print the dashboard
-            PrintDashboard();
+            Dashboard.PrintDashboard();
 
             // we print the starting stats
             PrintStats(playerStats, enemyStats);

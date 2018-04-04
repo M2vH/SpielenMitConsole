@@ -22,7 +22,7 @@ namespace MonsterHunter
             //    // blanc it out because game is over
             //    text = String.Format("{0,30}" , " ");
             //}
-            Program.CenterText(3, text);
+            Dashboard.CenterText(3, text);
         }
         public void PrintTheDist()
         {
@@ -33,7 +33,7 @@ namespace MonsterHunter
             //    // blanc it out because game is over
             //    text = String.Format("{0,30}", " ");
             //}
-            Program.CenterText(3, text);
+            Dashboard.CenterText(3, text);
         }
         void CalcDistance()
         {
