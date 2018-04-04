@@ -7,12 +7,9 @@ using System.Threading;
 
 namespace MonsterHunter
 {
-    struct GameTools
+    
+struct GameTools
     {
-        /*  The Timer
- *  We run a Timer and print a countdown in its own thread.
- */
-
         /// <summary>
         /// The countdown timer object
         /// </summary>
@@ -106,6 +103,146 @@ namespace MonsterHunter
             }
 
         }
+        #region Display the Statistics
+
+        public static Stats playerStats;    //  = new Stats();
+        public static Stats enemyStats;     //   = new Stats();
+
+        public static void InitStats()
+        {
+            playerStats = Program.player.outfit.stats;
+            enemyStats = Program.enemy.monster.outfit.stats;
+        }
+
+        public static void UpdateStats(Stats _player, Stats _enemy)
+        {
+            playerStats = _player;
+            enemyStats = _enemy;
+        }
+
+        public static void PrintStats()
+        {
+            //  string.Format("{0,20}","---");
+            //  string output = String.Format("Text{0,10} text{1,10}", arg1, arg2);
+            //  Console.SetCursorPosition(2,1);
+            //  Console.Write(output);
+            String clear = String.Format("{0,20}", " ");
+            int atLine = 1;
+            int left = 2;
+            int right = 78;
+            // int health = player.outfit.stats.HPoints;
+            // int otherNumber = 455;
+            string playerHealth = String.Format("{0,10}{1,10}", "Health", playerStats.hPoints);
+            string playerDefense = String.Format("{0,10}{1,10}", "Defense", playerStats.dPoints);
+
+            string enemyHealth = String.Format("{0,5}{1,15}", enemyStats.GetHPoints(), "Health");
+            string enemyDefense = String.Format("{0,5}{1,15}", enemyStats.dPoints, "Defense");
+            // lock (statsLock)
+            // {
+
+            lock (Program.printlock)
+            {
+
+                ConsoleColor backup = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Green;
+
+                Console.SetCursorPosition(left, atLine);
+                Console.Write(clear);
+                Console.SetCursorPosition(left, atLine);
+                Console.Write(playerHealth);
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.SetCursorPosition(left, atLine + 1);
+                Console.Write(clear);
+                Console.SetCursorPosition(left, atLine + 1);
+                Console.Write(playerDefense);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.SetCursorPosition(right, atLine);
+                Console.Write(clear);
+                Console.SetCursorPosition(right, atLine);
+                Console.Write(enemyHealth);
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.SetCursorPosition(right, atLine + 1);
+                Console.Write(clear);
+                Console.SetCursorPosition(right, atLine + 1);
+                Console.Write(enemyDefense);
+
+                Console.ForegroundColor = backup;
+            }
+            // }
+        }
+
+        public static void PrintStats(Stats _player, Stats _enemy)
+        {
+            //  string.Format("{0,20}","---");
+            //  string output = String.Format("Text{0,10} text{1,10}", arg1, arg2);
+            //  Console.SetCursorPosition(2,1);
+            //  Console.Write(output);
+            String clear = String.Format("{0,20}", " ");
+            int atLine = 1;
+            int left = 2;
+            int right = 78;
+            // int health = player.outfit.stats.HPoints;
+            // int otherNumber = 455;
+            string playerHealth = String.Format("{0,-10}{1,10}", "Health", _player.GetHPoints());
+            string playerDefense = String.Format("{0,-10}{1,10}", "Defense", _player.dPoints);
+            string playerAttack = String.Format("{0,-10}{1,10}", "Attack", _player.aPoints);
+
+            string enemyHealth = String.Format("{0,-5}{1,15}", _enemy.GetHPoints(), "Health");
+            string enemyDefense = String.Format("{0,-5}{1,15}", _enemy.dPoints, "Defense");
+            string enemyAttack = String.Format("{0,-5}{1,15}", _enemy.aPoints, "Defense");
+
+            // don't forget to update the Stats objects
+            UpdateStats(_player, _enemy);
+
+            lock (Program.printlock)
+            {
+
+                ConsoleColor backup = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Green;
+
+                Console.SetCursorPosition(left, atLine);
+                Console.Write(clear);
+                Console.SetCursorPosition(left, atLine);
+                Console.Write(playerHealth);
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.SetCursorPosition(left, atLine + 1);
+                Console.Write(clear);
+                Console.SetCursorPosition(left, atLine + 1);
+                Console.Write(playerDefense);
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(left, atLine + 2);
+                Console.Write(clear);
+                Console.SetCursorPosition(left, atLine + 2);
+                Console.Write(playerAttack);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.SetCursorPosition(right, atLine);
+                Console.Write(clear);
+                Console.SetCursorPosition(right, atLine);
+                Console.Write(enemyHealth);
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.SetCursorPosition(right, atLine + 1);
+                Console.Write(clear);
+                Console.SetCursorPosition(right, atLine + 1);
+                Console.Write(enemyDefense);
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(right, atLine + 2);
+                Console.Write(clear);
+                Console.SetCursorPosition(right, atLine + 2);
+                Console.Write(enemyAttack);
+
+                Console.ForegroundColor = backup;
+            }
+        }
+        #endregion
+
 
     }
 }

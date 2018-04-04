@@ -8,9 +8,8 @@ namespace MonsterHunter
 {
     struct Player
     {
-        /* Function <Monster>CreateMonster(string head, string body, string legs)
-         * Instantiates a monster with parts as parameter
-         */
+
+
 
         /// <summary>
         /// Create a monster out of parts as parameter 

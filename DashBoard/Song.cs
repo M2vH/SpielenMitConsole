@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace MonsterHunter
 {
     /// <summary>
     /// A struct to generate a song.
     /// </summary>
-    struct ASong
+    struct Song
     {
+        public static bool playSong = true;
+
         public Sound[] song;
 
         static Sound n_1;
@@ -64,5 +67,86 @@ namespace MonsterHunter
             song = theInitSong;
 
         }
+
+        #region Play a sound in the background async
+        /*
+         *      Das spielen von Sound im Hintergrund 
+         *      funktioniert in der Console leider nicht.
+         *      
+         *      Trauriges Smiley
+         */
+
+
+        static Song backgroundSong = new Song();
+
+
+
+        /// <summary>
+        /// The asyncron Task of PlaySong(Song)
+        /// </summary>
+        /// <param name="_newSong"></param>
+        /// <returns>Delegate of PlaySong()</returns>
+        /// <param name="_endless">Set to true for endless noise ;-)</param>
+        static Task PlaySongAsync(Sound[] _newSong, bool _endless)
+        {
+            return Task.Run(() => PlaySong(_newSong, _endless));
+        }
+
+        /// <summary>
+        /// The PlaySong plays a given song
+        /// </summary>
+        /// <param name="newSong">The song to play</param>
+        /// <param name="_endless">Set to true for endless sound</param>
+        static void PlaySong(Sound[] newSong, bool _endless)
+        {
+            // AutoResetEvent songEvent = new AutoResetEvent(true);
+            bool play = _endless;
+            while (play)
+            {
+                int duration = 16;
+
+                // block the threads for the next acustic applepie
+                // songEvent.Reset();
+                // lock (printlock)
+                // {
+                for (int i = 0; i < duration; i++)
+                {
+                    Console.Beep(newSong[i].f, newSong[i].d);
+                }
+                // }
+
+                // Thread.Sleep(500);
+                // songEvent.Set();
+                play = Song.playSong;
+            }
+        }
+
+        public static async void PlayThisSong(Sound[] _song, bool _endless)
+        {
+            await PlaySongAsync(_song, _endless);
+        }
+        #endregion
+
+        public static void PlayMySong()
+        {
+            try
+            {
+                //  maybe some sound at the end ???
+                backgroundSong.InitASong();
+
+                //InitASong();
+
+                // playSong = true;
+                PlaySong(backgroundSong.TheSong, playSong);
+
+            }
+            catch (ThreadAbortException ex)
+            {
+                System.Diagnostics.Debug.WriteLine("We killed the song. " + ex);
+
+            }
+        }
+
+
     }
 }

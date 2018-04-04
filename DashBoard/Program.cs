@@ -57,6 +57,10 @@ namespace MonsterHunter
         /// </summary>
         static Design[] theDesigns;
 
+        public static Enemy enemy;
+        public static Monster player;
+        public static Monster winner;
+
 
         #endregion
 
@@ -149,60 +153,6 @@ namespace MonsterHunter
             Console.CursorTop = y / 2;
         }
 
-        /// <summary>
-        /// Closing the game. Display "Press any key...".
-        /// </summary>
-        public static void CloseTheGame()
-        {
-            // in a close fight both can die!
-            if (enemyStats.GetHPoints() <= 0 && playerStats.GetHPoints() <= 0)
-            {
-                winner.name = "Nobody. Everybody is DEAD!";
-            }
-
-            // who is the winner?
-            if (enemyStats.GetHPoints() <= 0)
-            {
-                winner = player;
-                // Hide the looser
-                enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
-                // Display the player again to avoid fractals
-                player.PrintMonster();
-
-                // stop the enemy timer
-                enemyTimer.Dispose();
-            }
-            else
-            {
-                winner = enemy.monster;
-                player.HideMonster(player.pos_x, player.pos_y);
-                // Even he is hidden, we must put him aside.
-                player.pos_x = 10;
-                player.pos_y = 10;
-
-                // display winner to avoid fractals
-                enemy.monster.PrintMonster();
-
-                // enemy stops moving when winner;
-                // slow down the enemy movement
-                // enemyTimer.Change(0, 1500);
-            }
-
-
-            int here = y - 5 - top / 2;
-            lock (printlock)
-            {
-                playSong = false;
-                ConsoleColor red = ConsoleColor.Red;
-                Thread.Sleep(500);
-                string grats = "The Winner is... " + winner.name;
-                Dashboard.CenterText(here, grats, red);
-                Dashboard.CenterText(++here, "Press ENTER to close game ", red);
-                Thread.Sleep(2000);
-                Console.ReadLine();
-            }
-
-        }
 
        
         // ToDo: Question? Where are the CreateMonster functions placed best?
@@ -253,7 +203,7 @@ namespace MonsterHunter
                 {
 
                     // we check if player is dead
-                    if (playerStats.GetHPoints() <= 0 || player.outfit.stats.GetHPoints() <= 0)
+                    if (GameTools.playerStats.GetHPoints() <= 0 || player.outfit.stats.GetHPoints() <= 0)
                     {
                         // we dont want to run anymore
                         play = false;
@@ -276,7 +226,7 @@ namespace MonsterHunter
                     else
                     {
                         // we check if he is winner
-                        if (enemyStats.GetHPoints() <= 0)
+                        if (GameTools.enemyStats.GetHPoints() <= 0)
                         {
                             // player has won;
                             // stop the clock;
@@ -381,7 +331,7 @@ namespace MonsterHunter
                                             if (dist.distance < 4)
                                             {
                                                 // player.HitMonster(player.outfit.stats, enemy.monster.outfit.stats);
-                                                player.HitMonster(playerStats, enemyStats, true);
+                                                player.HitMonster(GameTools.playerStats, GameTools.enemyStats, true);
                                             }
                                         }
                                         break;
@@ -567,11 +517,11 @@ namespace MonsterHunter
                 while (moveIsPossible)
                 {
                     // Is enemy still alive?
-                    if (playerStats.GetHPoints() <= 0 || enemyStats.GetHPoints() <= 0)
+                    if (GameTools.playerStats.GetHPoints() <= 0 || GameTools.enemyStats.GetHPoints() <= 0)
                     {
                         moveIsPossible = false;
                         GameTools.KillCountdown();
-                        if (playerStats.GetHPoints() <= 0)
+                        if (GameTools.playerStats.GetHPoints() <= 0)
                         {
                             // player is dead
                             StopPlayer();
@@ -590,7 +540,7 @@ namespace MonsterHunter
                         {
                             enemy.monster.Fight(enemy.monster);
                             // enemy.monster.HitMonster(enemyStats,playerStats);
-                            enemy.monster.HitMonster(playerStats, enemyStats, false);
+                            enemy.monster.HitMonster(GameTools.playerStats, GameTools.enemyStats, false);
                         }
                     }
                     new_x = pos_x + move[0];
@@ -609,7 +559,7 @@ namespace MonsterHunter
 
                         // check for health
                         // if both alive, print distance,
-                        if (playerStats.GetHPoints() > 0 && enemyStats.GetHPoints() > 0)
+                        if (GameTools.playerStats.GetHPoints() > 0 && GameTools.enemyStats.GetHPoints() > 0)
                         {
                             dist.PrintTheDist();
                             break;
@@ -727,10 +677,6 @@ namespace MonsterHunter
          * and Enemy is different then Player
          */
 
-        public static Enemy enemy;
-        public static Monster player;
-        public static Monster winner;
-
         /// <summary>
         /// Inits a player and his enemy
         /// </summary>
@@ -845,234 +791,17 @@ namespace MonsterHunter
             await PlaySoundAsync(_i, _sound);
         }
 
-        #region Play a sound in the background async
-        /*
-         *      Das spielen von Sound im Hintergrund 
-         *      funktioniert in der Console leider nicht.
-         *      
-         *      Trauriges Smiley
-         */
 
-
-        static ASong backgroundSong = new ASong();
-
-
-
-        /// <summary>
-        /// The asyncron Task of PlaySong(ASong)
-        /// </summary>
-        /// <param name="_newSong"></param>
-        /// <returns>Delegate of PlaySong()</returns>
-        /// <param name="_endless">Set to true for endless noise ;-)</param>
-        static Task PlaySongAsync(Sound[] _newSong, bool _endless)
-        {
-            return Task.Run(() => PlaySong(_newSong, _endless));
-        }
-
-        /// <summary>
-        /// The PlaySong plays a given song
-        /// </summary>
-        /// <param name="newSong">The song to play</param>
-        /// <param name="_endless">Set to true for endless sound</param>
-        static void PlaySong(Sound[] newSong, bool _endless)
-        {
-            // AutoResetEvent songEvent = new AutoResetEvent(true);
-            bool play = _endless;
-            while (play)
-            {
-                int duration = 16;
-
-                // block the threads for the next acustic applepie
-                // songEvent.Reset();
-                // lock (printlock)
-                // {
-                for (int i = 0; i < duration; i++)
-                {
-                    Console.Beep(newSong[i].f, newSong[i].d);
-                }
-                // }
-
-                // Thread.Sleep(500);
-                // songEvent.Set();
-                play = playSong;
-            }
-        }
-
-        public static async void PlayThisSong(Sound[] _song, bool _endless)
-        {
-            await PlaySongAsync(_song, _endless);
-        }
-        #endregion
-
-        #region Display the Statistics
-
-        public static Stats playerStats;    //  = new Stats();
-        public static Stats enemyStats;     //   = new Stats();
-
-        public static void InitStats()
-        {
-            playerStats = player.outfit.stats;
-            enemyStats = enemy.monster.outfit.stats;
-        }
-
-        public static void UpdateStats(Stats _player, Stats _enemy)
-        {
-            playerStats = _player;
-            enemyStats = _enemy;
-        }
-
-        public static void PrintStats()
-        {
-            //  string.Format("{0,20}","---");
-            //  string output = String.Format("Text{0,10} text{1,10}", arg1, arg2);
-            //  Console.SetCursorPosition(2,1);
-            //  Console.Write(output);
-            String clear = String.Format("{0,20}", " ");
-            int atLine = 1;
-            int left = 2;
-            int right = 78;
-            // int health = player.outfit.stats.HPoints;
-            // int otherNumber = 455;
-            string playerHealth = String.Format("{0,10}{1,10}", "Health", playerStats.hPoints);
-            string playerDefense = String.Format("{0,10}{1,10}", "Defense", playerStats.dPoints);
-
-            string enemyHealth = String.Format("{0,5}{1,15}", enemyStats.GetHPoints(), "Health");
-            string enemyDefense = String.Format("{0,5}{1,15}", enemyStats.dPoints, "Defense");
-            // lock (statsLock)
-            // {
-
-            lock (printlock)
-            {
-
-                ConsoleColor backup = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Green;
-
-                Console.SetCursorPosition(left, atLine);
-                Console.Write(clear);
-                Console.SetCursorPosition(left, atLine);
-                Console.Write(playerHealth);
-
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.SetCursorPosition(left, atLine + 1);
-                Console.Write(clear);
-                Console.SetCursorPosition(left, atLine + 1);
-                Console.Write(playerDefense);
-
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.SetCursorPosition(right, atLine);
-                Console.Write(clear);
-                Console.SetCursorPosition(right, atLine);
-                Console.Write(enemyHealth);
-
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.SetCursorPosition(right, atLine + 1);
-                Console.Write(clear);
-                Console.SetCursorPosition(right, atLine + 1);
-                Console.Write(enemyDefense);
-
-                Console.ForegroundColor = backup;
-            }
-            // }
-        }
-
-        public static void PrintStats(Stats _player, Stats _enemy)
-        {
-            //  string.Format("{0,20}","---");
-            //  string output = String.Format("Text{0,10} text{1,10}", arg1, arg2);
-            //  Console.SetCursorPosition(2,1);
-            //  Console.Write(output);
-            String clear = String.Format("{0,20}", " ");
-            int atLine = 1;
-            int left = 2;
-            int right = 78;
-            // int health = player.outfit.stats.HPoints;
-            // int otherNumber = 455;
-            string playerHealth = String.Format("{0,-10}{1,10}", "Health", _player.GetHPoints());
-            string playerDefense = String.Format("{0,-10}{1,10}", "Defense", _player.dPoints);
-            string playerAttack = String.Format("{0,-10}{1,10}", "Attack", _player.aPoints);
-
-            string enemyHealth = String.Format("{0,-5}{1,15}", _enemy.GetHPoints(), "Health");
-            string enemyDefense = String.Format("{0,-5}{1,15}", _enemy.dPoints, "Defense");
-            string enemyAttack = String.Format("{0,-5}{1,15}", _enemy.aPoints, "Defense");
-
-            // don't forget to update the Stats objects
-            UpdateStats(_player, _enemy);
-
-            lock (printlock)
-            {
-
-                ConsoleColor backup = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Green;
-
-                Console.SetCursorPosition(left, atLine);
-                Console.Write(clear);
-                Console.SetCursorPosition(left, atLine);
-                Console.Write(playerHealth);
-
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.SetCursorPosition(left, atLine + 1);
-                Console.Write(clear);
-                Console.SetCursorPosition(left, atLine + 1);
-                Console.Write(playerDefense);
-
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.SetCursorPosition(left, atLine + 2);
-                Console.Write(clear);
-                Console.SetCursorPosition(left, atLine + 2);
-                Console.Write(playerAttack);
-
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.SetCursorPosition(right, atLine);
-                Console.Write(clear);
-                Console.SetCursorPosition(right, atLine);
-                Console.Write(enemyHealth);
-
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.SetCursorPosition(right, atLine + 1);
-                Console.Write(clear);
-                Console.SetCursorPosition(right, atLine + 1);
-                Console.Write(enemyDefense);
-
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.SetCursorPosition(right, atLine + 2);
-                Console.Write(clear);
-                Console.SetCursorPosition(right, atLine + 2);
-                Console.Write(enemyAttack);
-
-                Console.ForegroundColor = backup;
-            }
-        }
-        #endregion
 
         #region GameThread
 
         static Thread thePlayer = new Thread(StartPlayer);
         static Thread theEnemy = new Thread(StartEnemy);
-        static Thread theSong = new Thread(PlayMySong);
+        static Thread theSong = new Thread(Song.PlayMySong);
 
-        private static void PlayMySong()
-        {
-            try
-            {
-                //  maybe some sound at the end ???
-                backgroundSong.InitASong();
-
-                //InitASong();
-
-                // playSong = true;
-                PlaySong(backgroundSong.TheSong, playSong);
-
-            }
-            catch (ThreadAbortException ex)
-            {
-                System.Diagnostics.Debug.WriteLine("We killed the song. " + ex);
-
-            }
-        }
 
         #endregion
 
-        static bool playSong = true;
 
         static void Main(string[] args)
         {
@@ -1099,13 +828,13 @@ namespace MonsterHunter
             InitPlayerAndEnemy();
 
             // we init the gameStats
-            InitStats();
+            GameTools.InitStats();
 
             // we print the dashboard
             Dashboard.PrintDashboard();
 
             // we print the starting stats
-            PrintStats(playerStats, enemyStats);
+            GameTools.PrintStats(GameTools.playerStats, GameTools.enemyStats);
 
             // we init the movement choices of the enemy
             InitChoices();
@@ -1121,7 +850,7 @@ namespace MonsterHunter
             //  [1] Sound at the beginning
             //  MakeSomeNoise(2);
             //  [2] Sound in the background
-            // wir brauchen erst nen ASong
+            // wir brauchen erst nen Song
             // InitASong();
             // PlayThisSong(theBackgroundSong);
             #endregion
