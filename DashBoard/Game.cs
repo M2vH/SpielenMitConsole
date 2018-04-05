@@ -120,6 +120,7 @@ namespace MonsterHunter
             }
 
         }
+        
         #region Display the Statistics
 
         public static Stats playerStats;    //  = new Stats();

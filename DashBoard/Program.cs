@@ -9,12 +9,6 @@ namespace MonsterHunter
 {
     class Program
     {
-        #region Alle Variablen werden hier deklariert
-
-
-
-        #endregion
-
         /// <summary>
         /// Init the game. 
         /// Set concole size and color.
@@ -48,7 +42,7 @@ namespace MonsterHunter
                 designName = "Goble",
                 designColor = ConsoleColor.White,
                 designElements = new string[] { "(°;°)", " ~▓~ ", " ] [ ", "O-▓-O" },
-                FightSound = Sound.low ,
+                FightSound = Sound.low,
                 // top resistance: 30
                 stats = new Stats
                 {
@@ -63,7 +57,7 @@ namespace MonsterHunter
                 designName = "Frodo",
                 designColor = ConsoleColor.Yellow,
                 designElements = new string[] { "{O.O}", " /▓\\ ", " { } ", "o-▓-o" },
-                FightSound = Sound.mid ,
+                FightSound = Sound.mid,
                 // low resistance: 10
                 stats = new Stats
                 {
@@ -105,7 +99,7 @@ namespace MonsterHunter
         }
 
 
-       
+
         // ToDo: Question? Where are the CreateMonster functions placed best?
 
 
@@ -199,15 +193,10 @@ namespace MonsterHunter
 
             // try printing a welcome
             TextOnScreen hello = new TextOnScreen();
-            hello.FillWellcome();
-            hello.PrintWelcome(Window.x, Window.y);
+            hello.PrintStart();
 
             // theSong.Start();
 
-            string blanc = String.Format("{0}", "Press ENTER to start!");
-            Dashboard.CenterText(25, blanc, ConsoleColor.Red);
-            Console.CursorVisible = false;
-            Console.ReadLine();
             // playSong = false;
             // theSong.Join();
             // we print a background in the field
