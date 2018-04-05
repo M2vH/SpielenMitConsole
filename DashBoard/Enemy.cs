@@ -28,6 +28,22 @@ namespace MonsterHunter
 
             // return monster;
         }
+
+        public void CreateEnemyFromDesign(Design _design, string _name, bool _everywhere)
+        {
+            position = Monster.RandomStartPos(_everywhere);
+            monster = new Monster
+            {
+                outfit = _design,
+                name = _name,
+                pos_x = position[0], // Program.x / 3,
+                pos_y = position[1], // (Program.y + Program.top) / 2,
+
+            };
+
+            // return monster;
+        }
+
         public void CreateEnemyFromOponent()
         {
             position = Monster.RandomStartPos();

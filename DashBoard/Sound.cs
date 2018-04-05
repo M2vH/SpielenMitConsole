@@ -59,9 +59,8 @@ namespace MonsterHunter
         }
 
         /*  The sound machine
- *  Implementation of async fighting sound.
- *  ToDo: let each monster sound different.
- */
+        *  Implementation of async fighting sound.
+        */
         public static Sound low = new Sound(300,300);
         public static Sound mid = new Sound(900, 300);
         public static Sound high = new Sound(1500, 300);

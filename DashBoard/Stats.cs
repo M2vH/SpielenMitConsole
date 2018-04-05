@@ -13,9 +13,9 @@ namespace MonsterHunter
     {
         // Health Points    hPoints
         // Attack Points    aPoints
-
         // Defense Points   dPoints
         // Speed
+
         /// <summary>
         /// Health Points
         /// </summary>

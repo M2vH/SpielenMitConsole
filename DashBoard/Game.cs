@@ -560,6 +560,84 @@ namespace MonsterHunter
         /// </summary>
         public static Design[] theDesigns;
 
+        /// <summary>
+        /// Init the game. 
+        /// Set concole size and color.
+        /// Set the layout of the monster.
+        /// </summary>
+        public static void InitGame()
+        {
+            //  set screen to default
+            //  Console Settings
+            Console.Clear();
+            Console.WindowWidth = Window.x;
+            Console.WindowHeight = Window.y;
+            Console.BufferWidth = Window.x;
+            Console.BufferHeight = Window.y;
+            Console.BackgroundColor = ConsoleColor.Black;
+
+            #region Monster design
+            //  Monster Designs;
+            /*
+            |   Goble   Frodo   Angry
+            |
+            |   (° °)   {0.0}   [-.-]
+            |
+            |    ~▓~    o-▓-o    '▓'
+            |    ] [     { }     U U 
+            |
+             */
+
+            Game.goble = new Design
+            {
+                designName = "Goble",
+                designColor = ConsoleColor.White,
+                designElements = new string[] { "(°;°)", " ~▓~ ", " ] [ ", "O-▓-O" },
+                FightSound = Sound.low,
+                // top resistance: 30
+                stats = new Stats
+                {
+                    hPoints = 500,
+                    aPoints = 40,
+                    dPoints = 30,
+                }
+            };
+
+            Game.frodo = new Design
+            {
+                designName = "Frodo",
+                designColor = ConsoleColor.Yellow,
+                designElements = new string[] { "{O.O}", " /▓\\ ", " { } ", "o-▓-o" },
+                FightSound = Sound.mid,
+                // low resistance: 10
+                stats = new Stats
+                {
+                    hPoints = 500,
+                    aPoints = 50,
+                    dPoints = 10,
+                }
+            };
+
+            Game.angry = new Design
+            {
+                designName = "Angry",
+                designColor = ConsoleColor.Green,
+                designElements = new string[] { "[-.-]", " '▓' ", " U U ", "0-▓-0" },
+                FightSound = Sound.high,
+                // medium resistance: 20
+                stats = new Stats
+                {
+                    hPoints = 500,
+                    aPoints = 60,
+                    dPoints = 20,
+                },
+            };
+            #endregion
+
+            Game.theDesigns = new Design[] { Game.goble, Game.frodo, Game.angry };
+
+        }
+
 
 
     }

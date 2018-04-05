@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -48,9 +49,6 @@ namespace MonsterHunter
         /// Contains the monster design
         /// </summary>
         public Design outfit;
-
-        // keine Veränderung;
-        // public Stats stats;
 
         //  print a monster at pos x,y
         //  lock the printing of a Monster 
@@ -116,15 +114,17 @@ namespace MonsterHunter
         /// Print the monster at stored position
         /// </summary>
         /// <returns></returns>
-        public bool PrintMonster()
+        public void PrintMonster()
         {
-            bool feedback = false;
             if (pos_x != 0 && pos_y != 0)
             {
                 PrintMonster(pos_x, pos_y);
-                return !feedback;
             }
-            else return feedback;
+        }
+
+        public void PrintMonster(int[] _coords)
+        {
+                PrintMonster(_coords[0], _coords[1]);
         }
 
         //  Hide Monster
@@ -152,7 +152,7 @@ namespace MonsterHunter
                 {
                     // build the string
                     // get the corresponding char
-                    monster_string += Program.background[start_y + j][start_x + i];
+                    monster_string += Background.background[start_y + j][start_x + i];
                 }
                 // add the delimeter;
                 // we use it like a newline later
@@ -178,7 +178,7 @@ namespace MonsterHunter
             lock (Game.printlock)
             {
                 // set a new ForegroundColor
-                Console.ForegroundColor = Program.gameBackground;
+                Console.ForegroundColor = Background.fieldColor;
 
                 // [1] printing the head
                 Console.SetCursorPosition(pos_x - 2, pos_y - 1);
@@ -201,6 +201,109 @@ namespace MonsterHunter
 
                 // [5] set CursorColor back to default
                 Console.ForegroundColor = color_backup;
+            }
+        }
+
+        static Symbol testSign;
+
+        public void HideDancingMonster(int x, int y)
+        {
+            start_x = x;
+            start_y = y;
+            // set cursor to top left corner of monster
+            start_x -= 2;
+            start_y -= 1;
+            // print the old position with spaces;
+
+            for (int j = 0; j < 3; j++)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    start_x += i;
+                    start_y += j;
+                    try
+                    {
+                       testSign.Sign = ' ';
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Symbol not set!\n" + ex.Message);
+                    }
+                    // Debug.WriteLine(testSign.Sign);
+                    lock (Game.printlock)
+                    {
+                        try
+                        {
+                            // set cursor to position
+                            Console.SetCursorPosition(start_x, start_y);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Cursor Out of Range!\n" + ex.Source);
+                        }
+
+                        Console.Write(testSign.Sign);
+
+                    }
+
+                }
+            }
+
+            start_x = x;
+            start_y = y;
+            // set cursor to top left corner of monster
+            start_x -= 2;
+            start_y -= 1;
+            for (int j = 0; j < 3; j++)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    start_x += i;
+                    start_y += j;
+                    try
+                    {
+                        testSign = Background.signs[start_x, start_y];
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Debug.WriteLine("Symbol not set!\n" + ex.Message);
+                    }
+                    // Debug.WriteLine(testSign.Sign);
+                    lock (Game.printlock)
+                    {
+                        try
+                        {
+                            // set cursor to position
+                            Console.SetCursorPosition(start_x, start_y);
+
+                        }
+                        catch (Exception ex)
+                        {
+
+                            System.Diagnostics.Debug.WriteLine("Cursor Out of Range!\n" + ex.Source);
+                        }
+
+                        try
+                        {
+                            // set the right color
+                            Console.ForegroundColor = (ConsoleColor)testSign.Color;
+
+                        }
+                        catch (Exception ex)
+                        {
+
+                            Debug.WriteLine("Color out of Range!\n" + ex.Source);
+                        }
+                        // get the corresponding char
+                        // write the right symbol
+                        // store = Background.signs[start_x, start_y].Sign;
+                        Console.Write(testSign.Sign);
+
+                    }
+
+                }
             }
         }
 
@@ -274,6 +377,7 @@ namespace MonsterHunter
             Game.PrintStats(_me, _oponent);
 
         }
+
         //  the Timer CallBack Funktion
         //  This function is called,
         //  when Timer ticks happen.
@@ -317,7 +421,7 @@ namespace MonsterHunter
 
                     }
 
-                    move = RandomMove();
+                    move = RandomWeightedMove();
                     // erst hauen, dann laufen;
                     // und nur nebeneinander kämpfen;
                     if (Game.dist.GetDistance() < 5 && Game.dist.diff_y < 4)
@@ -393,7 +497,7 @@ namespace MonsterHunter
         /// </summary>
         /// <remarks>Weighted movement into left part of field</remarks>
         /// <returns>An int array with next x,y coords</returns>
-        static int[] RandomMove()
+        static int[] RandomWeightedMove()
         {
             int[] goHere = new int[] { 0, 0 };
             int selected = Game.random.Next(1, 20);
@@ -422,6 +526,35 @@ namespace MonsterHunter
             return goHere;
         }
 
+        public static int[] RandomDanceMove()
+        {
+            int[] goHere = new int[] { 0, 0 };
+            int selected = Game.random.Next(0, 5);
+
+            switch (selected)
+            {
+                case 0:
+                    goHere = Choice.goTo[0].coord;
+                    break;
+                case 1:
+                    goHere = Choice.goTo[1].coord;
+                    break;
+                case 2:
+                    goHere = Choice.goTo[2].coord;
+                    break;
+                case 3:
+                    goHere = Choice.goTo[3].coord;
+                    break;
+                case 4:
+                    goHere = Choice.goTo[4].coord;
+                    break;
+                default:
+                    break;
+            }
+
+            return goHere;
+        }
+
         /*  Function < int[] > RandomStartPos()
  *  Calculates a random position in the right side of the field
  *  Returns an int[]
@@ -435,7 +568,7 @@ namespace MonsterHunter
             int x_max = Window.x - 4;      // 4 steps left from outer right
 
             // pos y min/max
-            int y_min = Window.top + 4;          // 4 steps below top
+            int y_min = 8;          // 4 steps below top // ToDo: set dynamic ??
             int y_max = Window.y - 4;      // 4 steps above bottom
 
             start[0] = Game.random.Next(x_min, x_max);
@@ -444,6 +577,41 @@ namespace MonsterHunter
             return start;
         }
 
+        public static int[] RandomStartPos(bool _fullScreen)
+        {
+            int[] start = new int[2];
+
+            // pos x min/max
+            int x_min = 4;  // 4 steps right from zero
+            int x_max = Window.x - 4;      // 4 steps left from outer right
+
+            // pos y min/max
+            int y_min = 8;          // 4 steps below top // ToDo: set dynamic ??
+            int y_max = Window.y - 4;      // 4 steps above bottom
+
+            start[0] = Game.random.Next(x_min, x_max);
+            start[1] = Game.random.Next(y_min, y_max);
+
+            return start;
+        }
+
+        static int[] old = new int[2];
+        static int[] move = new int[2];
+
+        public void DanceMonster(object _initState)
+        {
+            AutoResetEvent danceReset = (AutoResetEvent)_initState;
+            old[0] = pos_x;
+            old[1] = pos_y;
+            HideDancingMonster(pos_x, pos_y);
+            move = RandomDanceMove();
+            old[0] += move[0];
+            old[1] += move[1];
+            PrintMonster(old[0], old[1]);
+            danceReset.Set();
+
+
+        }
 
 
     }

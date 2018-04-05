@@ -14,16 +14,6 @@ namespace MonsterHunter
         *  + -------------------------- +
         */
 
-        //  ToDo -> Copy String.Format sample into ReadMe.txt
-        //  init board_head
-        //  "{0,50:---}"
-        //  string.Format("{0,50}","---");
-        //
-        //  "{0,50}"
-        //  int a = 50;
-        //  "{0," + a +"}"
-        //  string.Format("{0," + a +"}","---");
-
         public static string[] symbols = { "+", "xxxxx xxxxx", "-", "|" };
         public static char filler = '-';
 
@@ -36,7 +26,7 @@ namespace MonsterHunter
         static void DrawLine(int line)
         {
             //String drawline = "{0}{1,100}";
-            //Console.Write(drawline, symbol[0], symbol[0].PadLeft(100, filler));
+            //Console.Write(drawline, zeichen[0], zeichen[0].PadLeft(100, filler));
             // Convert it into String.Format();
             string symbol = (string)symbols[0];
             String drawline = String.Format("{0}{1,100}", symbol, symbol.PadLeft(100, filler));
@@ -107,6 +97,16 @@ namespace MonsterHunter
         }
 
         /// <summary>
+        /// Center the cursor into center of field.
+        /// </summary>
+        static void Center()
+        {
+            Console.CursorLeft = Window.x / 2;
+            Console.CursorTop = Window.y / 2;
+        }
+
+
+        /// <summary>
         /// We print the layout of the dashboard.
         /// </summary>
         public static void PrintDashboard()
@@ -128,7 +128,7 @@ namespace MonsterHunter
             Console.SetCursorPosition(0, 0);
 
             // we have a DrawLine(int line);
-            //Console.Write(drawline, symbol[0], symbol[0].PadLeft(100, filler));
+            //Console.Write(drawline, zeichen[0], zeichen[0].PadLeft(100, filler));
             DrawLine(0);
 
             //Console.SetCursorPosition(0, 1);
