@@ -109,6 +109,66 @@ namespace MonsterHunter
 
         }
 
+        public void PrintDancingMonster(int x, int y)
+        {
+            // store aktual position of monster
+            pos_x = x;
+            pos_y = y;
+            // set cursor to top left corner of monster
+            start_x = x - 2;
+            start_y = y - 1;
+
+            parts = outfit.designElements;
+
+            // [0] set background color;
+            //      store default color;
+            ConsoleColor color_backup = Console.ForegroundColor;
+
+            lock (Game.printlock)
+            {
+                // if outfit.designColor is set, (it's not Black)
+                // set ForegroundColor to outfit.designColor;
+
+                if (outfit.designColor != ConsoleColor.Black)
+                {
+                    Console.ForegroundColor = outfit.designColor;
+                }
+
+                // [1] printing the head
+                //      set cursor to start_x, start_y
+                Console.SetCursorPosition(start_x, start_y);
+                //      write the head
+                Console.Write(parts[0]);
+
+                // [2] printing the arms
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - parts[0].Length, Console.CursorTop + 1);
+                //      print arms
+                Console.Write(parts[1]);
+
+                // [3] printing the legs
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - parts[0].Length, Console.CursorTop + 1);
+                //      print legs
+                Console.Write(parts[2]);
+
+                // [4] printing the name
+                //      set cursor
+                Console.SetCursorPosition(Console.CursorLeft - parts[0].Length, Console.CursorTop + 1);
+                //      print name
+                Console.BackgroundColor = outfit.designColor;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write(name);
+                Console.BackgroundColor = ConsoleColor.Black;
+                // [5] set cursor position back to params
+                Console.SetCursorPosition(pos_x, pos_y);
+
+                // [6] set cursorColor back
+                Console.ForegroundColor = color_backup;
+            }  // end of lock
+
+        }
+
         // print a monster and return true when printed;
         /// <summary>
         /// Print the monster at stored position
@@ -204,7 +264,7 @@ namespace MonsterHunter
             }
         }
 
-        static Symbol testSign = new Symbol() { Sign = '#', Color = 5 };
+        static Symbol testSign = new Symbol() { Sign = ' ', Color = 0 };
 
         static int cr = 0;
         //static int lf = 0;
@@ -219,7 +279,7 @@ namespace MonsterHunter
             //lf = start_y;
             // print the old position with spaces;
             #region print with spaces
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 4; j++)
             {
                 for (int i = 0; i < 5; i++)
                 {
@@ -256,6 +316,10 @@ namespace MonsterHunter
                 // Cursor in die nächste Zeile
                 start_y++;
             }
+            //++start_y;
+            //start_x = cr;
+            //Console.SetCursorPosition(start_x, start_y);
+            //Console.Write("     ");
             #endregion
 
             // [2] Zeichen aus Symbol[,] holen und schreiben
@@ -265,7 +329,7 @@ namespace MonsterHunter
             cr = start_x;
             lock (Game.printlock)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     for (int i = 0; i < 5; i++)
                     {
@@ -319,6 +383,12 @@ namespace MonsterHunter
                     // Cursor zurück nach links
                     start_x = cr;
                 }
+                //++start_y;
+                //start_x = cr;
+                //ConsoleColor store = Console.ForegroundColor;
+                //Console.ForegroundColor = ConsoleColor.White;
+                //Console.Write(name);
+                //Console.ForegroundColor = store;
 
             }
         }
@@ -639,7 +709,7 @@ namespace MonsterHunter
             ));
             lock (Game.printlock)
             {
-                PrintMonster(old[0], old[1]);
+                PrintDancingMonster(old[0], old[1]);
 
             }
             // check if move is possible
