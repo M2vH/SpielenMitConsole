@@ -27,6 +27,10 @@ namespace MonsterHunter
         static void Main(string[] args)
         {
             // console preparation
+            //Dancer theDancer = new Dancer();
+            //theDancer.InitDancer();
+
+
             Game.InitGame();
 
             // hide the cursor
@@ -44,7 +48,8 @@ namespace MonsterHunter
 
 
             TextOnScreen gameOver = new TextOnScreen();
-            gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ", Dancer.theDancer[2]);
+//            gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ", theDancer.dancer_1, theDancer.dancer_2, theDancer.dancer_3);
+            gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ");
 
 
 

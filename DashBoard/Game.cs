@@ -10,6 +10,10 @@ namespace MonsterHunter
 
     struct Game
     {
+        public static ConsoleKey choosenPlayer;
+
+        public static bool choiceIsMade = false;
+
         public static Enemy enemy;
         public static Monster player;
         public static Monster winner;
@@ -120,7 +124,7 @@ namespace MonsterHunter
             }
 
         }
-        
+
         #region Display the Statistics
 
         public static Stats playerStats;    //  = new Stats();
@@ -322,11 +326,42 @@ namespace MonsterHunter
         public static void InitPlayerAndEnemy()
         {
             // Create a player...
-            //  [1]...from given Design
+            //  [1]...from choosen Design
             //  player = CreatePlayer(angry, "Angry");
+
+
             //  [2]...from random design
-            int r = random.Next(0, theDesigns.Length);
-            Game.player = Player.CreatePlayer(theDesigns[r], theDesigns[r].designName);
+            if (!choiceIsMade)
+            {
+            }
+            else        // choice was made
+            {
+                // switch on ConsoleKey case [A]ngry , [F]rodo , [G]oblin
+                switch (Game.choosenPlayer)
+                {
+                    case ConsoleKey.A:
+                        Game.player = Player.CreatePlayer(theDesigns[2], theDesigns[2].designName);
+                        break;
+                    case ConsoleKey.F:
+                        Game.player = Player.CreatePlayer(theDesigns[1], theDesigns[1].designName);
+                        break;
+                    case ConsoleKey.G:
+                        Game.player = Player.CreatePlayer(theDesigns[0], theDesigns[0].designName);
+                        break;
+                    default:
+                        int r = random.Next(0, theDesigns.Length);
+                        Game.player = Player.CreatePlayer(theDesigns[r], theDesigns[r].designName);
+                        break;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                string text = String.Format("You selected [" + choosenPlayer.ToString() + "] " + Game.player.name);
+                Dashboard.CenterText(ConsoleColor.Red, 25, text);
+                Thread.Sleep(2000);
+                text = String.Format("{0:" + text.Length + "}", " ");
+                Dashboard.CenterText(ConsoleColor.Red, 25, "You selected [" + choosenPlayer.ToString() + "] " + Game.player.name);
+            }
+
 #if DEBUG
             int reduction = 400;
             Game.player.outfit.stats.SetHPoints(reduction);
@@ -360,7 +395,7 @@ namespace MonsterHunter
         }
 
         public static bool play = true;
-        
+
         // make a play
         // ! only cursor is moving !
         /// <summary>
@@ -511,7 +546,7 @@ namespace MonsterHunter
                                             if (Game.dist.distance < 4)
                                             {
                                                 Game.player.HitMonster(Game.playerStats, Game.enemyStats, true);
-                                                
+
                                             }
                                         }
                                         break;
@@ -636,7 +671,6 @@ namespace MonsterHunter
 
             Game.theDesigns = new Design[] { Game.goble, Game.frodo, Game.angry };
 
-            Dancer.InitDancer();
 
         }
 

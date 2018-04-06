@@ -8,42 +8,54 @@ namespace MonsterHunter
 {
     struct Dancer
     {
-        public static Monster dancer_1;
-        public static Monster dancer_2;
-        public static Monster dancer_3;
+        public Random rndm;
+        public Monster dancer_1;
+        public Monster dancer_2;
+        public Monster dancer_3;
 
-        public static void InitDancer()
+        public void InitDancer()
         {
-
-            dancer_1 = new Monster()
+            rndm = new Random();
+            dancer_1 = new Monster
             {
                 outfit = Game.goble,
                 name = "[ G ]",
-                parts = Game.goble.designElements,
-                pos_x = Monster.RandomStartPos(true)[0],
-                pos_y = Monster.RandomStartPos(true)[1],
+                // pos_x = Monster.RandomStartPos(true)[0],
+                // pos_y = Monster.RandomStartPos(true)[1],
+
+                pos_x = rndm.Next(2, 98),
+                pos_y = Game.random.Next(8, 25),
+
+                //pos_x = 25,
+                //pos_y = 15,
             };
-            dancer_2 = new Monster()
+            dancer_1.parts = Game.goble.designElements;
+
+            dancer_2 = new Monster
             {
                 outfit = Game.frodo,
                 name = "[ F ]",
                 parts = Game.frodo.designElements,
-                pos_x = Monster.RandomStartPos(true)[0],
-                pos_y = Monster.RandomStartPos(true)[1],
+                // pos_x = Monster.RandomStartPos(true)[0],
+                // pos_y = Monster.RandomStartPos(true)[1],
+                pos_x = 50,
+                pos_y = 15,
             };
-            dancer_3 = new Monster()
+            dancer_3 = new Monster
             {
                 outfit = Game.angry,
                 name = "[ A ]",
                 parts = Game.angry.designElements,
-                pos_x = Monster.RandomStartPos(true)[0],
-                pos_y = Monster.RandomStartPos(true)[1],
+                //pos_x = Monster.RandomStartPos(true)[0],
+                //pos_y = Monster.RandomStartPos(true)[1],
+                pos_x = 75,
+                pos_y = 15,
             };
 
             theDancer = new Monster[]{ dancer_1, dancer_2,dancer_3 };
         }
 
-        public static Monster[] theDancer;
+        public Monster[] theDancer;
 
     }
 }

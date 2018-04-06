@@ -610,12 +610,16 @@ namespace MonsterHunter
         static int[] old = new int[2];
         static int[] move = new int[2];
 
-        public void DanceOneMonster(object _initState)
+        public void DanceTheMonster(object _initState)
         {
             AutoResetEvent danceReset = (AutoResetEvent)_initState;
             old[0] = pos_x;
             old[1] = pos_y;
+            lock (Game.printlock)
+            {
             HideDancingMonster(pos_x, pos_y);
+
+            }
 
             do
             {
@@ -635,6 +639,19 @@ namespace MonsterHunter
 
 
         }
+
+        //public void DanceAllMonster(object _initState)
+        //{
+        //    for (int i = 0; i < Dancer.theDancer.Length; i++)
+        //    {
+        //        AutoResetEvent danceReset = (AutoResetEvent)_initState;
+
+
+
+        //        danceReset.Set();
+
+        //    }
+        //}
 
     }
 }

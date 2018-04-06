@@ -77,6 +77,21 @@ namespace MonsterHunter
 
         }
 
+        public static void CenterText(ConsoleColor color, int line, string foo)
+        {
+            int start = (Window.x - foo.Length) / 2;
+
+            lock (Game.printlock)
+            {
+                ConsoleColor memo = Console.ForegroundColor;
+                Console.ForegroundColor = color;
+                Console.SetCursorPosition(start, line);
+                Console.Write(foo);
+                Console.ForegroundColor = memo;
+            }
+
+        }
+
         //  print foo at the center of a line, 
         //  usinf color parameter
         //  (center of line is calculated)

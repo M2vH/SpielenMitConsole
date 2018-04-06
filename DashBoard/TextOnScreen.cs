@@ -191,10 +191,44 @@ namespace MonsterHunter
             string blanc = String.Format("{0}", _input);
             Dashboard.CenterText(25, blanc, ConsoleColor.Red);
             Console.CursorVisible = false;
-            Console.ReadLine();
-            dance.Dispose();
 
+            // store the selection
+            while (!Game.choiceIsMade)
+            {
+                ConsoleKey key = Console.ReadKey().Key;
+                if ((key == ConsoleKey.A || key == ConsoleKey.F) || key == ConsoleKey.G)
+                {
+                    Game.choosenPlayer = key;
+                    Game.choiceIsMade = true;
+                }
+
+            }
         }
+
+        public void PrintEnter(string _input, Timer[] timer)
+        {
+            string blanc = String.Format("{0}", _input);
+            Dashboard.CenterText(25, blanc, ConsoleColor.Red);
+            Console.CursorVisible = false;
+
+            // store the selection
+            while (!Game.choiceIsMade)
+            {
+                ConsoleKey key = Console.ReadKey().Key;
+                if ((key == ConsoleKey.A || key == ConsoleKey.F) || key == ConsoleKey.G)
+                {
+                    Game.choosenPlayer = key;
+                    Game.choiceIsMade = true;
+                }
+
+            }
+            // Console.ReadLine();
+            for (int i = 0; i < timer.Length; i++)
+            {
+                timer[i].Dispose();
+            }
+        }
+
         public void PrintStart()
         {
             FillTheList();
@@ -222,7 +256,10 @@ namespace MonsterHunter
             PrintEnter(_text);
         }
 
-        static Timer dance;
+
+        //static Timer dance;
+        //static Timer dance2;
+        //static Timer dance3;
 
         public void PrintText(string _path, string _text, Monster _monsters)
         {
@@ -234,11 +271,38 @@ namespace MonsterHunter
             int[] coords = Monster.RandomStartPos(true);
 
             AutoResetEvent danceReset = new AutoResetEvent(true);
-            dance = new Timer(_monsters.DanceOneMonster, danceReset, 1000, 500);
+            var dance = new Timer(_monsters.DanceTheMonster, danceReset, 1000, 500);
             danceReset.Set();
-            PrintEnter(_text);
+            PrintEnter(_text, new Timer[] { dance});
         }
 
+        public void PrintText(string _path, string _text, Monster m1, Monster m2, Monster m3)
+        {
+            FillTheList(_path);
+            //Console.Clear();
+            PrintColorBackground(Window.x, Window.y);
+            PrintASCII(lines, Window.x, Window.y);
+
+            AutoResetEvent danceReset = new AutoResetEvent(true);
+            var dance = new Timer(m1.DanceTheMonster, danceReset, 1000, 500);
+            danceReset.Set();
+
+            Thread.Sleep(2000);
+
+            AutoResetEvent danceReset2 = new AutoResetEvent(true);
+            var dance2 = new Timer(m2.DanceTheMonster, danceReset2, 2000, 800);
+            danceReset2.Set();
+
+            Thread.Sleep(2000);
+
+            AutoResetEvent danceReset3 = new AutoResetEvent(true);
+            var dance3 = new Timer(m3.DanceTheMonster, danceReset3, 3000, 1100);
+            danceReset3.Set();
+
+            Thread.Sleep(2000);
+
+            PrintEnter(_text, new Timer[]{ dance, dance2, dance3 });
+        }
 
         public void PrintGameOver()
         {
