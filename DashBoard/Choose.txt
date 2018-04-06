@@ -17,3 +17,5 @@
 ##     ##  #######  ##    ##  ######     ##    ######## ##     ## 
 -
                      Press [G] for Goble
+                     Press [F] for Frodo
+                     Press [A] for Angry

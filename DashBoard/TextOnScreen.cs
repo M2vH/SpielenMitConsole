@@ -139,7 +139,7 @@ namespace MonsterHunter
             Fill = new char[] { '.', ':', ',', ' ', ' ' };
             int new_x = (_x - size) / 2;
             // all line in field - ( welcome lines / 2 )
-            int new_y = _y - Lines.Count - Lines.Count / 2;
+            int new_y = (_y - Window.top - Lines.Count) / 2;
 
             int x = new_x;
             int y = new_y;
