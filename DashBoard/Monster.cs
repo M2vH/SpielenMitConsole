@@ -207,7 +207,7 @@ namespace MonsterHunter
         static Symbol testSign = new Symbol() { Sign = '#', Color = 5 };
 
         static int cr = 0;
-        static int lf = 0;
+        //static int lf = 0;
 
         public void HideDancingMonster(int x, int y)
         {
@@ -216,9 +216,9 @@ namespace MonsterHunter
             start_y = y - 1;
             // set cursor to top left corner of monster
             cr = start_x;
-            lf = start_y;
+            //lf = start_y;
             // print the old position with spaces;
-
+            #region print with spaces
             for (int j = 0; j < 3; j++)
             {
                 for (int i = 0; i < 5; i++)
@@ -232,21 +232,21 @@ namespace MonsterHunter
                     //    Debug.WriteLine("Symbol not set!\n" + ex.Message);
                     //}
                     // Debug.WriteLine(testSign.Sign);
-                    lock (Game.printlock)
+                    try
                     {
-                        try
+                        // set cursor to position
+                        lock (Game.printlock)
                         {
-                            // set cursor to position
                             Console.SetCursorPosition(start_x, start_y);
                             Console.Write(testSign.Sign);
                         }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine("Cursor Out of Range!\n" + ex.Source);
-                        }
-
-
                     }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Cursor Out of Range!\n" + ex.Source);
+                    }
+
+
 
                     // Cursor einen nach rechts
                     start_x++;
@@ -256,30 +256,31 @@ namespace MonsterHunter
                 // Cursor in die nächste Zeile
                 start_y++;
             }
+            #endregion
 
             // [2] Zeichen aus Symbol[,] holen und schreiben
             start_x = x - 2;
             start_y = y - 1;
             // set cursor to top left corner of monster
             cr = start_x;
-            for (int j = 0; j < 3; j++)
+            lock (Game.printlock)
             {
-                for (int i = 0; i < 5; i++)
+                for (int j = 0; j < 3; j++)
                 {
-                    start_x++;
-                    try
+                    for (int i = 0; i < 5; i++)
                     {
-                        testSign = Background.signs[start_x, start_y];
+                        start_x++;
+                        try
+                        {
+                            testSign = Background.signs[start_x, start_y];
 
-                    }
-                    catch (Exception ex)
-                    {
+                        }
+                        catch (Exception ex)
+                        {
 
-                        Debug.WriteLine("Symbol not set!\n" + ex.Message);
-                    }
-                    // Debug.WriteLine(testSign.Sign);
-                    lock (Game.printlock)
-                    {
+                            Debug.WriteLine("Symbol not set!\n" + ex.Message);
+                        }
+                        // Debug.WriteLine(testSign.Sign);
                         try
                         {
                             // set cursor to position
@@ -306,15 +307,19 @@ namespace MonsterHunter
                         // get the corresponding char
                         // write the right symbol
                         // store = Background.signs[start_x, start_y].Sign;
-                        Console.Write(testSign.Sign);
+                        lock (Game.printlock)
+                        {
+                            Console.Write(testSign.Sign);
+
+                        }
 
                     }
-
+                    // Cursor auf nächste Zeile
+                    start_y++;
+                    // Cursor zurück nach links
+                    start_x = cr;
                 }
-                // Cursor auf nächste Zeile
-                start_y++;
-                // Cursor zurück nach links
-                start_x = cr;
+
             }
         }
 
@@ -617,7 +622,7 @@ namespace MonsterHunter
             old[1] = pos_y;
             lock (Game.printlock)
             {
-            HideDancingMonster(pos_x, pos_y);
+                HideDancingMonster(pos_x, pos_y);
 
             }
 
@@ -632,8 +637,11 @@ namespace MonsterHunter
             (old[0] >= 2 && old[0] <= Window.x - 2) &&
             (old[1] >= 1 && old[1] <= Window.y - 1)
             ));
+            lock (Game.printlock)
+            {
+                PrintMonster(old[0], old[1]);
 
-            PrintMonster(old[0], old[1]);
+            }
             // check if move is possible
             danceReset.Set();
 

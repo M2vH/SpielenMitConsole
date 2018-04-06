@@ -276,30 +276,47 @@ namespace MonsterHunter
             PrintEnter(_text, new Timer[] { dance});
         }
 
-        public void PrintText(string _path, string _text, Monster m1, Monster m2, Monster m3)
+        public void PrintText(string _path, string _text, bool _all)
         {
             FillTheList(_path);
             //Console.Clear();
             PrintColorBackground(Window.x, Window.y);
             PrintASCII(lines, Window.x, Window.y);
 
+            // create three enemy;
+            Dancer dancer_1 = new Dancer();
+            Dancer dancer_2 = new Dancer();
+            Dancer dancer_3 = new Dancer();
+
+            dancer_1.InitDancer(Game.goble, "[ G ]");
+            dancer_2.InitDancer(Game.angry, "[ A ]");
+            dancer_3.InitDancer(Game.frodo, "[ F ]");
+
+            dancer_1.enemy.monster.pos_x = 19;
+            dancer_2.enemy.monster.pos_x = 50;
+            dancer_3.enemy.monster.pos_x = 75;
+
+            dancer_1.enemy.monster.pos_y = 10;
+            dancer_2.enemy.monster.pos_y = 10;
+            dancer_3.enemy.monster.pos_y = 10;
+
             AutoResetEvent danceReset = new AutoResetEvent(true);
-            var dance = new Timer(m1.DanceTheMonster, danceReset, 1000, 500);
+            var dance = new Timer(dancer_1.enemy.monster.DanceTheMonster, danceReset, 330, 2117);
             danceReset.Set();
 
-            Thread.Sleep(2000);
+            Thread.Sleep(330);
 
             AutoResetEvent danceReset2 = new AutoResetEvent(true);
-            var dance2 = new Timer(m2.DanceTheMonster, danceReset2, 2000, 800);
+            var dance2 = new Timer(dancer_2.enemy.monster.DanceTheMonster, danceReset2, 500, 2357);
             danceReset2.Set();
 
-            Thread.Sleep(2000);
+            Thread.Sleep(330);
 
             AutoResetEvent danceReset3 = new AutoResetEvent(true);
-            var dance3 = new Timer(m3.DanceTheMonster, danceReset3, 3000, 1100);
+            var dance3 = new Timer(dancer_3.enemy.monster.DanceTheMonster, danceReset3, 500, 2579);
             danceReset3.Set();
 
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
 
             PrintEnter(_text, new Timer[]{ dance, dance2, dance3 });
         }
@@ -317,5 +334,53 @@ namespace MonsterHunter
             gameOver.PrintText("GameOver.txt", _text);
 
         }
+
+        //public static Monster dancer_1;
+        //public Monster dancer_2;
+        //public Monster dancer_3;
+
+        //public void InitDancer()
+        //{
+        //    dancer_1 = new Monster
+        //    {
+        //        outfit = Game.goble,
+        //        name = "[ G ]",
+        //        // pos_x = Monster.RandomStartPos(true)[0],
+        //        // pos_y = Monster.RandomStartPos(true)[1],
+
+        //        //pos_x = Game.random.Next(2, 98),
+        //        //pos_y = Game.random.Next(8, 25),
+
+        //        pos_x = 25,
+        //        pos_y = 15,
+        //    };
+        //    dancer_1.parts = Game.goble.designElements;
+
+        //    dancer_2 = new Monster
+        //    {
+        //        outfit = Game.frodo,
+        //        name = "[ F ]",
+        //        parts = Game.frodo.designElements,
+        //        // pos_x = Monster.RandomStartPos(true)[0],
+        //        // pos_y = Monster.RandomStartPos(true)[1],
+        //        pos_x = 50,
+        //        pos_y = 15,
+        //    };
+        //    dancer_3 = new Monster
+        //    {
+        //        outfit = Game.angry,
+        //        name = "[ A ]",
+        //        parts = Game.angry.designElements,
+        //        //pos_x = Monster.RandomStartPos(true)[0],
+        //        //pos_y = Monster.RandomStartPos(true)[1],
+        //        pos_x = 75,
+        //        pos_y = 15,
+        //    };
+
+        //    theDancer = new Monster[] { dancer_1, dancer_2, dancer_3 };
+        //}
+
+        // public static Monster[] theDancer;
+
     }
 }

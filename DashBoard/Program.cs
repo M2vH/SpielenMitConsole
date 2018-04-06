@@ -48,9 +48,11 @@ namespace MonsterHunter
 
 
             TextOnScreen gameOver = new TextOnScreen();
-//            gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ", theDancer.dancer_1, theDancer.dancer_2, theDancer.dancer_3);
-            gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ");
 
+            //  gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ", theDancer.dancer_1, theDancer.dancer_2, theDancer.dancer_3);
+
+            //  gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ",true);
+            gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ", true);
 
 
             // theSong.Start();
