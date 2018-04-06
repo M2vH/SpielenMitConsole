@@ -31,7 +31,7 @@ namespace MonsterHunter
 
         public string Path { get => path; set => path = value; }
         public char[] Fill { get => fill; set => fill = value; }
-        public List<string> Lines { get => lines;  }
+        public List<string> Lines { get => lines; }
 
         /// <summary>
         /// Fills the lines marked with '-' in Welcome.txt with spaces
@@ -51,7 +51,7 @@ namespace MonsterHunter
 
                 if (line.StartsWith("-"))
                 {
-                    lines.Add(String.Format("{0," + size + "}"," "));
+                    lines.Add(String.Format("{0," + size + "}", " "));
                 }
                 else
                 {
@@ -88,11 +88,11 @@ namespace MonsterHunter
         public void PrintColorBackground(int _x, int _y)
         {
             char storage = '#';
-            
+
             // make some color on the screen
             for (int i = 0; i < _x; i++)
             {
-                for (int j = 0; j < _y-1; j++)
+                for (int j = 0; j < _y - 1; j++)
                 {
                     Symbol symbol = new Symbol();
                     Console.SetCursorPosition(i, j);
@@ -112,7 +112,6 @@ namespace MonsterHunter
         public void PrintStringBackground(int _x, int _y)
         {
             // make some color on the screen
-            string s = "";
             for (int i = 0; i < _y - 1; i++)
             {
                 for (int j = 0; j < _x; j++)
@@ -137,7 +136,7 @@ namespace MonsterHunter
         /// <param name="_y"></param>
         public void PrintASCII(List<string> _lines, int _x, int _y)
         {
-            Fill = new char[]{ '.', ':', ',', ' ', ' ' };
+            Fill = new char[] { '.', ':', ',', ' ', ' ' };
             int new_x = (_x - size) / 2;
             // all line in field - ( welcome lines / 2 )
             int new_y = _y - Lines.Count - Lines.Count / 2;
@@ -163,7 +162,7 @@ namespace MonsterHunter
                     else
                     {
                         ConsoleColor store = Console.ForegroundColor;
-                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write(symbol);
                         Console.ForegroundColor = store;
                     }
@@ -193,8 +192,8 @@ namespace MonsterHunter
             Dashboard.CenterText(25, blanc, ConsoleColor.Red);
             Console.CursorVisible = false;
             Console.ReadLine();
-            //click.Dispose();
-            
+            dance.Dispose();
+
         }
         public void PrintStart()
         {
@@ -223,7 +222,7 @@ namespace MonsterHunter
             PrintEnter(_text);
         }
 
-        // static Timer click;
+        static Timer dance;
 
         public void PrintText(string _path, string _text, Monster _monsters)
         {
@@ -234,17 +233,12 @@ namespace MonsterHunter
 
             int[] coords = Monster.RandomStartPos(true);
 
-            _monsters.PrintMonster(coords);
-
-            Thread.Sleep(2000);
-
-            _monsters.HideDancingMonster(coords[0], coords[1]);
-
-            // AutoResetEvent printReset = new AutoResetEvent(true);
-            // click = new Timer(_monsters.DanceMonster,printReset,1000,2000);
-            // printReset.Set();
+            AutoResetEvent danceReset = new AutoResetEvent(true);
+            dance = new Timer(_monsters.DanceOneMonster, danceReset, 1000, 500);
+            danceReset.Set();
             PrintEnter(_text);
         }
+
 
         public void PrintGameOver()
         {
@@ -256,7 +250,7 @@ namespace MonsterHunter
         public void PrintGameOver(string _text)
         {
             TextOnScreen gameOver = new TextOnScreen();
-            gameOver.PrintText("GameOver.txt" , _text);
+            gameOver.PrintText("GameOver.txt", _text);
 
         }
     }

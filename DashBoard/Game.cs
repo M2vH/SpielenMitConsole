@@ -636,6 +636,8 @@ namespace MonsterHunter
 
             Game.theDesigns = new Design[] { Game.goble, Game.frodo, Game.angry };
 
+            Dancer.InitDancer();
+
         }
 
 

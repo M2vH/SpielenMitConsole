@@ -41,17 +41,10 @@ namespace MonsterHunter
 
 
             // Create a Monster from Design
-            Design goble = Game.goble;
-            Monster choice_1 = new Monster();
-            int[] pos_1 = Monster.RandomStartPos(true);
-            choice_1.outfit = goble;
-            choice_1.parts = choice_1.outfit.designElements;
-            choice_1.name = "[G]oble";
-            choice_1.pos_x = pos_1[0];
-            choice_1.pos_y = pos_1[1];
+
 
             TextOnScreen gameOver = new TextOnScreen();
-            gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ", choice_1);
+            gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ", Dancer.theDancer[2]);
 
 
 

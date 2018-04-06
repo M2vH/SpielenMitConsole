@@ -124,7 +124,7 @@ namespace MonsterHunter
 
         public void PrintMonster(int[] _coords)
         {
-                PrintMonster(_coords[0], _coords[1]);
+            PrintMonster(_coords[0], _coords[1]);
         }
 
         //  Hide Monster
@@ -204,31 +204,33 @@ namespace MonsterHunter
             }
         }
 
-        static Symbol testSign;
+        static Symbol testSign = new Symbol() { Sign = '#', Color = 5 };
+
+        static int cr = 0;
+        static int lf = 0;
 
         public void HideDancingMonster(int x, int y)
         {
-            start_x = x;
-            start_y = y;
+            // [1] Zuerst mit Leerzeichen überschreiben;
+            start_x = x - 2;
+            start_y = y - 1;
             // set cursor to top left corner of monster
-            start_x -= 2;
-            start_y -= 1;
+            cr = start_x;
+            lf = start_y;
             // print the old position with spaces;
 
             for (int j = 0; j < 3; j++)
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    start_x += i;
-                    start_y += j;
-                    try
-                    {
-                       testSign.Sign = ' ';
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine("Symbol not set!\n" + ex.Message);
-                    }
+                    //try
+                    //{
+                    //    testSign.Sign = ' ';
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    Debug.WriteLine("Symbol not set!\n" + ex.Message);
+                    //}
                     // Debug.WriteLine(testSign.Sign);
                     lock (Game.printlock)
                     {
@@ -236,30 +238,35 @@ namespace MonsterHunter
                         {
                             // set cursor to position
                             Console.SetCursorPosition(start_x, start_y);
+                            Console.Write(testSign.Sign);
                         }
                         catch (Exception ex)
                         {
                             System.Diagnostics.Debug.WriteLine("Cursor Out of Range!\n" + ex.Source);
                         }
 
-                        Console.Write(testSign.Sign);
 
                     }
 
+                    // Cursor einen nach rechts
+                    start_x++;
                 }
+                // Cursor zurück nach links
+                start_x = cr;
+                // Cursor in die nächste Zeile
+                start_y++;
             }
 
-            start_x = x;
-            start_y = y;
+            // [2] Zeichen aus Symbol[,] holen und schreiben
+            start_x = x - 2;
+            start_y = y - 1;
             // set cursor to top left corner of monster
-            start_x -= 2;
-            start_y -= 1;
+            cr = start_x;
             for (int j = 0; j < 3; j++)
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    start_x += i;
-                    start_y += j;
+                    start_x++;
                     try
                     {
                         testSign = Background.signs[start_x, start_y];
@@ -304,6 +311,10 @@ namespace MonsterHunter
                     }
 
                 }
+                // Cursor auf nächste Zeile
+                start_y++;
+                // Cursor zurück nach links
+                start_x = cr;
             }
         }
 
@@ -529,7 +540,7 @@ namespace MonsterHunter
         public static int[] RandomDanceMove()
         {
             int[] goHere = new int[] { 0, 0 };
-            int selected = Game.random.Next(0, 5);
+            int selected = Game.random.Next(0, 4);
 
             switch (selected)
             {
@@ -545,9 +556,10 @@ namespace MonsterHunter
                 case 3:
                     goHere = Choice.goTo[3].coord;
                     break;
-                case 4:
-                    goHere = Choice.goTo[4].coord;
-                    break;
+                // we dont move not ;-)
+                //case 4:
+                //    goHere = Choice.goTo[4].coord;
+                //    break;
                 default:
                     break;
             }
@@ -598,21 +610,31 @@ namespace MonsterHunter
         static int[] old = new int[2];
         static int[] move = new int[2];
 
-        public void DanceMonster(object _initState)
+        public void DanceOneMonster(object _initState)
         {
             AutoResetEvent danceReset = (AutoResetEvent)_initState;
             old[0] = pos_x;
             old[1] = pos_y;
             HideDancingMonster(pos_x, pos_y);
-            move = RandomDanceMove();
-            old[0] += move[0];
-            old[1] += move[1];
+
+            do
+            {
+                move = RandomDanceMove();
+                old[0] += move[0];
+                old[1] += move[1];
+            }
+            // links + 2 && rechts -2             &&    oben + 1  &&  unten - 1
+            while (!(
+            (old[0] >= 2 && old[0] <= Window.x - 2) &&
+            (old[1] >= 1 && old[1] <= Window.y - 1)
+            ));
+
             PrintMonster(old[0], old[1]);
+            // check if move is possible
             danceReset.Set();
 
 
         }
-
 
     }
 }
