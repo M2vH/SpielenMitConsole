@@ -37,12 +37,12 @@ namespace MonsterHunter
         /*  Function <Monster>CreatePlayer(Design _design, string _name)
          *  Creates a gamer monster with a given <Design> at default position
          */
-         /// <summary>
-         /// Create a Monster out of a Design
-         /// </summary>
-         /// <param name="_design">The Design</param>
-         /// <param name="_name">The name</param>
-         /// <returns></returns>
+        /// <summary>
+        /// Create a Monster out of a Design
+        /// </summary>
+        /// <param name="_design">The Design</param>
+        /// <param name="_name">The name</param>
+        /// <returns></returns>
         public static Monster CreatePlayer(Design _design, string _name)
         {
             Monster monster = new Monster
@@ -59,14 +59,14 @@ namespace MonsterHunter
         /*  <Monster> CreatePlayer(Design _design, int _x, int _y, string _name)
          *  Creates a Monster at a given position;
          */
-         /// <summary>
-         /// Create a Monster out of a given Design at a given position.
-         /// </summary>
-         /// <param name="_design">The Design</param>
-         /// <param name="_x">The x-Coordinate of the position</param>
-         /// <param name="_y">The y-Coordinate of the position</param>
-         /// <param name="_name">The name displayed at the end of the game.</param>
-         /// <returns></returns>
+        /// <summary>
+        /// Create a Monster out of a given Design at a given position.
+        /// </summary>
+        /// <param name="_design">The Design</param>
+        /// <param name="_x">The x-Coordinate of the position</param>
+        /// <param name="_y">The y-Coordinate of the position</param>
+        /// <param name="_name">The name displayed at the end of the game.</param>
+        /// <returns></returns>
         public static Monster CreatePlayer(Design _design, int _x, int _y, string _name)
         {
             Monster monster = new Monster
@@ -81,9 +81,23 @@ namespace MonsterHunter
 
         public static void StartPlayer()
         {
+            bool manual = true;
             try
             {
-                Game.PlayTheGame(Game.player);
+                  //ToDo:
+                  //if (manual) the PlayTheGame()
+                
+                if (manual)
+                {
+                    // Game.PlayTheGame(Game.player);
+                    Game.PlayThePlayer(Game.player);
+
+                }
+                else
+                {
+                  //else let the computer control the player monster
+
+                }
             }
             catch (ThreadAbortException ex)
             {

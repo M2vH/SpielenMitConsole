@@ -108,6 +108,7 @@
     <Compile Include="Choice.cs" />
     <Compile Include="Dancer.cs" />
     <Compile Include="Dashboard.cs" />
+    <Compile Include="Difficulty.cs" />
     <Compile Include="Distance.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Direction.cs" />

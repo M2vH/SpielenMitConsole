@@ -10,6 +10,8 @@ namespace MonsterHunter
 
     struct Game
     {
+        public static Difficulty difficulty;
+
         public static ConsoleKey choosenPlayer;
 
         public static bool choiceIsMade = false;
@@ -18,7 +20,7 @@ namespace MonsterHunter
         public static Monster player;
         public static Monster winner;
 
-        public static Random random = new Random();     // ToDo: Make sure, we do it only once
+        public static Random random = new Random();     // Make sure, we do it only once
 
         /// <summary>
         /// The lock object to protect console printing
@@ -325,16 +327,12 @@ namespace MonsterHunter
         /// <remarks>The player is random and the enemy is different than player</remarks>
         public static void InitPlayerAndEnemy()
         {
-            // Create a player...
-            //  [1]...from choosen Design
-            //  player = CreatePlayer(angry, "Angry");
-
-
             //  [2]...from random design
             if (!choiceIsMade)
             {
+                // ToDo: Implement random player monster
             }
-            else        // choice was made
+            else        // choice was made in start screen
             {
                 // switch on ConsoleKey case [A]ngry , [F]rodo , [G]oblin
                 switch (Game.choosenPlayer)
@@ -358,8 +356,8 @@ namespace MonsterHunter
                 string text = String.Format("You selected [" + choosenPlayer.ToString() + "] " + Game.player.name);
                 Dashboard.CenterText(ConsoleColor.Red, 25, text);
                 Thread.Sleep(2000);
-                text = String.Format("{0:" + text.Length + "}", " ");
-                Dashboard.CenterText(ConsoleColor.Red, 25, "You selected [" + choosenPlayer.ToString() + "] " + Game.player.name);
+                text = new string(' ', text.Length);
+                Dashboard.CenterText(ConsoleColor.Red, 25, text);
             }
 
 #if DEBUG
@@ -405,17 +403,14 @@ namespace MonsterHunter
         /// <param name="_player">The player monster</param>
         public static void PlayTheGame(Monster _player)
         {
-
             try
             {
-
                 /*  We receive a monster for the player with an existing design
                  */
                 Game.player = _player;
 
                 while (play)
                 {
-
                     // we check if player is dead
                     if (Game.playerStats.GetHPoints() <= 0 || Game.player.outfit.stats.GetHPoints() <= 0)
                     {
@@ -566,6 +561,94 @@ namespace MonsterHunter
             catch (ThreadAbortException ex)
             {
 
+                System.Diagnostics.Debug.WriteLine("Catch: PlayTheGame " + ex);
+            }
+
+
+        } // end of function
+
+        public static void PlayThePlayer(Monster _player)
+        {
+            try
+            {
+                /*  We receive a monster for the player with an existing design
+                 */
+                Game.player = _player;
+
+                while (play)
+                {
+                    // we check if player is dead
+                    if (Game.playerStats.GetHPoints() <= 0 || Game.player.outfit.stats.GetHPoints() <= 0)
+                    {
+                        // we dont want to run anymore
+                        play = false;
+                        // we stop the countdown
+                        Game.KillCountdown();
+
+                        // we DONT stop the enemy, because his thread will run
+                        // until enemy is looser.
+                        //StopEnemy();
+
+                        // dont display a dead player
+                        Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
+
+                        // leave this loop
+                        Game.CloseTheGame();
+                        break;
+
+                    }
+                    // player is alive
+                    else
+                    {
+                        // we check if he is winner
+                        if (Game.enemyStats.GetHPoints() <= 0)
+                        {
+                            // player has won;
+                            // stop the clock;
+                            Game.KillCountdown();
+                            Game.CloseTheGame();
+                            // leave the 'play'-while
+                            break;
+                        }
+                        //  we need a monster;
+                        //  PrintTheMonster(pos_x, pos_y);
+                        Game.player.PrintMonster(Game.player.pos_x, Game.player.pos_y);
+
+                        // fight first, then run
+                        lock (printlock)
+                        {
+                            if (Game.dist.distance < 4)
+                            {
+                                Game.player.Fight(Game.player);
+                                // Game.player.HitMonster(Game.playerStats, Game.enemyStats, true);
+                            }
+                        }
+
+                        int[] nextStep = new int[2];
+
+                        int[] me = new int[2];
+                        me[0] = Game.player.pos_x;
+                        me[1] = Game.player.pos_y;
+
+                        int[] him = new int[2];
+                        me[0] = Game.enemy.monster.pos_x;
+                        me[1] = Game.enemy.monster.pos_y;
+
+                        nextStep = Monster.GetCloser(Game.player, Game.enemy.monster);
+
+                        lock (printlock)
+                        {
+                            // Todo: Weitermachen
+                            Game.player.HideMonster(me[0], me[1]);
+                            Game.player.pos_x += nextStep[0];
+                            Game.player.pos_y += nextStep[1];
+                        }
+                    } // end of else
+                } // end of while
+
+            } // end of try
+            catch (ThreadAbortException ex)
+            {
                 System.Diagnostics.Debug.WriteLine("Catch: PlayTheGame " + ex);
             }
 

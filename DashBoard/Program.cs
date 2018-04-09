@@ -18,6 +18,7 @@ namespace MonsterHunter
 
         public static Thread thePlayer = new Thread(Player.StartPlayer);
         public static Thread theEnemy = new Thread(Enemy.StartEnemy);
+        // public static Thread the2ndEnemy = new Thread();
         // public static Thread theSong = new Thread(Song.PlayMySong);
 
 
@@ -26,6 +27,7 @@ namespace MonsterHunter
 
         static void Main(string[] args)
         {
+
             // console preparation
             //Dancer theDancer = new Dancer();
             //theDancer.InitDancer();
@@ -44,15 +46,9 @@ namespace MonsterHunter
             hello.PrintStart();
 
 
-            // Create a Monster from Design
+            TextOnScreen message = new TextOnScreen();
 
-
-            TextOnScreen gameOver = new TextOnScreen();
-
-            //  gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ", theDancer.dancer_1, theDancer.dancer_2, theDancer.dancer_3);
-
-            //  gameOver.PrintText("Choose.txt", "Type the KEY and press ENTER ",true);
-            gameOver.PrintText("Choose.txt", "", true);
+            message.PrintText("Choose.txt", "", true);
 
 
             // theSong.Start();
@@ -94,8 +90,9 @@ namespace MonsterHunter
             // next time we call it GameLoop
             // PlayTheGame(player);
             // we start a seperate Thread;
+            thePlayer.Name = "PlayerControlledThread";
             thePlayer.Start();
-
+            theEnemy.Name = "EnemyThread";
             theEnemy.Start();
 
 

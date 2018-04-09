@@ -429,7 +429,7 @@ namespace MonsterHunter
 
         }
 
-        // ToDo: Delete this method ?
+        // Delete this method ?
         public void HitMonster(Stats _me, Stats _oponent)
         {
             // get defense of _monster
@@ -507,9 +507,12 @@ namespace MonsterHunter
 
                     }
 
-                    //// next line works
+                    //// next line(s) work
                     // move = RandomWeightedMove();
-                    move = GetCloser();
+                    move = GetCloser(Game.enemy.monster, Game.player);
+                    
+
+
                     // erst hauen, dann laufen;
                     // und nur nebeneinander kämpfen;
                     if (Game.dist.GetDistance() < 5 && Game.dist.diff_y < 4)
@@ -740,6 +743,47 @@ namespace MonsterHunter
             // calculate the distance for every possible move;
             new_me = new int[2];
             int[] reset_me = new int[]{ 0,0};
+            int new_dist = 100;
+            for (int i = 0; i < attack.Length; i++)
+            {
+                // calculate next position
+                new_me[0] = me[0] + attack[i].coord[0];
+                new_me[1] = me[1] + attack[i].coord[1];
+                new_dist = Game.dist.GetDistance(new_me, target);
+
+                if (new_dist < distance)
+                {
+                    goThere = attack[i].coord;
+                }
+                new_me = reset_me;
+
+            }
+            // store the distance, if smaller;
+            // return the move with minimum distance
+            return goThere;
+        }
+
+        public static int[] GetCloser(Monster _me, Monster _him)
+        {
+            // get all possible directions;
+            Choice[] attack = Choice.goTo;
+
+            // get the position of opponent;
+            target = new int[2];
+            target[0] = _him.pos_x;
+            target[1] = _him.pos_y;
+
+            // get own position
+            me = new int[2];
+            me[0] = _me.pos_x;
+            me[1] = _me.pos_y;
+
+            // get actual distance
+            distance = Game.dist.GetDistance(me, target);
+
+            // calculate the distance for every possible move;
+            new_me = new int[2];
+            int[] reset_me = new int[] { 0, 0 };
             int new_dist = 100;
             for (int i = 0; i < attack.Length; i++)
             {

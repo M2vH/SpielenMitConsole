@@ -9,7 +9,6 @@ namespace MonsterHunter
     struct Background
     {
         /* The Background
-        * ToDo: create struct with int x, int y, background {zeichen, foregroundColor}
         */
         public static Symbol[,] signs = new Symbol[Window.x+1,Window.y];
         // var to store the background in
