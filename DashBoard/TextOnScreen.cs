@@ -304,19 +304,19 @@ namespace MonsterHunter
             var dance = new Timer(dancer_1.enemy.monster.DanceTheMonster, danceReset, 330, 2117);
             danceReset.Set();
 
-            Thread.Sleep(330);
+            //Thread.Sleep(330);
 
             AutoResetEvent danceReset2 = new AutoResetEvent(true);
-            var dance2 = new Timer(dancer_2.enemy.monster.DanceTheMonster, danceReset2, 500, 2357);
+            var dance2 = new Timer(dancer_2.enemy.monster.DanceTheMonster, danceReset2, 660, 2357);
             danceReset2.Set();
 
-            Thread.Sleep(330);
+            //Thread.Sleep(330);
 
             AutoResetEvent danceReset3 = new AutoResetEvent(true);
-            var dance3 = new Timer(dancer_3.enemy.monster.DanceTheMonster, danceReset3, 500, 2579);
+            var dance3 = new Timer(dancer_3.enemy.monster.DanceTheMonster, danceReset3, 990, 2579);
             danceReset3.Set();
 
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
 
             PrintEnter(_text, new Timer[]{ dance, dance2, dance3 });
         }

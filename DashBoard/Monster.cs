@@ -507,7 +507,9 @@ namespace MonsterHunter
 
                     }
 
-                    move = RandomWeightedMove();
+                    //// next line works
+                    // move = RandomWeightedMove();
+                    move = GetCloser();
                     // erst hauen, dann laufen;
                     // und nur nebeneinander kämpfen;
                     if (Game.dist.GetDistance() < 5 && Game.dist.diff_y < 4)
@@ -555,8 +557,6 @@ namespace MonsterHunter
                             // StopPlayer();
                             break;
                         }
-
-
                     }
                     else
                     {
@@ -582,7 +582,7 @@ namespace MonsterHunter
         /// Calculates a weighted random enemy movement
         /// </summary>
         /// <remarks>Weighted movement into left part of field</remarks>
-        /// <returns>An int array with next x,y coords</returns>
+        /// <returns>An int array with next x,y step in range -1 to 1</returns>
         static int[] RandomWeightedMove()
         {
             int[] goHere = new int[] { 0, 0 };
@@ -642,10 +642,6 @@ namespace MonsterHunter
             return goHere;
         }
 
-        /*  Function < int[] > RandomStartPos()
- *  Calculates a random position in the right side of the field
- *  Returns an int[]
- */
         public static int[] RandomStartPos()
         {
             int[] start = new int[2];
@@ -713,24 +709,56 @@ namespace MonsterHunter
 
             }
             // check if move is possible
-            danceReset.Set();
+            danceReset.WaitOne();
 
 
         }
 
-        //public void DanceAllMonster(object _initState)
-        //{
-        //    for (int i = 0; i < Dancer.theDancer.Length; i++)
-        //    {
-        //        AutoResetEvent danceReset = (AutoResetEvent)_initState;
+        static int[] goThere;
+        static int distance;
+        static int[] target;
+        static int[] me;
+        static int[] new_me;
+        public static int[] GetCloser()
+        {
+            // get all possible directions;
+            Choice[] attack = Choice.goTo;
 
+            // get the position of opponent;
+            target = new int[2];
+            target[0] = Game.player.pos_x;
+            target[1] = Game.player.pos_y;
 
+            // get own position
+            me = new int[2];
+            me[0] = Game.enemy.monster.pos_x;
+            me[1] = Game.enemy.monster.pos_y;
 
-        //        danceReset.Set();
+            // get actual distance
+            distance = Game.dist.GetDistance(me, target);
 
-        //    }
-        //}
+            // calculate the distance for every possible move;
+            new_me = new int[2];
+            int[] reset_me = new int[]{ 0,0};
+            int new_dist = 100;
+            for (int i = 0; i < attack.Length; i++)
+            {
+                // calculate next position
+                new_me[0] = me[0] + attack[i].coord[0];
+                new_me[1] = me[1] + attack[i].coord[1];
+                new_dist = Game.dist.GetDistance(new_me, target);
 
+                if (new_dist < distance)
+                {
+                    goThere = attack[i].coord;
+                }
+                new_me = reset_me;
+
+            }
+            // store the distance, if smaller;
+            // return the move with minimum distance
+            return goThere;
+        }
     }
 }
 

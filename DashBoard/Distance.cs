@@ -42,14 +42,29 @@ namespace MonsterHunter
 
             distance = (int)Math.Sqrt((double)(diff_x * diff_x + diff_y * diff_y));
         }
+
+        int CalcDistance(int[] me, int[] him)
+        {
+            int diff_x = Math.Abs((int)(me[0] - him[0]));
+            int diff_y = Math.Abs((int)(me[1] - him[1]));
+
+            return (int)Math.Sqrt((double)(diff_x * diff_x + diff_y * diff_y));
+        }
+
         public void SetDistance(int _dist)
         {
             distance = _dist;
         }
+
         public int GetDistance()
         {
             CalcDistance();
             return distance;
+        }
+
+        public int GetDistance(int[] me, int[] him)
+        {
+            return CalcDistance(me,him);
         }
 
         public int Distancetest
