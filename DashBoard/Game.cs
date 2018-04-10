@@ -10,11 +10,16 @@ namespace MonsterHunter
 
     struct Game
     {
-        public static Difficulty difficulty;
+        // public static Difficulty difficulty;
 
         public static ConsoleKey choosenPlayer;
 
         public static bool choiceIsMade = false;
+
+        /// <summary>
+        /// Holds true to keep the main thread running;
+        /// </summary>
+        public static bool keepAlive = true;
 
         public static Enemy enemy;
         public static Monster player;
@@ -134,6 +139,7 @@ namespace MonsterHunter
 
         public static void InitStats()
         {
+            rounds = 0;
             playerStats = Game.player.outfit.stats;
             enemyStats = Game.enemy.monster.outfit.stats;
         }
@@ -159,7 +165,7 @@ namespace MonsterHunter
             string playerHealth = String.Format("{0,10}{1,10}", "Health", playerStats.hPoints);
             string playerDefense = String.Format("{0,10}{1,10}", "Defense", playerStats.dPoints);
 
-            string enemyHealth = String.Format("{0,5}{1,15}", enemyStats.GetHPoints(), "Health");
+            string enemyHealth = String.Format("{0,5}{1,15}", enemyStats.hPoints, "Health");
             string enemyDefense = String.Format("{0,5}{1,15}", enemyStats.dPoints, "Defense");
             // lock (statsLock)
             // {
@@ -268,6 +274,7 @@ namespace MonsterHunter
         #endregion
         /// <summary>
         /// Closing the game. Display "Press any key...".
+        /// <remarks>And check, who is winner</remarks>
         /// </summary>
         public static void CloseTheGame()
         {
@@ -309,7 +316,11 @@ namespace MonsterHunter
             int here = Window.y - 5 - Window.top / 2;
             lock (Game.printlock)
             {
-                Song.playSong = false;
+                PrintStats();
+                Dashboard.CenterText(2, "Monster Fight took " + rounds + " rounds.", winner.outfit.designColor);
+                string blanc = new string(' ', 30);
+                Dashboard.CenterText(3, blanc);
+                // Song.playSong = false;
                 ConsoleColor red = ConsoleColor.Red;
                 Thread.Sleep(500);
                 string grats = "The Winner is... " + winner.name;
@@ -670,6 +681,8 @@ namespace MonsterHunter
 
         }
 
+        // ToDo: Delete function
+        // We don't need parameter;
         public static void PlayThePlayer(Monster _player)
         {
             try
@@ -758,6 +771,121 @@ namespace MonsterHunter
             }
 
 
+        } // end of function
+
+        public static Timer startAutoplayTimer;
+
+        static AutoResetEvent resetAutoplayTimer = new AutoResetEvent(true);
+
+        private static int rounds;
+
+        public static int Rounds { get => rounds; set => rounds += 1; }
+
+        public static void StartAutoPlayerTimer(int _millis)
+        {
+            try
+            {
+                startAutoplayTimer = new Timer(PlayThePlayer, resetAutoplayTimer, 1000, _millis);
+                // resetAutoplayTimer.WaitOne();
+                resetAutoplayTimer.WaitOne();
+            }
+            catch (ThreadAbortException ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine("Catch: StartAutoplayTimer " + ex);
+            }
+        }
+
+
+
+        public static void PlayThePlayer(Object _stateInfo)
+        {
+            AutoResetEvent resetAutoPlayer = (AutoResetEvent)_stateInfo;
+
+            // bool moveIsPossible = true;
+            try
+            {
+                // System.Diagnostics.Debug.WriteLine("Player:" + System.DateTime.Now);
+                // I check if one of us is dead
+                if (playerStats.GetHPoints() <= 0 || enemyStats.GetHPoints() <= 0)
+                {
+                    // I dont want to run anymore
+                    // moveIsPossible = false;
+                    // startAutoplayTimer.Dispose();
+                    // I stop the countdown
+                    KillCountdown();
+
+                    // I DONT stop the enemy, because his thread will 
+                    // check for his own.
+                    // Enemy.StopEnemy();
+
+                    // I check if I am a looser
+                    if (playerStats.GetHPoints() <= 0)
+                    {       // I am a dead player
+                            // dont display a dead player
+                        player.HideMonster(player.pos_x, player.pos_y);
+                        // take hidden player aside
+                        player.pos_x = 5;
+                        player.pos_y = 10;
+                        return;
+
+                    }
+                    else
+                    {
+                        // Enemy must be dead.
+                        Enemy.StopEnemy();
+                        return;
+                    }
+
+                }
+                else
+                {
+                    // I am alive
+                    //  I need a monster;
+
+                    player.PrintMonster(player.pos_x, player.pos_y);
+
+                    // fight first if possible, then run
+                    // ToDo: add 'same level check'
+                    if (dist.CalcDistance_xy() < 5 && dist.CalcDistance_y() < 4)
+                    {
+                        lock (printlock)
+                        {
+                            player.Fight(player);
+                            player.HitMonster(playerStats, enemyStats, true);
+                        }
+                    }
+
+                    int[] nextStep = new int[2];
+
+                    //int[] me = new int[2];
+                    //me[0] = player.pos_x;
+                    //me[1] = player.pos_y;
+
+                    //int[] him = new int[2];
+                    //him[0] = enemy.monster.pos_x;
+                    //him[1] = enemy.monster.pos_y;
+
+                    nextStep = Monster.GetCloser(player, enemy.monster);
+
+                    lock (printlock)
+                    {
+                        // Todo: Weitermachen
+                        player.HideMonster(player.pos_x, player.pos_y);
+                        player.pos_x += nextStep[0];
+                        player.pos_y += nextStep[1];
+                        player.PrintMonster();
+                    }
+                } // end of else
+
+
+            } // end of try
+            catch (ThreadAbortException ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Catch: PlayTheGame " + ex);
+            }
+
+            resetAutoPlayer.Set();
         } // end of function
 
 

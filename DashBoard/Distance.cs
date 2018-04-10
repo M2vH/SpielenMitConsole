@@ -26,7 +26,7 @@ namespace MonsterHunter
         }
         public void PrintTheDist()
         {
-            CalcDistance();
+            CalcDistance_xy();
             text = String.Format("{0,-21}{1,5:D2}","Actual Distance", distance);
             //if (Program.enemyStats.GetHPoints() <= 0 && Program.playerStats.GetHPoints() <= 0)
             //{
@@ -35,15 +35,24 @@ namespace MonsterHunter
             //}
             Dashboard.CenterText(3, text);
         }
-        void CalcDistance()
+        public int CalcDistance_xy()
         {
             diff_x = Math.Abs((int)(Game.player.pos_x - Game.enemy.monster.pos_x));
             diff_y = Math.Abs((int)(Game.player.pos_y - Game.enemy.monster.pos_y));
 
             distance = (int)Math.Sqrt((double)(diff_x * diff_x + diff_y * diff_y));
+            return distance;
         }
 
-        int CalcDistance(int[] me, int[] him)
+        public int CalcDistance_y()
+        {
+            int diff_y = 0;
+            diff_y = Math.Abs((int)(Game.player.pos_y - Game.enemy.monster.pos_y));
+
+            return diff_y;
+        }
+
+        int CalcDistance_xy(int[] me, int[] him)
         {
             int diff_x = Math.Abs((int)(me[0] - him[0]));
             int diff_y = Math.Abs((int)(me[1] - him[1]));
@@ -58,20 +67,20 @@ namespace MonsterHunter
 
         public int GetDistance()
         {
-            CalcDistance();
+            CalcDistance_xy();
             return distance;
         }
 
         public int GetDistance(int[] me, int[] him)
         {
-            return CalcDistance(me,him);
+            return CalcDistance_xy(me,him);
         }
 
         public int Distancetest
         {
             get
             {
-                CalcDistance();
+                CalcDistance_xy();
                 return distance;
             }
             private set

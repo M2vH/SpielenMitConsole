@@ -101,12 +101,13 @@ namespace MonsterHunter
             }
         }
 
-        private static void StopEnemy()
+        public static void StopEnemy()
         {
             try
             {
-                Program.theEnemy.Join();
+                // Program.theEnemy.Join();
                 Game.enemy.monster.HideMonster(Game.enemy.monster.pos_x, Game.enemy.monster.pos_y);
+                Game.keepAlive = false;
 
             }
             catch (ThreadAbortException ex)
@@ -115,7 +116,7 @@ namespace MonsterHunter
                 System.Diagnostics.Debug.WriteLine("Stop Enemy: " + ex);
             }
             // playSong = false;
-            Game.CloseTheGame();
+            // Game.CloseTheGame();
         }
 
         /// <summary>

@@ -53,6 +53,7 @@ namespace MonsterHunter
                 pos_y = (Window.y + Window.top) / 2,
 
             };
+            player.parts = _design.designElements;
             return player;
         }
 
@@ -76,18 +77,18 @@ namespace MonsterHunter
                 pos_x = _x,
                 pos_y = _y,
             };
+            monster.parts = _design.designElements;
             return monster;
         }
 
         public static void StartPlayer()
         {
             // Variable to store, if player is user controlled (true) or computercontrolled
+            //ToDo:
+            //if (manual) the PlayTheGame()
             bool manual = false;
             try
             {
-                  //ToDo:
-                  //if (manual) the PlayTheGame()
-                
                 if (manual)
                 {
                     Game.PlayTheGame(Game.player);
@@ -95,8 +96,11 @@ namespace MonsterHunter
                 }
                 else
                 {
-                  //else let the computer control the player player
-                    Game.PlayThePlayer(Game.player);
+                    //else let the computer control the player player
+                    //// Test:
+                    // Game.PlayThePlayer(Game.player); // works, but overloaded
+                    // Game.PlayThePlayer();    // works, but leeks of Timer
+                    Game.StartAutoPlayerTimer(500);
 
                 }
             }
@@ -112,10 +116,11 @@ namespace MonsterHunter
             {
                 // thePlayer.Abort();
                 Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
+                Game.keepAlive = false;
                 // player.pos_x = 5;
                 // player.pos_y = 5;
                 // playSong = false;
-                Game.CloseTheGame();
+                // Game.CloseTheGame();
             }
             catch (ThreadAbortException ex)
             {

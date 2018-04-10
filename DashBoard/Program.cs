@@ -42,8 +42,8 @@ namespace MonsterHunter
             Choice.InitChoices();
 
             // Printing a welcome
-            TextOnScreen hello = new TextOnScreen();
-            hello.PrintStart();
+            // TextOnScreen hello = new TextOnScreen();
+            // hello.PrintStart();
 
 
             TextOnScreen message = new TextOnScreen();
@@ -90,17 +90,30 @@ namespace MonsterHunter
             // next time we call it GameLoop
             // PlayTheGame(player);
             // we start a seperate Thread;
-            thePlayer.Name = "PlayerThread";
-            thePlayer.Start();
             theEnemy.Name = "EnemyThread";
             theEnemy.Start();
 
+            thePlayer.Name = "PlayerThread";
+            thePlayer.Start();
+
+            // Player.StartPlayer();
+            // theEnemy.Join();
+            // thePlayer.Join();
 
             // The Game is running
             // Relax for 1/2 a second
+            // Thread.Yield();
+            // Wait for the threads to finish
+            // ToDo: Add a return in the functions called by threads.
+            // thePlayer.Join();
+            while (Game.keepAlive)
+            {
 
-            Thread.Sleep(500);
+            }
+            theEnemy.Join();
+            thePlayer.Join();
 
+            Game.CloseTheGame();
         }
 
     }

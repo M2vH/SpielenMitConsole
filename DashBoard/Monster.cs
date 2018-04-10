@@ -406,10 +406,10 @@ namespace MonsterHunter
             {
                 // Sorry, that Console Sound s*cks
                 // Program.MakeSomeNoise(1, _monster.outfit.FightSound);
-                string store = parts[1];
+                string store = _monster.parts[1];
                 try
                 {
-                    parts[1] = parts[3];
+                    _monster.parts[1] = _monster.parts[3];
 
                 }
                 catch (IndexOutOfRangeException ex)
@@ -417,12 +417,12 @@ namespace MonsterHunter
 
                     System.Diagnostics.Debug.WriteLine("We have no 'fighting' layout." + ex);
                 }
-                PrintMonster();
-                parts[1] = store;
+                _monster.PrintMonster();
+                _monster.parts[1] = store;
                 // display fight for 50ms
                 Thread.Sleep(50);
-                HideMonster(pos_x, pos_y);
-                PrintMonster();
+                _monster.HideMonster(pos_x, pos_y);
+                _monster.PrintMonster();
 
 
             }
@@ -436,9 +436,10 @@ namespace MonsterHunter
             // calc damage ( myAttack - hisDefense = theDamage )
             // write new health at _monster ( hisHealth -= theDamage  )
             // do _monster.PrintStats()
+            Game.Rounds += 1;
+                int damage = 0;
             lock (Game.printlock)
             {
-                int damage = 0;
                 damage = _me.aPoints - _oponent.dPoints;
                 // _oponent.hPoints -= damage;
                 _oponent.SetHPoints(damage);
@@ -449,14 +450,21 @@ namespace MonsterHunter
 
         public void HitMonster(Stats _me, Stats _oponent, bool _enemyWasHit)
         {
+            Game.Rounds += 1;
             int damage = 0;
             if (_enemyWasHit)
             {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("Player attacks Enemy");
+#endif
                 damage = _me.aPoints - _oponent.dPoints;
                 _oponent.SetHPoints(damage);
             }
             else
             {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("Enemy attacks Player");
+#endif
                 damage = _oponent.aPoints - _me.dPoints;
                 _me.SetHPoints(damage);
             }
@@ -475,7 +483,7 @@ namespace MonsterHunter
         public static void MoveMonster(Object _stateInfo)
         {
             AutoResetEvent resetMoveMonster = (AutoResetEvent)_stateInfo;
-
+            // System.Diagnostics.Debug.WriteLine("Enemy: " + System.DateTime.Now);
             /*  
              *  We will be called every <int>_millis
              */
@@ -486,93 +494,95 @@ namespace MonsterHunter
             int new_y = 0;
             int pos_x = Game.enemy.monster.pos_x;
             int pos_y = Game.enemy.monster.pos_y;
-            bool moveIsPossible = true;
+            // bool moveIsPossible = true;
 
             try
             {
 
-                while (moveIsPossible)
-                {
-                    // Is enemy still alive?
+                    // I check, if one of us is dead
                     if (Game.playerStats.GetHPoints() <= 0 || Game.enemyStats.GetHPoints() <= 0)
                     {
-                        moveIsPossible = false;
+                        // I dont want to run anymore
+                        // moveIsPossible = false;
+                        // I stop the clock
                         Game.KillCountdown();
+
+                        // I check, if player is dead!
+                        // in case, player is manually controlled
+                        // we must kill his thread
                         if (Game.playerStats.GetHPoints() <= 0)
                         {
                             // player is dead
                             Player.StopPlayer();
-                            break;
+                            // break;
                         }
 
-                    }
-
-                    //// next line(s) work
-                    // move = RandomWeightedMove();
-                    move = GetCloser(Game.enemy.monster, Game.player);
-                    
-
-
-                    // erst hauen, dann laufen;
-                    // und nur nebeneinander kämpfen;
-                    if (Game.dist.GetDistance() < 5 && Game.dist.diff_y < 4)
-                    {
-                        int r = Game.random.Next(2, 14);
-                        if ((r % 2) == 0)
-                        {
-                            Game.enemy.monster.Fight(Game.enemy.monster);
-                            // enemy.monster.HitMonster(enemyStats,playerStats);
-                            Game.enemy.monster.HitMonster(Game.playerStats, Game.enemyStats, false);
-                            Sound.PlaySound(1, Game.enemy.monster.outfit.FightSound);
-                        }
-                    }
-                    new_x = pos_x + move[0];
-                    new_y = pos_y + move[1];
-
-                    // min_x < new_x < max_x
-                    // is next move inside the field?
-                    if ((2 < new_x && new_x < Window.x - 3) && (Window.top + 1 < new_y && new_y < Window.y - 2))
-                    {
-                        // we are inside field
-                        Game.enemy.monster.HideMonster(Game.enemy.monster.pos_x, Game.enemy.monster.pos_y);
-                        Game.enemy.monster.pos_x += move[0];
-                        Game.enemy.monster.pos_y += move[1];
-                        Game.enemy.monster.PrintMonster();
-
-
-                        // check for health
-                        // if both alive, print distance,
-                        if (Game.playerStats.GetHPoints() > 0 && Game.enemyStats.GetHPoints() > 0)
-                        {
-                            Game.dist.PrintTheDist();
-                            break;
-                        }
-                        else
-                        {
-                            // someone is dead
-                            Game.KillCountdown();
-                            Game.play = false;
-                            moveIsPossible = false;
-                            // if player is NOT moving, he will not
-                            // recognize he is dead.
-                            // The hard way;
-                            // we must catch exception
-                            // StopPlayer();
-                            break;
-                        }
                     }
                     else
                     {
-                        moveIsPossible = true;
+                        // I am alive
+
+                        //// next line(s) work
+                        // move = RandomWeightedMove();
+
+                        // attack the player
+                        move = GetCloser(Game.enemy.monster, Game.player);
+
+                    // erst hauen, dann laufen;
+                    // und nur nebeneinander kämpfen;
+#if DEBUG
+                    int test = Game.dist.CalcDistance_xy();
+                    int test2 = Game.dist.CalcDistance_y();
+#endif
+                    if (Game.dist.CalcDistance_xy() < 5 && Game.dist.CalcDistance_y() < 4)
+                        {
+                            // int r = Game.random.Next(2, 14);
+                            // if ((r % 2) == 0)
+                            // {
+                                Game.enemy.monster.Fight(Game.enemy.monster);
+                                // enemy.monster.HitMonster(enemyStats,playerStats);
+                                Game.enemy.monster.HitMonster(Game.playerStats, Game.enemyStats, false);
+                                // Sound.PlaySound(1, Game.enemy.monster.outfit.FightSound);
+                            // }
+                        }
+                        new_x = pos_x + move[0];
+                        new_y = pos_y + move[1];
+
+                        // min_x < new_x < max_x
+                        // is next move inside the field?
+                        if ((2 < new_x && new_x < Window.x - 3) && (Window.top + 1 < new_y && new_y < Window.y - 2))
+                        {
+                            // we are inside field
+                            Game.enemy.monster.HideMonster(Game.enemy.monster.pos_x, Game.enemy.monster.pos_y);
+                            Game.enemy.monster.pos_x += move[0];
+                            Game.enemy.monster.pos_y += move[1];
+                            Game.enemy.monster.PrintMonster();
+
+
+                            // check for health in case we had a fight;
+                            // if both alive, print distance,
+                            if (Game.playerStats.GetHPoints() > 0 && Game.enemyStats.GetHPoints() > 0)
+                            {
+                                Game.dist.PrintTheDist();
+                                // break;
+                            }
+                            else
+                            {
+                                // one of us is dead
+                                Game.KillCountdown();
+                                Game.play = false;
+
+                                // leave the loop;
+                                // break;
+                            }
+                        }
                     }
 
-
-                } // end of while
-            }
+            }   // end try
             catch (ThreadAbortException ex)
             {
 
-                System.Diagnostics.Debug.WriteLine("Catch: MovePlayer() " + ex);
+                // System.Diagnostics.Debug.WriteLine("Catch: MovePlayer() " + ex);
             }
 
 
@@ -742,7 +752,7 @@ namespace MonsterHunter
 
             // calculate the distance for every possible move;
             new_me = new int[2];
-            int[] reset_me = new int[]{ 0,0};
+            int[] reset_me = new int[] { 0, 0 };
             int new_dist = 100;
             for (int i = 0; i < attack.Length; i++)
             {
@@ -765,6 +775,9 @@ namespace MonsterHunter
 
         public static int[] GetCloser(Monster _me, Monster _him)
         {
+            lock (Game.printlock)
+            {
+
             // get all possible directions;
             Choice[] attack = Choice.goTo;
 
@@ -801,6 +814,7 @@ namespace MonsterHunter
             }
             // store the distance, if smaller;
             // return the move with minimum distance
+            }
             return goThere;
         }
     }
