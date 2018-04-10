@@ -10,12 +10,12 @@ namespace MonsterHunter
     struct Player
     {
         /// <summary>
-        /// Create a monster out of parts as parameter 
+        /// Create a player out of parts as parameter 
         /// <remarks>Actual max size is 5 symbols.</remarks>
         /// </summary>
-        /// <param name="_head">The Head of the monster</param>
-        /// <param name="_body">The Body of the monster</param>
-        /// <param name="_legs">The Legs of the monster</param>
+        /// <param name="_head">The Head of the player</param>
+        /// <param name="_body">The Body of the player</param>
+        /// <param name="_legs">The Legs of the player</param>
         /// <param name="_name">The Name. Displayed if winner</param>
         /// <returns></returns>
         public static Monster CreatePlayer(string _head, string _body, string _legs, string _name)
@@ -35,7 +35,7 @@ namespace MonsterHunter
         }
 
         /*  Function <Monster>CreatePlayer(Design _design, string _name)
-         *  Creates a gamer monster with a given <Design> at default position
+         *  Creates a gamer player with a given <Design> at default position
          */
         /// <summary>
         /// Create a Monster out of a Design
@@ -45,7 +45,7 @@ namespace MonsterHunter
         /// <returns></returns>
         public static Monster CreatePlayer(Design _design, string _name)
         {
-            Monster monster = new Monster
+            Monster player = new Monster
             {
                 outfit = _design,
                 name = _name,
@@ -53,7 +53,7 @@ namespace MonsterHunter
                 pos_y = (Window.y + Window.top) / 2,
 
             };
-            return monster;
+            return player;
         }
 
         /*  <Monster> CreatePlayer(Design _design, int _x, int _y, string _name)
@@ -81,7 +81,8 @@ namespace MonsterHunter
 
         public static void StartPlayer()
         {
-            bool manual = true;
+            // Variable to store, if player is user controlled (true) or computercontrolled
+            bool manual = false;
             try
             {
                   //ToDo:
@@ -89,13 +90,13 @@ namespace MonsterHunter
                 
                 if (manual)
                 {
-                    // Game.PlayTheGame(Game.player);
-                    Game.PlayThePlayer(Game.player);
+                    Game.PlayTheGame(Game.player);
 
                 }
                 else
                 {
-                  //else let the computer control the player monster
+                  //else let the computer control the player player
+                    Game.PlayThePlayer(Game.player);
 
                 }
             }
@@ -121,7 +122,6 @@ namespace MonsterHunter
                 System.Diagnostics.Debug.WriteLine("We killed the thread " + ex);
             }
         }
-
 
 
     }

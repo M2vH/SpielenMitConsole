@@ -90,7 +90,7 @@ namespace MonsterHunter
             // next time we call it GameLoop
             // PlayTheGame(player);
             // we start a seperate Thread;
-            thePlayer.Name = "PlayerControlledThread";
+            thePlayer.Name = "PlayerThread";
             thePlayer.Start();
             theEnemy.Name = "EnemyThread";
             theEnemy.Start();
