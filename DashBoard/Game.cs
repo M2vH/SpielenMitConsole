@@ -316,9 +316,15 @@ namespace MonsterHunter
             int here = Window.y - 5 - Window.top / 2;
             lock (Game.printlock)
             {
-                PrintStats();
+                lock (printlock)
+                {
+                    Thread.Sleep(200);
+                    PrintStats(playerStats,enemyStats);
+                    Thread.Sleep(200);
+
+                }
                 Dashboard.CenterText(2, "Monster Fight took " + rounds + " rounds.", winner.outfit.designColor);
-                string blanc = new string(' ', 30);
+                string blanc = new string(' ', 27);
                 Dashboard.CenterText(3, blanc);
                 // Song.playSong = false;
                 ConsoleColor red = ConsoleColor.Red;

@@ -42,9 +42,17 @@ namespace MonsterHunter
             Choice.InitChoices();
 
             // Printing a welcome
-            // TextOnScreen hello = new TextOnScreen();
-            // hello.PrintStart();
 
+            bool quickCheck = false;
+#if DEBUG
+            quickCheck = true;
+#endif
+            if (!quickCheck)
+            {
+                TextOnScreen hello = new TextOnScreen();
+                hello.PrintStart();
+
+            }
 
             TextOnScreen message = new TextOnScreen();
 
