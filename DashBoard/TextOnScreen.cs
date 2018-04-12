@@ -283,7 +283,7 @@ namespace MonsterHunter
             PrintColorBackground(Window.x, Window.y);
             PrintASCII(lines, Window.x, Window.y);
 
-            // create three enemy;
+            // create three isEnemy;
             Dancer dancer_1 = new Dancer();
             Dancer dancer_2 = new Dancer();
             Dancer dancer_3 = new Dancer();
@@ -292,28 +292,28 @@ namespace MonsterHunter
             dancer_2.InitDancer(Game.angry, "[ A ]");
             dancer_3.InitDancer(Game.frodo, "[ F ]");
 
-            dancer_1.enemy.monster.pos_x = 19;
-            dancer_2.enemy.monster.pos_x = 50;
-            dancer_3.enemy.monster.pos_x = 75;
+            dancer_1.isEnemy.monster.pos_x = 19;
+            dancer_2.isEnemy.monster.pos_x = 50;
+            dancer_3.isEnemy.monster.pos_x = 75;
 
-            dancer_1.enemy.monster.pos_y = 10;
-            dancer_2.enemy.monster.pos_y = 10;
-            dancer_3.enemy.monster.pos_y = 10;
+            dancer_1.isEnemy.monster.pos_y = 10;
+            dancer_2.isEnemy.monster.pos_y = 10;
+            dancer_3.isEnemy.monster.pos_y = 10;
 
             AutoResetEvent danceReset = new AutoResetEvent(true);
-            var dance = new Timer(dancer_1.enemy.monster.DanceTheMonster, danceReset, 330, 2117);
+            var dance = new Timer(dancer_1.isEnemy.monster.DanceTheMonster, danceReset, 330, 2117);
             danceReset.Set();
 
             //Thread.Sleep(330);
 
             AutoResetEvent danceReset2 = new AutoResetEvent(true);
-            var dance2 = new Timer(dancer_2.enemy.monster.DanceTheMonster, danceReset2, 660, 2357);
+            var dance2 = new Timer(dancer_2.isEnemy.monster.DanceTheMonster, danceReset2, 660, 2357);
             danceReset2.Set();
 
             //Thread.Sleep(330);
 
             AutoResetEvent danceReset3 = new AutoResetEvent(true);
-            var dance3 = new Timer(dancer_3.enemy.monster.DanceTheMonster, danceReset3, 990, 2579);
+            var dance3 = new Timer(dancer_3.isEnemy.monster.DanceTheMonster, danceReset3, 990, 2579);
             danceReset3.Set();
 
             //Thread.Sleep(1000);

@@ -18,11 +18,15 @@ namespace MonsterHunter
 
         public static Thread thePlayer = new Thread(Player.StartPlayer);
         public static Thread theEnemy = new Thread(Enemy.StartEnemy);
-        // public static Thread the2ndEnemy = new Thread();
         // public static Thread theSong = new Thread(Song.PlayMySong);
 
 
         #endregion
+
+            /// <summary>
+            /// Set to true, if player is keyboard controlled
+            /// </summary>
+        public static bool manual = true;
 
 
         static void Main(string[] args)
@@ -38,7 +42,7 @@ namespace MonsterHunter
             // hide the cursor
             Console.CursorVisible = false;
 
-            // we init the movement goTo of the enemy
+            // we init the movement goTo of the isEnemy
             Choice.InitChoices();
 
             // Printing a welcome
@@ -109,8 +113,6 @@ namespace MonsterHunter
             // thePlayer.Join();
 
             // The Game is running
-            // Relax for 1/2 a second
-            // Thread.Yield();
             // Wait for the threads to finish
             // ToDo: Add a return in the functions called by threads.
             // thePlayer.Join();

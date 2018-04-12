@@ -86,10 +86,10 @@ namespace MonsterHunter
             // Variable to store, if player is user controlled (true) or computercontrolled
             //ToDo:
             //if (manual) the PlayTheGame()
-            bool manual = false;
+            //bool manual = false;
             try
             {
-                if (manual)
+                if (Program.manual)
                 {
                     Game.PlayTheGame(Game.player);
 
@@ -97,10 +97,15 @@ namespace MonsterHunter
                 else
                 {
                     //else let the computer control the player player
+                    // set start position to random in left half of field;
+                    Game.player.pos_x = Game.random.Next(5, (Window.x / 2 - 5));
+                    Game.player.pos_y = Game.random.Next(Window.top + 5, (Window.y - 2));
+
                     //// Test:
                     // Game.PlayThePlayer(Game.player); // works, but overloaded
                     // Game.PlayThePlayer();    // works, but leeks of Timer
-                    Game.StartAutoPlayerTimer(500);
+                    // Game.StartAutoPlayerTimer(500);
+                    Game.StartAutoPlayerTimer(Game.player.outfit.stats.sPoints);
 
                 }
             }

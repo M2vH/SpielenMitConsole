@@ -8,13 +8,13 @@ namespace MonsterHunter
 {
     struct Dancer
     {
-        public Enemy enemy;
+        public Enemy isEnemy;
 
         public void InitDancer(Design design, string title)
         {
-            enemy = new Enemy();
-            enemy.CreateEnemyFromDesign(design, title, true);
-            enemy.monster.parts = design.designElements;
+            isEnemy = new Enemy();
+            isEnemy.CreateEnemyFromDesign(design, title, true);
+            isEnemy.monster.parts = design.designElements;
         }
     }
 }

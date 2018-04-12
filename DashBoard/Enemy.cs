@@ -52,12 +52,12 @@ namespace MonsterHunter
 
         //  The Enemy Timer objects;
         /// <summary>
-        /// The Timer object for enemy movement
+        /// The Timer object for isEnemy movement
         /// </summary>
         public static Timer enemyTimer;
 
         /// <summary>
-        /// The callback when enemy move event is ready
+        /// The callback when isEnemy move event is ready
         /// </summary>
         static AutoResetEvent resetEnemyTimer = new AutoResetEvent(true);
 
@@ -84,14 +84,15 @@ namespace MonsterHunter
         }
 
         /// <summary>
-        /// The delegate for the enemy thread
+        /// The delegate for the isEnemy thread
         /// </summary>
         public static void StartEnemy()
         {
-            // Start the timerbased enemy movement
+            // Start the timerbased isEnemy movement
             try
             {
-                Enemy.StartEnemyTimer(500);
+                // Enemy.StartEnemyTimer(500);
+                Enemy.StartEnemyTimer(Game.enemy.monster.outfit.stats.sPoints);
 
             }
             catch (ThreadAbortException ex)
@@ -120,9 +121,9 @@ namespace MonsterHunter
         }
 
         /// <summary>
-        /// Create an enemy different from Player
+        /// Create an isEnemy different from Player
         /// </summary>
-        /// <remarks>Set enemy start position to random position</remarks>
+        /// <remarks>Set isEnemy start position to random position</remarks>
         /// <param name="_player">The player monster</param>
         /// <returns>Returns a monster different than parameter</returns>
         public static Monster CreateEnemy(Monster _player)

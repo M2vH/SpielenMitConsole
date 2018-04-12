@@ -14,8 +14,14 @@ namespace MonsterHunter
         // Health Points    hPoints
         // Attack Points    aPoints
         // Defense Points   dPoints
-        // Speed
+        // Speed Points     sPoints     // controlles the movement speed
 
+            /// <summary>
+            /// Speed points.
+            /// <remarks>Converts into move every millisecond</remarks>
+            /// </summary>
+        public int sPoints;
+            
         /// <summary>
         /// Health Points
         /// </summary>
