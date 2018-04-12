@@ -180,29 +180,13 @@ namespace MonsterHunter
         public void PrintEnter()
         {
             string blanc = String.Format("{0}", "Press ENTER to start!");
-            Dashboard.CenterText(25, blanc, ConsoleColor.Red);
-            Console.CursorVisible = false;
-            Console.ReadLine();
-
+            PrintEnter(blanc);
         }
 
         public void PrintEnter(string _input)
         {
-            string blanc = String.Format("{0}", _input);
-            Dashboard.CenterText(25, blanc, ConsoleColor.Red);
-            Console.CursorVisible = false;
-
-            // store the selection
-            while (!Game.choiceIsMade)
-            {
-                ConsoleKey key = Console.ReadKey().Key;
-                if ((key == ConsoleKey.A || key == ConsoleKey.F) || key == ConsoleKey.G)
-                {
-                    Game.choosenPlayer = key;
-                    Game.choiceIsMade = true;
-                }
-
-            }
+            Timer[] empty = new Timer[0];
+            PrintEnter(_input, empty);
         }
 
         public void PrintEnter(string _input, Timer[] timer)

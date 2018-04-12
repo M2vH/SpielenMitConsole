@@ -46,11 +46,9 @@ namespace MonsterHunter
             Choice.InitChoices();
 
             // Printing a welcome
-
+            // set next to false to hide welcome during debugging
             bool quickCheck = false;
-#if DEBUG
-            quickCheck = true;
-#endif
+
             if (!quickCheck)
             {
                 TextOnScreen hello = new TextOnScreen();
@@ -59,19 +57,17 @@ namespace MonsterHunter
             }
 
             TextOnScreen message = new TextOnScreen();
-
+            // Display choose screen with dancing monster;
             message.PrintText("Choose.txt", "", true);
-
-
-            // theSong.Start();
-
-            // playSong = false;
-            // theSong.Join();
-            // we print a background in the field
-            Background.DrawInMagenta();
 
             // Init the Player and Enemy
             Game.InitPlayerAndEnemy();
+
+            message.PrintText("theAngro.txt", "[M] - Mod the player, [D] - Default values");
+
+            
+            // we print a background in the field
+            Background.DrawInMagenta();
 
             // we init the gameStats
             Game.InitStats();
