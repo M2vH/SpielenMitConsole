@@ -89,12 +89,12 @@ namespace MonsterHunter
         {
             char storage = '#';
 
+            Symbol symbol = new Symbol();
             // make some color on the screen
             for (int i = 0; i < _x; i++)
             {
                 for (int j = 0; j < _y - 1; j++)
                 {
-                    Symbol symbol = new Symbol();
                     Console.SetCursorPosition(i, j);
                     Console.ForegroundColor = (ConsoleColor)Game.random.Next(1, 7);
                     storage = Fill[Game.random.Next(0, 4)];
@@ -273,7 +273,7 @@ namespace MonsterHunter
             AutoResetEvent danceReset = new AutoResetEvent(true);
             var dance = new Timer(_monsters.DanceTheMonster, danceReset, 1000, 500);
             danceReset.Set();
-            PrintEnter(_text, new Timer[] { dance});
+            PrintEnter(_text, new Timer[] { dance });
         }
 
         public void PrintText(string _path, string _text, bool _all)
@@ -318,7 +318,7 @@ namespace MonsterHunter
 
             //Thread.Sleep(1000);
 
-            PrintEnter(_text, new Timer[]{ dance, dance2, dance3 });
+            PrintEnter(_text, new Timer[] { dance, dance2, dance3 });
         }
 
         public void PrintGameOver()

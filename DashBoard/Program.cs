@@ -18,23 +18,17 @@ namespace MonsterHunter
 
         public static Thread thePlayer = new Thread(Player.StartPlayer);
         public static Thread theEnemy = new Thread(Enemy.StartEnemy);
-        // public static Thread theSong = new Thread(Song.PlayMySong);
-
 
         #endregion
 
             /// <summary>
             /// Set to true, if player is keyboard controlled
             /// </summary>
-        public static bool manual = true;
+        public static bool manual = false;
 
 
         static void Main(string[] args)
         {
-
-            // console preparation
-            //Dancer theDancer = new Dancer();
-            //theDancer.InitDancer();
 
 
             Game.InitGame();
@@ -60,11 +54,6 @@ namespace MonsterHunter
 
             message.PrintText("Choose.txt", "", true);
 
-
-            // theSong.Start();
-
-            // playSong = false;
-            // theSong.Join();
             // we print a background in the field
             Background.DrawInMagenta();
 
