@@ -222,7 +222,7 @@ namespace MonsterHunter
 
             string enemyHealth = String.Format("{0,-5}{1,15}", _enemy.GetHPoints(), "Health");
             string enemyDefense = String.Format("{0,-5}{1,15}", _enemy.dPoints, "Defense");
-            string enemyAttack = String.Format("{0,-5}{1,15}", _enemy.aPoints, "Defense");
+            string enemyAttack = String.Format("{0,-5}{1,15}", _enemy.aPoints, "Attack");
 
             // don't forget to update the Stats objects
             UpdateStats(_player, _enemy);
