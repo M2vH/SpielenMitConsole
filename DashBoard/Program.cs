@@ -47,11 +47,9 @@ namespace MonsterHunter
 
             // Printing a welcome
 
-            bool quickCheck = false;
-#if DEBUG
-            quickCheck = true;
-#endif
-            if (!quickCheck)
+            bool skipWelcome = false;
+
+            if (!skipWelcome)
             {
                 TextOnScreen hello = new TextOnScreen();
                 hello.PrintStart();
