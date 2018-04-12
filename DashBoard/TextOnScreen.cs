@@ -240,26 +240,14 @@ namespace MonsterHunter
 
         public void PrintText(string _path)
         {
-            FillTheList(_path);
-            //Console.Clear();
-            PrintColorBackground(Window.x, Window.y);
-            PrintASCII(lines, Window.x, Window.y);
-            PrintEnter();
+            PrintText(_path, "");
         }
 
         public void PrintText(string _path, string _text)
         {
-            FillTheList(_path);
-            //Console.Clear();
-            PrintColorBackground(Window.x, Window.y);
-            PrintASCII(lines, Window.x, Window.y);
-            PrintEnter(_text);
+            PrintText(_path, _text, false);
         }
 
-
-        //static Timer dance;
-        //static Timer dance2;
-        //static Timer dance3;
 
         public void PrintText(string _path, string _text, Monster _monsters)
         {
@@ -273,7 +261,7 @@ namespace MonsterHunter
             AutoResetEvent danceReset = new AutoResetEvent(true);
             var dance = new Timer(_monsters.DanceTheMonster, danceReset, 1000, 500);
             danceReset.Set();
-            PrintEnter(_text, new Timer[] { dance});
+            PrintEnter(_text, new Timer[] { dance });
         }
 
         public void PrintText(string _path, string _text, bool _all)
@@ -283,42 +271,45 @@ namespace MonsterHunter
             PrintColorBackground(Window.x, Window.y);
             PrintASCII(lines, Window.x, Window.y);
 
-            // create three isEnemy;
-            Dancer dancer_1 = new Dancer();
-            Dancer dancer_2 = new Dancer();
-            Dancer dancer_3 = new Dancer();
+            if (_all)
+            {
+                // create three isEnemy;
+                Dancer dancer_1 = new Dancer();
+                Dancer dancer_2 = new Dancer();
+                Dancer dancer_3 = new Dancer();
 
-            dancer_1.InitDancer(Game.goble, "[ G ]");
-            dancer_2.InitDancer(Game.angry, "[ A ]");
-            dancer_3.InitDancer(Game.frodo, "[ F ]");
+                dancer_1.InitDancer(Game.goble, "[ G ]");
+                dancer_2.InitDancer(Game.angry, "[ A ]");
+                dancer_3.InitDancer(Game.frodo, "[ F ]");
 
-            dancer_1.isEnemy.monster.pos_x = 19;
-            dancer_2.isEnemy.monster.pos_x = 50;
-            dancer_3.isEnemy.monster.pos_x = 75;
+                dancer_1.isEnemy.monster.pos_x = 19;
+                dancer_2.isEnemy.monster.pos_x = 50;
+                dancer_3.isEnemy.monster.pos_x = 75;
 
-            dancer_1.isEnemy.monster.pos_y = 10;
-            dancer_2.isEnemy.monster.pos_y = 10;
-            dancer_3.isEnemy.monster.pos_y = 10;
+                dancer_1.isEnemy.monster.pos_y = 10;
+                dancer_2.isEnemy.monster.pos_y = 10;
+                dancer_3.isEnemy.monster.pos_y = 10;
 
-            AutoResetEvent danceReset = new AutoResetEvent(true);
-            var dance = new Timer(dancer_1.isEnemy.monster.DanceTheMonster, danceReset, 330, 2117);
-            danceReset.Set();
+                AutoResetEvent danceReset = new AutoResetEvent(true);
+                var dance = new Timer(dancer_1.isEnemy.monster.DanceTheMonster, danceReset, 330, 2117);
+                danceReset.Set();
 
-            //Thread.Sleep(330);
+                AutoResetEvent danceReset2 = new AutoResetEvent(true);
+                var dance2 = new Timer(dancer_2.isEnemy.monster.DanceTheMonster, danceReset2, 660, 2357);
+                danceReset2.Set();
 
-            AutoResetEvent danceReset2 = new AutoResetEvent(true);
-            var dance2 = new Timer(dancer_2.isEnemy.monster.DanceTheMonster, danceReset2, 660, 2357);
-            danceReset2.Set();
+                AutoResetEvent danceReset3 = new AutoResetEvent(true);
+                var dance3 = new Timer(dancer_3.isEnemy.monster.DanceTheMonster, danceReset3, 990, 2579);
+                danceReset3.Set();
 
-            //Thread.Sleep(330);
+                PrintEnter(_text, new Timer[] { dance, dance2, dance3 });
 
-            AutoResetEvent danceReset3 = new AutoResetEvent(true);
-            var dance3 = new Timer(dancer_3.isEnemy.monster.DanceTheMonster, danceReset3, 990, 2579);
-            danceReset3.Set();
+            }
+            else
+            {
+                PrintEnter(_text);
+            }
 
-            //Thread.Sleep(1000);
-
-            PrintEnter(_text, new Timer[]{ dance, dance2, dance3 });
         }
 
         public void PrintGameOver()
