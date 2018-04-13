@@ -14,6 +14,8 @@ namespace MonsterHunter
 
         public static ConsoleKey choosenPlayer;
 
+        public static ConsoleKey keyPressed;
+
         public static ConsoleKey modInput;
 
         public static bool choiceIsMade = false;

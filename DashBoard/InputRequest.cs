@@ -52,7 +52,7 @@ namespace MonsterHunter
                 key = Console.ReadKey().Key;
                 if ( _keys.Contains(key) )
                 {
-                    Game.choosenPlayer = key;
+                    Game.keyPressed = key;
                     Game.choiceIsMade = true;
                 }
 
@@ -74,7 +74,7 @@ namespace MonsterHunter
 
             // The request
             string input = String.Format("{0}", _input);
-            Dashboard.CenterText(25, input, ConsoleColor.Red);
+            Dashboard.CenterText(25, input, ConsoleColor.White);
             Console.CursorVisible = true;
             Console.ForegroundColor = ConsoleColor.White;
             int theResult = 0;
