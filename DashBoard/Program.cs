@@ -60,15 +60,14 @@ namespace MonsterHunter
             // Display choose screen with dancing monster;
             message.PrintText("Choose.txt", "", true);
 
-            // Init the Player and Enemy
-            Game.InitPlayerAndEnemy();
+            // message.PrintText("theAngro.txt", "[M] - Mod the player, [D] - Default values");
 
-            message.PrintText("theAngro.txt", "[M] - Mod the player, [D] - Default values");
-
-            
             // we print a background in the field
             Background.DrawInMagenta();
 
+            // Init the Player and Enemy
+            Game.InitPlayerAndEnemy();
+            
             // we init the gameStats
             Game.InitStats();
 

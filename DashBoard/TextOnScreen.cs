@@ -194,7 +194,7 @@ namespace MonsterHunter
             string blanc = String.Format("{0}", _input);
             Dashboard.CenterText(25, blanc, ConsoleColor.Red);
             Console.CursorVisible = false;
-
+            Game.choiceIsMade = false;
             // store the selection
             while (!Game.choiceIsMade)
             {
