@@ -18,17 +18,23 @@ namespace MonsterHunter
 
         public static Thread thePlayer = new Thread(Player.StartPlayer);
         public static Thread theEnemy = new Thread(Enemy.StartEnemy);
+        // public static Thread theSong = new Thread(Song.PlayMySong);
+
 
         #endregion
 
             /// <summary>
             /// Set to true, if player is keyboard controlled
             /// </summary>
-        public static bool manual = false;
+        public static bool manual = true;
 
 
         static void Main(string[] args)
         {
+
+            // console preparation
+            //Dancer theDancer = new Dancer();
+            //theDancer.InitDancer();
 
 
             Game.InitGame();
@@ -40,10 +46,10 @@ namespace MonsterHunter
             Choice.InitChoices();
 
             // Printing a welcome
+            // set next to false to hide welcome during debugging
+            bool quickCheck = false;
 
-            bool skipWelcome = false;
-
-            if (!skipWelcome)
+            if (!quickCheck)
             {
                 TextOnScreen hello = new TextOnScreen();
                 hello.PrintStart();
@@ -51,14 +57,17 @@ namespace MonsterHunter
             }
 
             TextOnScreen message = new TextOnScreen();
-
+            // Display choose screen with dancing monster;
             message.PrintText("Choose.txt", "", true);
-
-            // we print a background in the field
-            Background.DrawInMagenta();
 
             // Init the Player and Enemy
             Game.InitPlayerAndEnemy();
+
+            message.PrintText("theAngro.txt", "[M] - Mod the player, [D] - Default values");
+
+            
+            // we print a background in the field
+            Background.DrawInMagenta();
 
             // we init the gameStats
             Game.InitStats();

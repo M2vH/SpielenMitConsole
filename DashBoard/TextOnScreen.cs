@@ -89,12 +89,12 @@ namespace MonsterHunter
         {
             char storage = '#';
 
-            Symbol symbol = new Symbol();
             // make some color on the screen
             for (int i = 0; i < _x; i++)
             {
                 for (int j = 0; j < _y - 1; j++)
                 {
+                    Symbol symbol = new Symbol();
                     Console.SetCursorPosition(i, j);
                     Console.ForegroundColor = (ConsoleColor)Game.random.Next(1, 7);
                     storage = Fill[Game.random.Next(0, 4)];
@@ -180,29 +180,13 @@ namespace MonsterHunter
         public void PrintEnter()
         {
             string blanc = String.Format("{0}", "Press ENTER to start!");
-            Dashboard.CenterText(25, blanc, ConsoleColor.Red);
-            Console.CursorVisible = false;
-            Console.ReadLine();
-
+            PrintEnter(blanc);
         }
 
         public void PrintEnter(string _input)
         {
-            string blanc = String.Format("{0}", _input);
-            Dashboard.CenterText(25, blanc, ConsoleColor.Red);
-            Console.CursorVisible = false;
-
-            // store the selection
-            while (!Game.choiceIsMade)
-            {
-                ConsoleKey key = Console.ReadKey().Key;
-                if ((key == ConsoleKey.A || key == ConsoleKey.F) || key == ConsoleKey.G)
-                {
-                    Game.choosenPlayer = key;
-                    Game.choiceIsMade = true;
-                }
-
-            }
+            Timer[] empty = new Timer[0];
+            PrintEnter(_input, empty);
         }
 
         public void PrintEnter(string _input, Timer[] timer)
@@ -240,26 +224,14 @@ namespace MonsterHunter
 
         public void PrintText(string _path)
         {
-            FillTheList(_path);
-            //Console.Clear();
-            PrintColorBackground(Window.x, Window.y);
-            PrintASCII(lines, Window.x, Window.y);
-            PrintEnter();
+            PrintText(_path, "");
         }
 
         public void PrintText(string _path, string _text)
         {
-            FillTheList(_path);
-            //Console.Clear();
-            PrintColorBackground(Window.x, Window.y);
-            PrintASCII(lines, Window.x, Window.y);
-            PrintEnter(_text);
+            PrintText(_path, _text, false);
         }
 
-
-        //static Timer dance;
-        //static Timer dance2;
-        //static Timer dance3;
 
         public void PrintText(string _path, string _text, Monster _monsters)
         {
@@ -283,42 +255,45 @@ namespace MonsterHunter
             PrintColorBackground(Window.x, Window.y);
             PrintASCII(lines, Window.x, Window.y);
 
-            // create three isEnemy;
-            Dancer dancer_1 = new Dancer();
-            Dancer dancer_2 = new Dancer();
-            Dancer dancer_3 = new Dancer();
+            if (_all)
+            {
+                // create three isEnemy;
+                Dancer dancer_1 = new Dancer();
+                Dancer dancer_2 = new Dancer();
+                Dancer dancer_3 = new Dancer();
 
-            dancer_1.InitDancer(Game.goble, "[ G ]");
-            dancer_2.InitDancer(Game.angry, "[ A ]");
-            dancer_3.InitDancer(Game.frodo, "[ F ]");
+                dancer_1.InitDancer(Game.goble, "[ G ]");
+                dancer_2.InitDancer(Game.angry, "[ A ]");
+                dancer_3.InitDancer(Game.frodo, "[ F ]");
 
-            dancer_1.isEnemy.monster.pos_x = 19;
-            dancer_2.isEnemy.monster.pos_x = 50;
-            dancer_3.isEnemy.monster.pos_x = 75;
+                dancer_1.isEnemy.monster.pos_x = 19;
+                dancer_2.isEnemy.monster.pos_x = 50;
+                dancer_3.isEnemy.monster.pos_x = 75;
 
-            dancer_1.isEnemy.monster.pos_y = 10;
-            dancer_2.isEnemy.monster.pos_y = 10;
-            dancer_3.isEnemy.monster.pos_y = 10;
+                dancer_1.isEnemy.monster.pos_y = 10;
+                dancer_2.isEnemy.monster.pos_y = 10;
+                dancer_3.isEnemy.monster.pos_y = 10;
 
-            AutoResetEvent danceReset = new AutoResetEvent(true);
-            var dance = new Timer(dancer_1.isEnemy.monster.DanceTheMonster, danceReset, 330, 2117);
-            danceReset.Set();
+                AutoResetEvent danceReset = new AutoResetEvent(true);
+                var dance = new Timer(dancer_1.isEnemy.monster.DanceTheMonster, danceReset, 330, 2117);
+                danceReset.Set();
 
-            //Thread.Sleep(330);
+                AutoResetEvent danceReset2 = new AutoResetEvent(true);
+                var dance2 = new Timer(dancer_2.isEnemy.monster.DanceTheMonster, danceReset2, 660, 2357);
+                danceReset2.Set();
 
-            AutoResetEvent danceReset2 = new AutoResetEvent(true);
-            var dance2 = new Timer(dancer_2.isEnemy.monster.DanceTheMonster, danceReset2, 660, 2357);
-            danceReset2.Set();
+                AutoResetEvent danceReset3 = new AutoResetEvent(true);
+                var dance3 = new Timer(dancer_3.isEnemy.monster.DanceTheMonster, danceReset3, 990, 2579);
+                danceReset3.Set();
 
-            //Thread.Sleep(330);
+                PrintEnter(_text, new Timer[] { dance, dance2, dance3 });
 
-            AutoResetEvent danceReset3 = new AutoResetEvent(true);
-            var dance3 = new Timer(dancer_3.isEnemy.monster.DanceTheMonster, danceReset3, 990, 2579);
-            danceReset3.Set();
+            }
+            else
+            {
+                PrintEnter(_text);
+            }
 
-            //Thread.Sleep(1000);
-
-            PrintEnter(_text, new Timer[] { dance, dance2, dance3 });
         }
 
         public void PrintGameOver()
