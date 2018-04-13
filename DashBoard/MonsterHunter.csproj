@@ -154,6 +154,7 @@
     <Content Include="GameOver.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Names.txt" />
     <Content Include="theAngro.txt" />
     <Content Include="Welcome.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
