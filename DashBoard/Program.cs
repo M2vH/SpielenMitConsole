@@ -64,7 +64,7 @@ namespace MonsterHunter
                 ConsoleKey.G,
                 ConsoleKey.A,
                 ConsoleKey.F
-                ,ConsoleKey.Spacebar
+                ,ConsoleKey.Spacebar // keep this for random gameplay
             };
             // ...and request the input
             Game.choosenPlayer =
@@ -83,38 +83,42 @@ namespace MonsterHunter
                     TextOnScreen.PrintText("theGoble.txt");
                     break;
                 default:
-                    TextOnScreen.PrintText("GameOver.txt");
-                    Thread.Sleep(2000);
-                    return;
+                    TextOnScreen.PrintText("RandomGame.txt");
+                    Thread.Sleep(4000);
+                    break;
 
             }
 
-            keys = new List<ConsoleKey>
+            if (Game.isNotRandom)
+            {
+
+                keys = new List<ConsoleKey>
             {
                 ConsoleKey.M,
                 ConsoleKey.D
             };
-            Game.modInput = InputRequest.PrintInputRequest("[M] - Mod the player, [D] - Default values", keys);
+                Game.modInput = InputRequest.PrintInputRequest("[M] - Mod the player, [D] - Default values", keys);
 
-            if (Game.modInput == ConsoleKey.M)
-            {
-                string modAttack = "Enter value from 0 to 100:  ";
-                // we mod the player
-                // store the input
-                int attack = -1;
-                int defense = -1;
-                int speed;
-                attack = InputRequest.PrintModRequest("Attack - " + modAttack);
-                defense = InputRequest.PrintModRequest("Defense - " + modAttack);
-                speed = InputRequest.PrintModRequest("Speed - " + modAttack);
-
-
+                if (Game.modInput == ConsoleKey.M)
+                {
+                    string modAttack = "Enter value from 0 to 100:  ";
+                    // we mod the player
+                    // store the input
+                    int attack = -1;
+                    int defense = -1;
+                    int speed;
+                    attack = InputRequest.PrintModRequest("Attack - " + modAttack);
+                    defense = InputRequest.PrintModRequest("Defense - " + modAttack);
+                    speed = InputRequest.PrintModRequest("Speed - " + modAttack);
 
 
 
-                Console.ReadLine();
+
+
+                    Console.ReadLine();
+                }
+
             }
-
 
 
 

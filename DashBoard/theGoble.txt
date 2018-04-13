@@ -1,9 +1,9 @@
-          d888b   .d88b.  d8888b. db      d88888b 
-         88' Y8b .8P  Y8. 88  `8D 88      88'     
-         88      88    88 88oooY' 88      88ooooo 
-         88  ooo 88    88 88~~~b. 88      88~~~~~ 
-         88. ~8~ `8b  d8' 88   8D 88booo. 88.     
-          Y888P   `Y88P'  Y8888P' Y88888P Y88888P 
+   d888b   .d88b.  d8888b. db      d88888b 
+  88' Y8b .8P  Y8. 88  `8D 88      88'     
+  88      88    88 88oooY' 88      88ooooo 
+  88  ooo 88    88 88~~~b. 88      88~~~~~ 
+  88. ~8~ `8b  d8' 88   8D 88booo. 88.     
+   Y888P   `Y88P'  Y8888P' Y88888P Y88888P 
 -
-                    The quick 'Goblin'
+            The quick 'Goblin'
 -

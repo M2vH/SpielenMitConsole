@@ -53,6 +53,10 @@ namespace MonsterHunter
                 if ( _keys.Contains(key) )
                 {
                     Game.keyPressed = key;
+                    if (key == ConsoleKey.Spacebar)
+                    {
+                        Game.isNotRandom = false;
+                    }
                     Game.choiceIsMade = true;
                 }
 

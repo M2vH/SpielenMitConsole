@@ -20,6 +20,8 @@ namespace MonsterHunter
 
         public static bool choiceIsMade = false;
 
+        public static bool isNotRandom = true;
+
         /// <summary>
         /// Holds true to keep the main thread running;
         /// </summary>
@@ -289,7 +291,7 @@ namespace MonsterHunter
             Enemy.enemyTimer.Dispose();
             // stop the player timer
             // check if Timer object exists
-                // Timer object exists, if Program.manual = false
+            // Timer object exists, if Program.manual = false
             if (!Program.manual)
             {
                 startAutoplayTimer.Dispose();
@@ -376,35 +378,36 @@ namespace MonsterHunter
             if (!choiceIsMade)
             {
                 // ToDo: Implement random player monster
-            }
-            else        // choice was made in start screen
-            {
-                // switch on ConsoleKey case [A]ngry , [F]rodo , [G]oblin
-                switch (Game.choosenPlayer)
-                {
-                    case ConsoleKey.A:
-                        Game.player = Player.CreatePlayer(theDesigns[2], theDesigns[2].designName);
-                        break;
-                    case ConsoleKey.F:
-                        Game.player = Player.CreatePlayer(theDesigns[1], theDesigns[1].designName);
-                        break;
-                    case ConsoleKey.G:
-                        Game.player = Player.CreatePlayer(theDesigns[0], theDesigns[0].designName);
-                        break;
-                    default:
-                        int r = random.Next(0, theDesigns.Length);
-                        Game.player = Player.CreatePlayer(theDesigns[r], theDesigns[r].designName);
-                        break;
-                }
+                int[] playerKeys = new int[] { 65, 70, 71 };
+                choiceIsMade = true;
+                choosenPlayer = (ConsoleKey)playerKeys[random.Next(0, 2)];
 
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                // string text = String.Format("You selected [" + choosenPlayer.ToString() + "] " + Game.player.name);
-                string text = String.Format("You selected " + Game.player.name);
-                Dashboard.CenterText(ConsoleColor.Red, 25, text);
-                Thread.Sleep(2000);
-                text = new string(' ', text.Length);
-                Dashboard.CenterText(ConsoleColor.Red, 25, text);
             }
+            // switch on ConsoleKey case [A]ngry , [F]rodo , [G]oblin
+            switch (Game.choosenPlayer)
+            {
+                case ConsoleKey.A:
+                    Game.player = Player.CreatePlayer(theDesigns[2], theDesigns[2].designName);
+                    break;
+                case ConsoleKey.F:
+                    Game.player = Player.CreatePlayer(theDesigns[1], theDesigns[1].designName);
+                    break;
+                case ConsoleKey.G:
+                    Game.player = Player.CreatePlayer(theDesigns[0], theDesigns[0].designName);
+                    break;
+                default:
+                    int r = random.Next(0, theDesigns.Length);
+                    Game.player = Player.CreatePlayer(theDesigns[r], theDesigns[r].designName);
+                    break;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            // string text = String.Format("You selected [" + choosenPlayer.ToString() + "] " + Game.player.name);
+            string text = String.Format("You selected " + Game.player.name);
+            Dashboard.CenterText(ConsoleColor.Red, 25, text);
+            Thread.Sleep(2000);
+            text = new string(' ', text.Length);
+            Dashboard.CenterText(ConsoleColor.Red, 25, text);
 
 #if DEBUG
             int reduction = 400;
@@ -701,7 +704,7 @@ namespace MonsterHunter
 
             Game.angry = new Design
             {
-                designName = "Angry",
+                designName = "Angro",
                 designColor = ConsoleColor.Green,
                 designElements = new string[] { "[-.-]", " '▓' ", " U U ", "0-▓-0" },
                 FightSound = Sound.high,
