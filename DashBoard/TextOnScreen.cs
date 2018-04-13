@@ -27,16 +27,16 @@ namespace MonsterHunter
         /// <summary>
         /// The list with all lines
         /// </summary>
-        private List<string> lines;
+        private static List<string> lines;
 
         public string Path { get => path; set => path = value; }
-        public char[] Fill { get => fill; set => fill = value; }
-        public List<string> Lines { get => lines; }
+        public static char[] Fill { get => fill; set => fill = value; }
+        public static List<string> Lines { get => lines; }
 
         /// <summary>
         /// Fills the lines marked with '-' in Welcome.txt with spaces
         /// </summary>
-        public void FillTheList()
+        public static void FillTheList()
         {
             fileContent = File.ReadAllLines(path);
             lines = new List<string>();
@@ -64,7 +64,7 @@ namespace MonsterHunter
         /// Fills the list with content from given path/to/file.txt
         /// </summary>
         /// <param name="_path">the path/to/file.txt</param>
-        public void FillTheList(string _path)
+        public static void FillTheList(string _path)
         {
             path = _path;
             FillTheList();
@@ -85,7 +85,7 @@ namespace MonsterHunter
         /// </summary>
         /// <param name="_x">x-size of the screen</param>
         /// <param name="_y">size of the screeny-</param>
-        public void PrintColorBackground(int _x, int _y)
+        public static void PrintColorBackground(int _x, int _y)
         {
             char storage = '#';
 
@@ -134,7 +134,7 @@ namespace MonsterHunter
         /// <param name="_lines"></param>
         /// <param name="_x"></param>
         /// <param name="_y"></param>
-        public void PrintASCII(List<string> _lines, int _x, int _y)
+        public static void PrintASCII(List<string> _lines, int _x, int _y)
         {
             Fill = new char[] { '.', ':', ',', ' ', ' ' };
             int new_x = (_x - size) / 2;
@@ -173,82 +173,30 @@ namespace MonsterHunter
 
         }
 
-        /// <summary>
-        /// Prints a 'Press ENTER to start!'
-        /// <remarks>...and waits for keyboard.</remarks>
-        /// </summary>
-        public void PrintEnter()
-        {
-            string blanc = String.Format("{0}", "Press ENTER to start!");
-            PrintEnter(blanc);
-        }
-
-        public void PrintEnter(string _input)
-        {
-            Timer[] empty = new Timer[0];
-            PrintEnter(_input, empty);
-        }
-
-        public void PrintEnter(string _input, Timer[] timer)
-        {
-            string blanc = String.Format("{0}", _input);
-            Dashboard.CenterText(25, blanc, ConsoleColor.Red);
-            Console.CursorVisible = false;
-            Game.choiceIsMade = false;
-            // store the selection
-            while (!Game.choiceIsMade)
-            {
-                ConsoleKey key = Console.ReadKey().Key;
-                if ((key == ConsoleKey.A || key == ConsoleKey.F) || key == ConsoleKey.G)
-                {
-                    Game.choosenPlayer = key;
-                    Game.choiceIsMade = true;
-                }
-
-            }
-            // Console.ReadLine();
-            for (int i = 0; i < timer.Length; i++)
-            {
-                timer[i].Dispose();
-            }
-        }
-
-        public void PrintStart()
+        public static void PrintStart()
         {
             FillTheList();
             //Console.Clear();
             PrintColorBackground(Window.x, Window.y);
             PrintASCII(Lines, Window.x, Window.y);
-            PrintEnter();
+            // PrintInputRequest();
         }
 
-        public void PrintText(string _path)
+        public static void PrintText(string _path)
         {
             PrintText(_path, "");
         }
 
-        public void PrintText(string _path, string _text)
-        {
-            PrintText(_path, _text, false);
-        }
-
-
-        public void PrintText(string _path, string _text, Monster _monsters)
+        public static void PrintText(string _path, string _text)
         {
             FillTheList(_path);
             //Console.Clear();
             PrintColorBackground(Window.x, Window.y);
             PrintASCII(lines, Window.x, Window.y);
 
-            int[] coords = Monster.RandomStartPos(true);
-
-            AutoResetEvent danceReset = new AutoResetEvent(true);
-            var dance = new Timer(_monsters.DanceTheMonster, danceReset, 1000, 500);
-            danceReset.Set();
-            PrintEnter(_text, new Timer[] { dance });
         }
 
-        public void PrintText(string _path, string _text, bool _all)
+        public static Timer[] PrintText(string _path, string _text, bool _all)
         {
             FillTheList(_path);
             //Console.Clear();
@@ -286,29 +234,44 @@ namespace MonsterHunter
                 var dance3 = new Timer(dancer_3.isEnemy.monster.DanceTheMonster, danceReset3, 990, 2579);
                 danceReset3.Set();
 
-                PrintEnter(_text, new Timer[] { dance, dance2, dance3 });
+                return new Timer[] { dance, dance2, dance3 };
 
             }
             else
             {
-                PrintEnter(_text);
+                return new Timer[0];
             }
 
         }
 
-        public void PrintGameOver()
-        {
-            TextOnScreen gameOver = new TextOnScreen();
-            gameOver.PrintText("GameOver.txt");
+        //public void PrintText(string _path, string _text, Monster _monsters)
+        //{
+        //    FillTheList(_path);
+        //    //Console.Clear();
+        //    PrintColorBackground(Window.x, Window.y);
+        //    PrintASCII(lines, Window.x, Window.y);
 
-        }
+        //    int[] coords = Monster.RandomStartPos(true);
 
-        public void PrintGameOver(string _text)
-        {
-            TextOnScreen gameOver = new TextOnScreen();
-            gameOver.PrintText("GameOver.txt", _text);
+        //    AutoResetEvent danceReset = new AutoResetEvent(true);
+        //    var dance = new Timer(_monsters.DanceTheMonster, danceReset, 1000, 500);
+        //    danceReset.Set();
+        //    PrintInputRequest(_text, new Timer[] { dance });
+        //}
 
-        }
+        //public void PrintGameOver()
+        //{
+        //    TextOnScreen gameOver = new TextOnScreen();
+        //    gameOver.PrintText("GameOver.txt");
+
+        //}
+
+        //public void PrintGameOver(string _text)
+        //{
+        //    TextOnScreen gameOver = new TextOnScreen();
+        //    gameOver.PrintText("GameOver.txt", _text);
+
+        //}
 
         //public static Monster dancer_1;
         //public Monster dancer_2;

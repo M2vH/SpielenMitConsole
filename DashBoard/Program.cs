@@ -23,10 +23,10 @@ namespace MonsterHunter
 
         #endregion
 
-            /// <summary>
-            /// Set to true, if player is keyboard controlled
-            /// </summary>
-        public static bool manual = true;
+        /// <summary>
+        /// Set to true, if player is keyboard controlled
+        /// </summary>
+        public static bool manual = false;
 
 
         static void Main(string[] args)
@@ -51,23 +51,65 @@ namespace MonsterHunter
 
             if (!quickCheck)
             {
-                TextOnScreen hello = new TextOnScreen();
-                hello.PrintStart();
-
+                TextOnScreen.PrintStart();
+                InputRequest.PrintInputRequest(ConsoleKey.Enter);
             }
 
-            TextOnScreen message = new TextOnScreen();
-            // Display choose screen with dancing monster;
-            message.PrintText("Choose.txt", "", true);
+            // Display "Choose"-Screen with dancing monster;
+            Timer[] timer = TextOnScreen.PrintText("Choose.txt", "", true);
+            // Request the key input;
+            // create the List of excepted keys;
+            List<ConsoleKey> keys = new List<ConsoleKey>
+            {
+                ConsoleKey.G,
+                ConsoleKey.A,
+                ConsoleKey.F
+            };
+            // ...and request the input
+            Game.choosenPlayer =
+            InputRequest.PrintInputRequest("", timer, keys);
 
-            // message.PrintText("theAngro.txt", "[M] - Mod the player, [D] - Default values");
+            // Start Player mod menue
+            TextOnScreen.PrintText("theAngro.txt");
+
+            keys = new List<ConsoleKey>
+            {
+                ConsoleKey.M,
+                ConsoleKey.D
+            };
+            Game.modInput = InputRequest.PrintInputRequest("[M] - Mod the player, [D] - Default values", keys);
+
+            if (Game.modInput == ConsoleKey.M)
+            {
+                string modAttack = "Enter value from 0 to 100:  ";
+                // we mod the player
+                // store the input
+                int attack = -1;
+                int defense = -1;
+                int speed;
+                attack = InputRequest.PrintModRequest("Attack - " + modAttack);
+                defense = InputRequest.PrintModRequest("Defense - " + modAttack);
+                speed = InputRequest.PrintModRequest("Speed - " + modAttack);
+
+
+
+
+
+                Console.ReadLine();
+            }
+
+
+
+
+
+
 
             // we print a background in the field
             Background.DrawInMagenta();
 
             // Init the Player and Enemy
             Game.InitPlayerAndEnemy();
-            
+
             // we init the gameStats
             Game.InitStats();
 

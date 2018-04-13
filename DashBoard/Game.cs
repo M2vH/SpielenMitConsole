@@ -14,6 +14,8 @@ namespace MonsterHunter
 
         public static ConsoleKey choosenPlayer;
 
+        public static ConsoleKey modInput;
+
         public static bool choiceIsMade = false;
 
         /// <summary>
@@ -394,7 +396,8 @@ namespace MonsterHunter
                 }
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                string text = String.Format("You selected [" + choosenPlayer.ToString() + "] " + Game.player.name);
+                // string text = String.Format("You selected [" + choosenPlayer.ToString() + "] " + Game.player.name);
+                string text = String.Format("You selected " + Game.player.name);
                 Dashboard.CenterText(ConsoleColor.Red, 25, text);
                 Thread.Sleep(2000);
                 text = new string(' ', text.Length);
