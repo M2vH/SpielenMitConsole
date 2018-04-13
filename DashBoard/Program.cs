@@ -64,13 +64,30 @@ namespace MonsterHunter
                 ConsoleKey.G,
                 ConsoleKey.A,
                 ConsoleKey.F
+                ,ConsoleKey.Spacebar
             };
             // ...and request the input
             Game.choosenPlayer =
             InputRequest.PrintInputRequest("", timer, keys);
 
             // Start Player mod menue
-            TextOnScreen.PrintText("theAngro.txt");
+            switch (Game.choosenPlayer)
+            {
+                case ConsoleKey.A:
+                    TextOnScreen.PrintText("theAngro.txt");
+                    break;
+                case ConsoleKey.F:
+                    TextOnScreen.PrintText("theFrodo.txt");
+                    break;
+                case ConsoleKey.G:
+                    TextOnScreen.PrintText("theGoble.txt");
+                    break;
+                default:
+                    TextOnScreen.PrintText("GameOver.txt");
+                    Thread.Sleep(2000);
+                    return;
+
+            }
 
             keys = new List<ConsoleKey>
             {
