@@ -115,7 +115,7 @@ namespace MonsterHunter
 
 
 
-                    Console.ReadLine();
+                    // Console.ReadLine();
                 }
 
             }
@@ -172,12 +172,16 @@ namespace MonsterHunter
 
             // The Game is running
             // Wait for the threads to finish
-            // ToDo: Add a return in the functions called by threads.
-            // thePlayer.Join();
+            // Added a return in the functions called by threads.
+            // Thread.Join() doesnt work, 
+            // cause thread starts timer thread
+            // and AutoResetEvent gives us time back;
             while (Game.keepAlive)
             {
 
             }
+            // ToDo:
+            // Check if we still need the following
             theEnemy.Join();
             thePlayer.Join();
 

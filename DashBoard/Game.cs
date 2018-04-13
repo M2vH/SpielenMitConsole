@@ -377,7 +377,7 @@ namespace MonsterHunter
             //  [2]...from random design
             if (!choiceIsMade)
             {
-                // ToDo: Implement random player monster
+                // Implement random player monster
                 int[] playerKeys = new int[] { 65, 70, 71 };
                 choiceIsMade = true;
                 choosenPlayer = (ConsoleKey)playerKeys[random.Next(0, 2)];
@@ -735,7 +735,6 @@ namespace MonsterHunter
                  */
                 Game.player = _player;
 
-                // ToDo: Implement Timer 
                 // In
                 while (Game.play)
                 {
@@ -800,7 +799,8 @@ namespace MonsterHunter
 
                         lock (Game.printlock)
                         {
-                            // Todo: Weitermachen
+                            // Todo: Hier weitermachen
+                            // Check, if we are running out of bounce;
                             Game.player.HideMonster(me[0], me[1]);
                             Game.player.pos_x += nextStep[0];
                             Game.player.pos_y += nextStep[1];
@@ -890,7 +890,7 @@ namespace MonsterHunter
                     player.PrintMonster(player.pos_x, player.pos_y);
 
                     // fight first if possible, then run
-                    // ToDo: add 'same level check'
+                    // add 'same level check'
                     if (dist.CalcDistance_xy() < 5 && dist.CalcDistance_y() < 4)
                     {
                         lock (printlock)

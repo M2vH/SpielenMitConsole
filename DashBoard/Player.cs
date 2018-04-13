@@ -83,10 +83,6 @@ namespace MonsterHunter
 
         public static void StartPlayer()
         {
-            // Variable to store, if player is user controlled (true) or computercontrolled
-            //ToDo:
-            //if (manual) the PlayTheGame()
-            //bool manual = false;
             try
             {
                 if (Program.manual)
