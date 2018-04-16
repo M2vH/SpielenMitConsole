@@ -15,8 +15,14 @@ namespace MonsterHunter
         /// </summary>
         private static string path = "Welcome.txt";
 
+        /// <summary>
+        /// A place to store the result of the FileReader.
+        /// </summary>
         private static string[] fileContent;
 
+        /// <summary>
+        /// Variable to store the maximum width of the ASCII text.
+        /// </summary>
         private static int size = 0;
 
         /// <summary>
@@ -29,8 +35,19 @@ namespace MonsterHunter
         /// </summary>
         private static List<string> lines;
 
+        /// <summary>
+        /// The path/to/read/from/text.txt
+        /// </summary>
         public string Path { get => path; set => path = value; }
+
+        /// <summary>
+        /// The symbols to fill the spaces between ASCII letters.
+        /// </summary>
         public static char[] Fill { get => fill; set => fill = value; }
+
+        /// <summary>
+        /// The List object holds the lines coming from the FileReader
+        /// </summary>
         public static List<string> Lines { get => lines; }
 
         /// <summary>
