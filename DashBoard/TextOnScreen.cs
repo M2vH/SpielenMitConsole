@@ -34,7 +34,10 @@ namespace MonsterHunter
         public static List<string> Lines { get => lines; }
 
         /// <summary>
+        /// Fills the Lines object with the strings from a file
+        /// <remarks>
         /// Fills the lines marked with '-' in Welcome.txt with spaces
+        /// </remarks>
         /// </summary>
         public static void FillTheList()
         {
@@ -130,10 +133,12 @@ namespace MonsterHunter
 
         /// <summary>
         /// Print the ASCII text at given position
+        /// <remarks>...fills the spaces in text strings with random symbol
+        /// and centers the text.</remarks>
         /// </summary>
-        /// <param name="_lines"></param>
-        /// <param name="_x"></param>
-        /// <param name="_y"></param>
+        /// <param name="_lines">the lines to print</param>
+        /// <param name="_x">the center of the x-axis</param>
+        /// <param name="_y">the center of the y-axis</param>
         public static void PrintASCII(List<string> _lines, int _x, int _y)
         {
             Fill = new char[] { '.', ':', ',', ' ', ' ' };
@@ -173,29 +178,45 @@ namespace MonsterHunter
 
         }
 
+        /// <summary>
+        /// Prints the content of Welcome.txt
+        /// </summary>
         public static void PrintStart()
         {
             FillTheList();
-            //Console.Clear();
             PrintColorBackground(Window.x, Window.y);
             PrintASCII(Lines, Window.x, Window.y);
-            // PrintInputRequest();
         }
 
+        /// <summary>
+        /// Prints the content of file at given path
+        /// </summary>
+        /// <param name="_path">path/to/file.txt</param>
         public static void PrintText(string _path)
         {
             PrintText(_path, "");
         }
 
+        /// <summary>
+        /// Prints the content of file at given path
+        /// </summary>
+        /// <param name="_path">path/to/file.txt</param>
+        /// <param name="_text">additional text</param>
         public static void PrintText(string _path, string _text)
         {
             FillTheList(_path);
-            //Console.Clear();
             PrintColorBackground(Window.x, Window.y);
             PrintASCII(lines, Window.x, Window.y);
 
         }
 
+        /// <summary>
+        /// Prints the content of the file
+        /// </summary>
+        /// <param name="_path">path/to/file.txt</param>
+        /// <param name="_text">additional text</param>
+        /// <param name="_all">true for all monster dancing</param>
+        /// <returns>Timer[] with timer object of each dancing monster</returns>
         public static Timer[] PrintText(string _path, string _text, bool _all)
         {
             FillTheList(_path);
