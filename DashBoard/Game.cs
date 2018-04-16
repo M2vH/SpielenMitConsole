@@ -10,16 +10,28 @@ namespace MonsterHunter
 
     struct Game
     {
-        // public static Difficulty difficulty;
 
+        /// <summary>
+        /// Stores the ConsoleKey.Key
+        /// </summary>
         public static ConsoleKey choosenPlayer;
+
 
         public static ConsoleKey keyPressed;
 
+        /// <summary>
+        /// Stores the Key coming from Modification Screen;
+        /// </summary>
         public static ConsoleKey modInput;
 
+        /// <summary>
+        /// Stores, if User has selected a monster;
+        /// </summary>
         public static bool choiceIsMade = false;
 
+        /// <summary>
+        /// Stores if Player is a random player
+        /// </summary>
         public static bool isNotRandom = true;
 
         /// <summary>
@@ -27,10 +39,25 @@ namespace MonsterHunter
         /// </summary>
         public static bool keepAlive = true;
 
+        /// <summary>
+        /// The enemy object when game is running
+        /// </summary>
         public static Enemy enemy;
+
+        /// <summary>
+        /// The player object when game is running
+        /// </summary>
         public static Monster player;
+
+        /// <summary>
+        /// The winner object. We could let him dance on GameOver Screen.
+        /// <remarks>Object exists, when fight is over and winner will be calculated.</remarks>
+        /// </summary>
         public static Monster winner;
 
+        /// <summary>
+        /// The Random object through out our game;
+        /// </summary>
         public static Random random = new Random();     // Make sure, we do it only once
 
         /// <summary>
@@ -52,18 +79,15 @@ namespace MonsterHunter
         // We call this function when the timer thread callback is ready
         static AutoResetEvent autoEvent = new AutoResetEvent(true);
 
-        //  we count every timer callback call
-        //  init invokeCount;
         /// <summary>
         /// Object to store how often Countdowntimer calls.
         /// </summary>
         static int invokeCount = 0;
 
-        // we want to run for given amount of seconds;
         /// <summary>
         /// The maximum Countdown Time in seconds
         /// </summary>
-        static int maxCount = 120;
+        static int maxCount = 120;         // we want to run for given amount of seconds;
 
         // we store countdown here;
         // and init remaining time with maximum seconds
@@ -104,7 +128,7 @@ namespace MonsterHunter
             // We send signals to waiting threads
             AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
 
-            if (invokeCount == maxCount)
+            if (invokeCount == maxCount)    // the time has run out; 
             {
                 secondAuto.Set();
                 KillCountdown();
@@ -112,11 +136,10 @@ namespace MonsterHunter
         }
 
 
-        // we clean up the thread
         /// <summary>
         /// Kill the Timer Thread when Key.L ends the game
         /// </summary>
-        public static void KillCountdown()
+        public static void KillCountdown()        // we clean up the thread
         {
             countdown.Dispose();
         }

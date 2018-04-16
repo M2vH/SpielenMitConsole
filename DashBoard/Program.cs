@@ -46,7 +46,7 @@ namespace MonsterHunter
             Choice.InitChoices();
 
             // Printing a welcome
-            // set next to false to hide welcome during debugging
+            // set next bool to false to hide welcome during debugging
             bool quickCheck = false;
 
             if (!quickCheck)
