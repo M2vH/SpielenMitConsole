@@ -441,6 +441,9 @@ namespace MonsterHunter
             Game.enemy.monster.PrintMonster();
         }
 
+        /// <summary>
+        /// Used in the while-loops to keep game running.
+        /// </summary>
         public static bool play = true;
 
         // make a play

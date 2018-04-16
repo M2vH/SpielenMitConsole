@@ -129,24 +129,24 @@ namespace MonsterHunter
 
         }
 
-        public void PrintStringBackground(int _x, int _y)
-        {
-            // make some color on the screen
-            for (int i = 0; i < _y - 1; i++)
-            {
-                for (int j = 0; j < _x; j++)
-                {
-                    // Console.SetCursorPosition(i, j);
-                    Console.ForegroundColor = (ConsoleColor)Game.random.Next(1, 7);
+        //public void PrintStringBackground(int _x, int _y)
+        //{
+        //    // make some color on the screen
+        //    for (int i = 0; i < _y - 1; i++)
+        //    {
+        //        for (int j = 0; j < _x; j++)
+        //        {
+        //            // Console.SetCursorPosition(i, j);
+        //            Console.ForegroundColor = (ConsoleColor)Game.random.Next(1, 7);
 
-                    Console.Write(Fill[Game.random.Next(0, 4)]);
+        //            Console.Write(Fill[Game.random.Next(0, 4)]);
 
-                }
-                Console.WriteLine();
-            }
+        //        }
+        //        Console.WriteLine();
+        //    }
 
 
-        }
+        //}
 
         /// <summary>
         /// Print the ASCII text at given position
