@@ -111,7 +111,7 @@ namespace MonsterHunter
                     defense = InputRequest.PrintModRequest("Defense - " + modAttack);
                     speed = InputRequest.PrintModRequest("Speed - " + modAttack);
 
-
+                    // ToDo: Use the input values
 
 
 
