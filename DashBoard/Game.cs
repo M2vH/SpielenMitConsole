@@ -47,7 +47,7 @@ namespace MonsterHunter
         /// <summary>
         /// The player object when game is running
         /// </summary>
-        public static Monster player;
+        public static Player player;
 
         /// <summary>
         /// The winner object. We could let him dance on GameOver Screen.
@@ -407,20 +407,21 @@ namespace MonsterHunter
 
             }
             // switch on ConsoleKey case [A]ngry , [F]rodo , [G]oblin
+            // ToDo: use constructor instead;
             switch (Game.choosenPlayer)
             {
                 case ConsoleKey.A:
-                    Game.player = Player.CreateMonster(theDesigns[2], theDesigns[2].designName);
+                    Game.player = new Player(theDesigns[2], theDesigns[2].designName);
                     break;
                 case ConsoleKey.F:
-                    Game.player = Player.CreateMonster(theDesigns[1], theDesigns[1].designName);
+                    Game.player = new Player(theDesigns[1], theDesigns[1].designName);
                     break;
                 case ConsoleKey.G:
-                    Game.player = Player.CreateMonster(theDesigns[0], theDesigns[0].designName);
+                    Game.player = new Player(theDesigns[0], theDesigns[0].designName);
                     break;
                 default:
                     int r = random.Next(0, theDesigns.Length);
-                    Game.player = Player.CreateMonster(theDesigns[r], theDesigns[r].designName);
+                    Game.player = new Player(theDesigns[r], theDesigns[r].designName);
                     break;
             }
 
@@ -476,7 +477,7 @@ namespace MonsterHunter
         /// </summary>
         /// <remarks>Runs until Key.L is pressed</remarks>
         /// <param name="_player">The player monster</param>
-        public static void PlayTheGame(Monster _player)
+        public static void PlayTheGame(Player _player)
         {
             try
             {

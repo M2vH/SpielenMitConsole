@@ -20,30 +20,6 @@ namespace MonsterHunter
         }
 
 
-        /*  Function <Monster>CreateMonster(Design _design, string _name)
-         *  Creates a gamer player with a given <Design> at default position
-         *  
-         *  we use constructor above;
-         */
-        /// <summary>
-        /// Create a Monster out of a Design
-        /// </summary>
-        /// <param name="_design">The Design</param>
-        /// <param name="_name">The name</param>
-        /// <returns></returns>
-        public static Monster CreateMonster(Design _design, string _name)
-        {
-            Monster player = new Monster
-            {
-                outfit = _design,
-                name = _name,
-                pos_x = Window.x / 3,
-                pos_y = (Window.y + Window.top) / 2,
-
-            };
-            player.parts = _design.designElements;
-            return player;
-        }
 
         /*  <Monster> CreateMonster(Design _design, int _x, int _y, string _name)
          *  Creates a Monster at a given position;
