@@ -12,7 +12,7 @@ namespace MonsterHunter
         public static void Show()
         {
             // Display "Choose"-Screen with dancing monster;
-            Timer[] timer = TextOnScreen.PrintText("Choose.txt", "", true);
+            Timer[] timer = TextOnScreen.PrintText("TextFiles/Choose.txt", "", true);
             // Request the key input;
             // create the List of excepted keys;
             List<ConsoleKey> keys = new List<ConsoleKey>
@@ -30,16 +30,16 @@ namespace MonsterHunter
             switch (Game.choosenPlayer)
             {
                 case ConsoleKey.A:
-                    TextOnScreen.PrintText("theAngro.txt");
+                    TextOnScreen.PrintText("TextFiles/theAngro.txt");
                     break;
                 case ConsoleKey.F:
-                    TextOnScreen.PrintText("theFrodo.txt");
+                    TextOnScreen.PrintText("TextFiles/theFrodo.txt");
                     break;
                 case ConsoleKey.G:
-                    TextOnScreen.PrintText("theGoble.txt");
+                    TextOnScreen.PrintText("TextFiles/theGoble.txt");
                     break;
                 default:
-                    TextOnScreen.PrintText("RandomGame.txt");
+                    TextOnScreen.PrintText("TextFiles/RandomGame.txt");
                     Thread.Sleep(4000);
                     break;
 

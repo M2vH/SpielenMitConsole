@@ -13,7 +13,7 @@ namespace MonsterHunter
         /// <summary>
         /// Path to the file.txt
         /// </summary>
-        private static string path = "Welcome.txt";
+        private static string path = "TextFiles/Welcome.txt";
 
         /// <summary>
         /// A place to store the result of the FileReader.
@@ -282,81 +282,6 @@ namespace MonsterHunter
 
         }
 
-        //public void PrintText(string _path, string _text, Monster _monsters)
-        //{
-        //    FillTheList(_path);
-        //    //Console.Clear();
-        //    PrintColorBackground(Window.x, Window.y);
-        //    PrintASCII(lines, Window.x, Window.y);
-
-        //    int[] coords = Monster.RandomStartPos(true);
-
-        //    AutoResetEvent danceReset = new AutoResetEvent(true);
-        //    var dance = new Timer(_monsters.DanceTheMonster, danceReset, 1000, 500);
-        //    danceReset.Set();
-        //    PrintInputRequest(_text, new Timer[] { dance });
-        //}
-
-        //public void PrintGameOver()
-        //{
-        //    TextOnScreen gameOver = new TextOnScreen();
-        //    gameOver.PrintText("GameOver.txt");
-
-        //}
-
-        //public void PrintGameOver(string _text)
-        //{
-        //    TextOnScreen gameOver = new TextOnScreen();
-        //    gameOver.PrintText("GameOver.txt", _text);
-
-        //}
-
-        //public static Monster dancer_1;
-        //public Monster dancer_2;
-        //public Monster dancer_3;
-
-        //public void InitDancer()
-        //{
-        //    dancer_1 = new Monster
-        //    {
-        //        outfit = Game.goble,
-        //        name = "[ G ]",
-        //        // pos_x = Monster.RandomStartPos(true)[0],
-        //        // pos_y = Monster.RandomStartPos(true)[1],
-
-        //        //pos_x = Game.random.Next(2, 98),
-        //        //pos_y = Game.random.Next(8, 25),
-
-        //        pos_x = 25,
-        //        pos_y = 15,
-        //    };
-        //    dancer_1.parts = Game.goble.designElements;
-
-        //    dancer_2 = new Monster
-        //    {
-        //        outfit = Game.frodo,
-        //        name = "[ F ]",
-        //        parts = Game.frodo.designElements,
-        //        // pos_x = Monster.RandomStartPos(true)[0],
-        //        // pos_y = Monster.RandomStartPos(true)[1],
-        //        pos_x = 50,
-        //        pos_y = 15,
-        //    };
-        //    dancer_3 = new Monster
-        //    {
-        //        outfit = Game.angry,
-        //        name = "[ A ]",
-        //        parts = Game.angry.designElements,
-        //        //pos_x = Monster.RandomStartPos(true)[0],
-        //        //pos_y = Monster.RandomStartPos(true)[1],
-        //        pos_x = 75,
-        //        pos_y = 15,
-        //    };
-
-        //    theDancer = new Monster[] { dancer_1, dancer_2, dancer_3 };
-        //}
-
-        // public static Monster[] theDancer;
 
     }
 }
