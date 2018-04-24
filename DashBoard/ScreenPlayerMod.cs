@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonsterHunter
 {
-    class PlayerMod
+    class ScreenPlayerMod
     {
         private static int min = 10;
         private static int max = 60;

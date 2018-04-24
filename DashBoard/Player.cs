@@ -79,7 +79,7 @@ namespace MonsterHunter
         {
             try
             {
-                // thePlayer.Abort();
+                // thePlayerThread.Abort();
                 Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
                 Game.keepAlive = false;
                 // player.pos_x = 5;

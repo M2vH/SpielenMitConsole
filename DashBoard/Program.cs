@@ -16,8 +16,8 @@ namespace MonsterHunter
          */
         #region GameThreads
 
-        public static Thread thePlayer = new Thread(Player.StartPlayer);
-        public static Thread theEnemy = new Thread(Enemy.StartEnemy);
+        public static Thread thePlayerThread = new Thread(Player.StartPlayer);
+        public static Thread theEnemyThread = new Thread(Enemy.StartEnemy);
         // public static Thread theSong = new Thread(Song.PlayMySong);
 
 
@@ -87,15 +87,14 @@ namespace MonsterHunter
             // next time we call it GameLoop
             // PlayTheGame(player);
             // we start a seperate Thread;
-            theEnemy.Name = "EnemyThread";
-            theEnemy.Start();
+            theEnemyThread.Name = "EnemyThread";
+            theEnemyThread.Start();
 
-            thePlayer.Name = "PlayerThread";
-            thePlayer.Start();
+            thePlayerThread.Name = "PlayerThread";
+            thePlayerThread.Start();
 
-            // Player.StartPlayer();
-            // theEnemy.Join();
-            // thePlayer.Join();
+            // theEnemyThread.Join();
+            // thePlayerThread.Join();
 
             // The Game is running
             // Wait for the threads to finish
@@ -107,10 +106,6 @@ namespace MonsterHunter
             {
 
             }
-            // ToDo:
-            // Check if we still need the following
-            theEnemy.Join();
-            thePlayer.Join();
 
             Game.CloseTheGame();
         }

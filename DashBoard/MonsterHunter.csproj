@@ -108,19 +108,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Background.cs" />
-    <Compile Include="Choice.cs" />
+    <Compile Include="Helper\Choice.cs" />
     <Compile Include="Dancer.cs" />
     <Compile Include="Dashboard.cs" />
-    <Compile Include="Difficulty.cs" />
-    <Compile Include="Distance.cs" />
+    <Compile Include="Helper\Difficulty.cs" />
+    <Compile Include="Helper\Distance.cs" />
     <Compile Include="Enemy.cs" />
-    <Compile Include="Direction.cs" />
+    <Compile Include="Helper\Direction.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="InputRequest.cs" />
     <Compile Include="Monster.cs" />
-    <Compile Include="Design.cs" />
+    <Compile Include="Helper\Design.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="PlayerMod.cs" />
+    <Compile Include="ScreenPlayerMod.cs" />
     <Compile Include="ScreenChoose.cs" />
     <Compile Include="ScreenWelcome.cs" />
     <Compile Include="Song.cs" />

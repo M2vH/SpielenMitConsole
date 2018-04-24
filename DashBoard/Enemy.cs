@@ -97,7 +97,7 @@ namespace MonsterHunter
         {
             try
             {
-                // Program.theEnemy.Join();
+                // Program.theEnemyThread.Join();
                 Game.enemy.HideMonster(Game.enemy.pos_x, Game.enemy.pos_y);
                 Game.keepAlive = false;
 

@@ -24,7 +24,7 @@ namespace MonsterHunter
         /// </summary>
         public static ConsoleKey modInput;
 
-        public static PlayerMod modifications = new PlayerMod();
+        public static ScreenPlayerMod modifications = new ScreenPlayerMod();
 
         /// <summary>
         /// Stores, if User has selected a monster;
