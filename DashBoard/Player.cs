@@ -7,33 +7,9 @@ using System.Threading.Tasks;
 
 namespace MonsterHunter
 {
-    class Player
+    class Player : Monster
     {
-        /// <summary>
-        /// Create a player out of parts as parameter 
-        /// <remarks>Actual max size is 5 symbols.</remarks>
-        /// </summary>
-        /// <param name="_head">The Head of the player</param>
-        /// <param name="_body">The Body of the player</param>
-        /// <param name="_legs">The Legs of the player</param>
-        /// <param name="_name">The Name. Displayed if winner</param>
-        /// <returns></returns>
-        public static Monster CreatePlayer(string _head, string _body, string _legs, string _name)
-        {
-            Monster player = new Monster
-            {
-                parts = new string[3],
-                name = _name,
-                pos_x = Window.x / 3,
-                pos_y = (Window.y + Window.top) / 2,
-            };
-            player.parts[0] = _head;
-            player.parts[1] = _body;
-            player.parts[2] = _legs;
-
-            return player;
-        }
-
+        
         /*  Function <Monster>CreatePlayer(Design _design, string _name)
          *  Creates a gamer player with a given <Design> at default position
          */
