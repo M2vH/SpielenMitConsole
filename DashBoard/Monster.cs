@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MonsterHunter
 {
-    struct Monster
+    class Monster
     {
         // store top left corner of monster
         /// <summary>
@@ -592,7 +592,7 @@ namespace MonsterHunter
         }
 
         /// <summary>
-        /// Calculates a weighted random isEnemy movement
+        /// Calculates a weighted random  movement
         /// </summary>
         /// <remarks>Weighted movement into left part of field</remarks>
         /// <returns>An int array with next x,y step in range -1 to 1</returns>
