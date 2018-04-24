@@ -24,6 +24,8 @@ namespace MonsterHunter
         /// </summary>
         public static ConsoleKey modInput;
 
+        public static PlayerMod modifications = new PlayerMod();
+
         /// <summary>
         /// Stores, if User has selected a monster;
         /// </summary>
@@ -170,6 +172,11 @@ namespace MonsterHunter
         {
             rounds = 0;
             playerStats = Game.player.outfit.stats;
+
+            playerStats.aPoints = Game.modifications.Attack;
+            playerStats.dPoints = Game.modifications.Defense;
+            playerStats.sPoints = Game.modifications.Speed;
+
             enemyStats = Game.enemy.outfit.stats;
         }
 
@@ -438,31 +445,14 @@ namespace MonsterHunter
             Game.player.outfit.stats.SetHPoints(reduction);
 #endif
 
-            /* Create an asDancer...
-            *  [1] this works
-            *  asDancer = CreateEnemy(player);
-            *  ...and print it;
-            *  asDancer.PrintMonster();
-            *
-            *  [2] test the <struct>Enemy
-            *  Enemy asDancer = new Enemy();  // This works
-            *  asDancer = new Enemy();    
-            *  [2.1] CreateEnemyFromDesign
-            *  asDancer.CreateEnemyFromDesign(angry, "The angry"); // This works
-            *  asDancer.CreateEnemyFromOponent();
-
-            *  [3] Print the Enemy
-            *  asDancer.monster.PrintMonster();
-
-            *  we need a callback
-            *  MoveTheMonster(asDancer, 500, 500);
-            */
             Game.enemy = new Enemy(player);
 
             //Game.enemy.CreateEnemyFromOponent();
 #if DEBUG
             Game.enemy.outfit.stats.SetHPoints(reduction);
 #endif
+
+
             Game.enemy.PrintMonster();
 
             winner = new Monster();

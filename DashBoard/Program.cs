@@ -28,103 +28,30 @@ namespace MonsterHunter
         /// </summary>
         public static bool manual = false;
 
+        // Printing a welcome
+        // set next bool to false to hide welcome during debugging
+        public static bool showWelcome = true;
+
 
         static void Main(string[] args)
         {
-
-            // console preparation
-            //Dancer theDancer = new Dancer();
-            //theDancer.InitDancer();
-
 
             Game.InitGame();
 
             // hide the cursor
             Console.CursorVisible = false;
 
-            // we init the movement goTo of the asDancer
+            // we init the movement goTos for the enemy.asDancer
             Choice.InitChoices();
 
-            // Printing a welcome
-            // set next bool to false to hide welcome during debugging
-            bool quickCheck = false;
+            ScreenWelcome.Show();
 
-            if (!quickCheck)
-            {
-                TextOnScreen.PrintStart();
-                InputRequest.PrintInputRequest(ConsoleKey.Enter);
-            }
 
-            // Display "Choose"-Screen with dancing monster;
-            Timer[] timer = TextOnScreen.PrintText("Choose.txt", "", true);
-            // Request the key input;
-            // create the List of excepted keys;
-            List<ConsoleKey> keys = new List<ConsoleKey>
-            {
-                ConsoleKey.G,
-                ConsoleKey.A,
-                ConsoleKey.F
-                ,ConsoleKey.Spacebar // keep this for random gameplay
-            };
-            // ...and request the input
-            Game.choosenPlayer =
-            InputRequest.PrintInputRequest("", timer, keys);
-
-            // Start Player mod menue
-            switch (Game.choosenPlayer)
-            {
-                case ConsoleKey.A:
-                    TextOnScreen.PrintText("theAngro.txt");
-                    break;
-                case ConsoleKey.F:
-                    TextOnScreen.PrintText("theFrodo.txt");
-                    break;
-                case ConsoleKey.G:
-                    TextOnScreen.PrintText("theGoble.txt");
-                    break;
-                default:
-                    TextOnScreen.PrintText("RandomGame.txt");
-                    Thread.Sleep(4000);
-                    break;
-
-            }
-
-            if (Game.isNotRandom)
-            {
-
-                keys = new List<ConsoleKey>
-            {
-                ConsoleKey.M,
-                ConsoleKey.D
-            };
-                Game.modInput = InputRequest.PrintInputRequest("[M] - Mod the player, [D] - Default values", keys);
-
-                if (Game.modInput == ConsoleKey.M)
-                {
-                    string modAttack = "Enter value from 0 to 100:  ";
-                    // we mod the player
-                    // store the input
-                    int attack = -1;
-                    int defense = -1;
-                    int speed;
-                    attack = InputRequest.PrintModRequest("Attack - " + modAttack);
-                    defense = InputRequest.PrintModRequest("Defense - " + modAttack);
-                    speed = InputRequest.PrintModRequest("Speed - " + modAttack);
-
-                    // ToDo: Use the input values
+            ScreenChoose.Show();
 
 
 
-                    // Console.ReadLine();
-                }
-
-            }
-
-
-
-
-
-
+            // Game is now ready for the action;
             // we print a background in the field
             Background.DrawInMagenta();
 

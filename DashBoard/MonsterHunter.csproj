@@ -120,6 +120,9 @@
     <Compile Include="Monster.cs" />
     <Compile Include="Design.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="PlayerMod.cs" />
+    <Compile Include="ScreenChoose.cs" />
+    <Compile Include="ScreenWelcome.cs" />
     <Compile Include="Song.cs" />
     <Compile Include="Sound.cs" />
     <Compile Include="Program.cs" />
