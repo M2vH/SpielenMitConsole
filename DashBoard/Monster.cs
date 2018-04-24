@@ -454,19 +454,23 @@ namespace MonsterHunter
             int damage = 0;
             if (_enemyWasHit)
             {
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine("Player attacks Enemy");
-#endif
                 damage = _me.aPoints - _oponent.dPoints;
                 _oponent.SetHPoints(damage);
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("Player attacks Enemy");
+                // System.Diagnostics.Debug.WriteLine("damage = attack - defense");
+                System.Diagnostics.Debug.WriteLine(damage + " = " + _me.aPoints + " - " + _oponent.dPoints);
+#endif
             }
             else
             {
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine("Enemy attacks Player");
-#endif
                 damage = _oponent.aPoints - _me.dPoints;
                 _me.SetHPoints(damage);
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("Enemy attacks Player");
+                // System.Diagnostics.Debug.WriteLine("damage = attack - defense");
+                System.Diagnostics.Debug.WriteLine(damage + " = " + _oponent.aPoints + " - " + _me.dPoints);
+#endif
             }
             Game.PrintStats(_me, _oponent);
 

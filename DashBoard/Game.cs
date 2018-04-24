@@ -37,6 +37,13 @@ namespace MonsterHunter
         public static bool isNotRandom = true;
 
         /// <summary>
+        /// Stores if player is modded as boolean. 
+        /// <remarks></remarks>
+        /// </summary>
+        public static bool isModyfied = false;
+
+
+        /// <summary>
         /// Holds true to keep the main thread running;
         /// </summary>
         public static bool keepAlive = true;
@@ -171,12 +178,25 @@ namespace MonsterHunter
         public static void InitStats()
         {
             rounds = 0;
-            // playerStats = Game.player.outfit.stats;
 
-            playerStats.aPoints = Game.modifications.Attack;
-            playerStats.dPoints = Game.modifications.Defense;
-            playerStats.sPoints = Game.modifications.Speed;
-            playerStats.hPoints = Game.player.outfit.stats.GetHPoints();
+
+            if (isModyfied)
+            {   // player is modified;
+                // we get the mod values;
+                playerStats.aPoints = Game.modifications.Attack;
+                playerStats.dPoints = Game.modifications.Defense;
+                playerStats.sPoints = Game.modifications.Speed;
+                playerStats.hPoints = Game.player.outfit.stats.GetHPoints();
+            }
+            else
+            {   // player has default values;
+                // get values from outfit;
+                playerStats.aPoints = player.outfit.stats.aPoints;
+                playerStats.dPoints = player.outfit.stats.dPoints;
+                playerStats.sPoints = player.outfit.stats.sPoints;
+                playerStats.hPoints = player.outfit.stats.hPoints;
+            }
+
 
             enemyStats.aPoints = Game.enemy.outfit.stats.aPoints;
             enemyStats.dPoints = Game.enemy.outfit.stats.dPoints;
@@ -749,97 +769,6 @@ namespace MonsterHunter
 
         }
 
-        // ToDo: Delete function
-        // We don't need parameter;
-        //public static void PlayThePlayer(Monster _player)
-        //{
-        //    try
-        //    {
-        //        /*  We receive a monster for the player with an existing design
-        //         */
-        //        Game.player = _player;
-
-        //        // In
-        //        while (Game.play)
-        //        {
-        //            // we check if player is dead
-        //            if (Game.playerStats.GetHPoints() <= 0 || Game.player.outfit.stats.GetHPoints() <= 0)
-        //            {
-        //                // we dont want to run anymore
-        //                Game.play = false;
-        //                // we stop the countdown
-        //                Game.KillCountdown();
-
-        //                // we DONT stop the asDancer, because his thread will run
-        //                // until asDancer is looser.
-        //                //StopEnemy();
-
-        //                // dont display a dead player
-        //                Game.player.HideMonster(Game.player.pos_x, Game.player.pos_y);
-
-        //                // leave this loop
-        //                Game.CloseTheGame();
-        //                break;
-
-        //            }
-        //            // player is alive
-        //            else
-        //            {
-        //                // we check if he is winner
-        //                if (Game.enemyStats.GetHPoints() <= 0)
-        //                {
-        //                    // player has won;
-        //                    // stop the clock;
-        //                    Game.KillCountdown();
-        //                    Game.CloseTheGame();
-        //                    // leave the 'play'-while
-        //                    break;
-        //                }
-        //                //  we need a monster;
-        //                //  PrintTheMonster(pos_x, pos_y);
-        //                Game.player.PrintMonster(Game.player.pos_x, Game.player.pos_y);
-
-        //                // fight first, then run
-        //                lock (Game.printlock)
-        //                {
-        //                    if (Game.dist.distance < 4)
-        //                    {
-        //                        Game.player.Fight(Game.player);
-        //                        // Game.player.HitMonster(Game.playerStats, Game.enemyStats, true);
-        //                    }
-        //                }
-
-        //                int[] nextStep = new int[2];
-
-        //                int[] me = new int[2];
-        //                me[0] = Game.player.pos_x;
-        //                me[1] = Game.player.pos_y;
-
-        //                int[] him = new int[2];
-        //                me[0] = Game.enemy.monster.pos_x;
-        //                me[1] = Game.enemy.monster.pos_y;
-
-        //                nextStep = Monster.GetCloser(Game.player, Game.enemy.monster);
-
-        //                lock (Game.printlock)
-        //                {
-        //                    // Hier weitermachen
-        //                    // Check, if we are running out of bounce;
-        //                    Game.player.HideMonster(me[0], me[1]);
-        //                    Game.player.pos_x += nextStep[0];
-        //                    Game.player.pos_y += nextStep[1];
-        //                }
-        //            } // end of else
-        //        } // end of while
-
-        //    } // end of try
-        //    catch (ThreadAbortException ex)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine("Catch: PlayTheGame " + ex);
-        //    }
-
-
-        //} // end of function
 
         public static Timer startAutoplayTimer;
 
@@ -863,7 +792,6 @@ namespace MonsterHunter
                 System.Diagnostics.Debug.WriteLine("Catch: StartAutoplayTimer " + ex);
             }
         }
-
 
 
         public static void PlayThePlayer(Object _stateInfo)

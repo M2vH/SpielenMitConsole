@@ -68,6 +68,8 @@ namespace MonsterHunter
                     Game.modifications.SetDefense();
                     Game.modifications.SetSpeed();
 
+                    Game.isModyfied = true;
+
                     // Console.ReadLine();
                 }
 

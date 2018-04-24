@@ -41,6 +41,10 @@ namespace MonsterHunter
             else
             {
                 hPoints -= absoluteDamage;
+
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("absolute Damage:  -" + absoluteDamage + " healthpoints.");
+#endif
             }
         }
         public int GetHPoints()
