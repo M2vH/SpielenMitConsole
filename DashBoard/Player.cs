@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonsterHunter
 {
-    struct Player
+    class Player
     {
         /// <summary>
         /// Create a player out of parts as parameter 
