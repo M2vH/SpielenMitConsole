@@ -149,7 +149,7 @@ namespace MonsterHunter
         //}
 
         /// <summary>
-        /// Print the ASCII text at given position
+        /// Print the ASCII text at given randomPosition
         /// <remarks>...fills the spaces in text strings with random symbol
         /// and centers the text.</remarks>
         /// </summary>
@@ -252,24 +252,24 @@ namespace MonsterHunter
                 dancer_2.InitDancer(Game.angry, "[ A ]");
                 dancer_3.InitDancer(Game.frodo, "[ F ]");
 
-                dancer_1.isEnemy.monster.pos_x = 19;
-                dancer_2.isEnemy.monster.pos_x = 50;
-                dancer_3.isEnemy.monster.pos_x = 75;
+                dancer_1.isEnemy.pos_x = 19;
+                dancer_2.isEnemy.pos_x = 50;
+                dancer_3.isEnemy.pos_x = 75;
 
-                dancer_1.isEnemy.monster.pos_y = 10;
-                dancer_2.isEnemy.monster.pos_y = 10;
-                dancer_3.isEnemy.monster.pos_y = 10;
+                dancer_1.isEnemy.pos_y = 10;
+                dancer_2.isEnemy.pos_y = 10;
+                dancer_3.isEnemy.pos_y = 10;
 
                 AutoResetEvent danceReset = new AutoResetEvent(true);
-                var dance = new Timer(dancer_1.isEnemy.monster.DanceTheMonster, danceReset, 330, 2117);
+                var dance = new Timer(dancer_1.isEnemy.DanceTheMonster, danceReset, 330, 2117);
                 danceReset.Set();
 
                 AutoResetEvent danceReset2 = new AutoResetEvent(true);
-                var dance2 = new Timer(dancer_2.isEnemy.monster.DanceTheMonster, danceReset2, 660, 2357);
+                var dance2 = new Timer(dancer_2.isEnemy.DanceTheMonster, danceReset2, 660, 2357);
                 danceReset2.Set();
 
                 AutoResetEvent danceReset3 = new AutoResetEvent(true);
-                var dance3 = new Timer(dancer_3.isEnemy.monster.DanceTheMonster, danceReset3, 990, 2579);
+                var dance3 = new Timer(dancer_3.isEnemy.DanceTheMonster, danceReset3, 990, 2579);
                 danceReset3.Set();
 
                 return new Timer[] { dance, dance2, dance3 };

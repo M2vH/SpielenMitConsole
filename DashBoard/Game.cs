@@ -170,7 +170,7 @@ namespace MonsterHunter
         {
             rounds = 0;
             playerStats = Game.player.outfit.stats;
-            enemyStats = Game.enemy.monster.outfit.stats;
+            enemyStats = Game.enemy.outfit.stats;
         }
 
         public static void UpdateStats(Stats _player, Stats _enemy)
@@ -332,7 +332,7 @@ namespace MonsterHunter
             {
                 winner = player;
                 // Hide the looser
-                enemy.monster.HideMonster(enemy.monster.pos_x, enemy.monster.pos_y);
+                enemy.HideMonster(enemy.pos_x, enemy.pos_y);
                 // Display the player again to avoid fractals
                 player.PrintMonster();
 
@@ -345,14 +345,14 @@ namespace MonsterHunter
             }
             else
             {
-                winner = enemy.monster;
+                winner = enemy as Monster;
                 player.HideMonster(player.pos_x, player.pos_y);
                 // Even he is hidden, we must put him aside.
                 player.pos_x = 10;
                 player.pos_y = 10;
 
                 // display winner to avoid fractals
-                enemy.monster.PrintMonster();
+                enemy.PrintMonster();
 
                 //Dancer dancingWinner = new Dancer();
                 //dancingWinner.InitDancer(enemy.monster.outfit, "");
@@ -457,12 +457,13 @@ namespace MonsterHunter
             *  we need a callback
             *  MoveTheMonster(isEnemy, 500, 500);
             */
-            Game.enemy = new Enemy();
-            Game.enemy.CreateEnemyFromOponent();
+            Game.enemy = new Enemy(player);
+
+            //Game.enemy.CreateEnemyFromOponent();
 #if DEBUG
-            Game.enemy.monster.outfit.stats.SetHPoints(reduction);
+            Game.enemy.outfit.stats.SetHPoints(reduction);
 #endif
-            Game.enemy.monster.PrintMonster();
+            Game.enemy.PrintMonster();
 
             winner = new Monster();
         }
@@ -939,7 +940,7 @@ namespace MonsterHunter
                     //him[0] = isEnemy.monster.pos_x;
                     //him[1] = isEnemy.monster.pos_y;
 
-                    nextStep = Monster.GetCloser(player, enemy.monster);
+                    nextStep = Monster.GetCloser(player as Monster, enemy as Monster);
 
                     lock (printlock)
                     {

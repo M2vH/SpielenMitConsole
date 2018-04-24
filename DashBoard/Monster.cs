@@ -14,21 +14,21 @@ namespace MonsterHunter
         /// <summary>
         /// The x of top left coordinates of the monster print.
         /// </summary>
-        /// <remarks>Is relative to monster position</remarks>
+        /// <remarks>Is relative to monster randomPosition</remarks>
         int start_x;
         /// <summary>
         /// The y of top left coordinates of the monster print.
         /// </summary>
-        /// <remarks>Is relative to monster position</remarks>
+        /// <remarks>Is relative to monster randomPosition</remarks>
         int start_y;
 
-        // store actual position of monster
+        // store actual randomPosition of monster
         /// <summary>
         /// Store actual x position
         /// </summary>
         public int pos_x;
         /// <summary>
-        /// Store actual x position
+        /// Store actual x randomPosition
         /// </summary>
         public int pos_y;
 
@@ -53,13 +53,13 @@ namespace MonsterHunter
         //  print a monster at pos x,y
         //  lock the printing of a Monster 
         /// <summary>
-        /// Print the monster at position
+        /// Print the monster at randomPosition
         /// </summary>
         /// <param name="x">x-coordinate of monster center</param>
         /// <param name="y">y-coordinate of monster center</param>
         public void PrintMonster(int x, int y)
         {
-            // store aktual position of monster
+            // store aktual randomPosition of monster
             pos_x = x;
             pos_y = y;
             // set cursor to top left corner of monster
@@ -100,7 +100,7 @@ namespace MonsterHunter
                 //      print legs
                 Console.Write(parts[2]);
 
-                // [4] set cursor position back to params
+                // [4] set cursor randomPosition back to params
                 Console.SetCursorPosition(pos_x, pos_y);
 
                 // [5] set cursorColor back
@@ -111,7 +111,7 @@ namespace MonsterHunter
 
         public void PrintDancingMonster(int x, int y)
         {
-            // store aktual position of monster
+            // store aktual randomPosition of monster
             pos_x = x;
             pos_y = y;
             // set cursor to top left corner of monster
@@ -160,7 +160,7 @@ namespace MonsterHunter
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.Write(name);
                 Console.BackgroundColor = ConsoleColor.Black;
-                // [5] set cursor position back to params
+                // [5] set cursor randomPosition back to params
                 Console.SetCursorPosition(pos_x, pos_y);
 
                 // [6] set cursorColor back
@@ -171,7 +171,7 @@ namespace MonsterHunter
 
         // print a monster and return true when printed;
         /// <summary>
-        /// Print the monster at stored position
+        /// Print the monster at stored randomPosition
         /// </summary>
         /// <returns></returns>
         public void PrintMonster()
@@ -193,10 +193,10 @@ namespace MonsterHunter
         /// <summary>
         /// Hide the monster
         /// </summary>
-        /// <remarks>Hide the monster by re-printing background at given position.
+        /// <remarks>Hide the monster by re-printing background at given randomPosition.
         /// Locks the Thread while printing.</remarks>
-        /// <param name="x">x-coordinate of monster position</param>
-        /// <param name="y">y-coordinate of monster position</param>
+        /// <param name="x">x-coordinate of monster randomPosition</param>
+        /// <param name="y">y-coordinate of monster randomPosition</param>
         public void HideMonster(int x, int y)
         {
             // set cursor to top left corner of monster
@@ -227,7 +227,7 @@ namespace MonsterHunter
             //                 "     " + "#";
 
             var blanc_bg = parts.Split('#');
-            // set position of cursor after every printed part of monster
+            // set randomPosition of cursor after every printed part of monster
             // params are the middle of the monster
             // Set cursor to background color
 
@@ -256,7 +256,7 @@ namespace MonsterHunter
                 //      print legs
                 Console.Write(blanc_bg[2]);
 
-                // [4] set cursor position back to params
+                // [4] set cursor randomPosition back to params
                 Console.SetCursorPosition(pos_x, pos_y);
 
                 // [5] set CursorColor back to default
@@ -277,7 +277,7 @@ namespace MonsterHunter
             // set cursor to top left corner of monster
             cr = start_x;
             //lf = start_y;
-            // print the old position with spaces;
+            // print the old randomPosition with spaces;
             #region print with spaces
             for (int j = 0; j < 4; j++)
             {
@@ -294,7 +294,7 @@ namespace MonsterHunter
                     // Debug.WriteLine(testSign.Sign);
                     try
                     {
-                        // set cursor to position
+                        // set cursor to randomPosition
                         lock (Game.printlock)
                         {
                             Console.SetCursorPosition(start_x, start_y);
@@ -347,7 +347,7 @@ namespace MonsterHunter
                         // Debug.WriteLine(testSign.Sign);
                         try
                         {
-                            // set cursor to position
+                            // set cursor to randomPosition
                             Console.SetCursorPosition(start_x, start_y);
 
                         }
@@ -492,8 +492,8 @@ namespace MonsterHunter
             int[] move = { 0, 0 };
             int new_x = 0;
             int new_y = 0;
-            int pos_x = Game.enemy.monster.pos_x;
-            int pos_y = Game.enemy.monster.pos_y;
+            int pos_x = Game.enemy.pos_x;
+            int pos_y = Game.enemy.pos_y;
             // bool moveIsPossible = true;
 
             try
@@ -526,7 +526,7 @@ namespace MonsterHunter
                     // move = RandomWeightedMove();
 
                     // attack the player
-                    move = GetCloser(Game.enemy.monster, Game.player);
+                    move = GetCloser(Game.enemy as Monster, Game.player as Monster);
 
                     // erst hauen, dann laufen;
                     // und nur nebeneinander kämpfen;
@@ -539,9 +539,9 @@ namespace MonsterHunter
                         // int r = Game.random.Next(2, 14);
                         // if ((r % 2) == 0)
                         // {
-                        Game.enemy.monster.Fight(Game.enemy.monster);
+                        Game.enemy.Fight(Game.enemy);
                         // isEnemy.monster.HitMonster(enemyStats,playerStats);
-                        Game.enemy.monster.HitMonster(Game.playerStats, Game.enemyStats, false);
+                        Game.enemy.HitMonster(Game.playerStats, Game.enemyStats, false);
                         // Sound.PlaySound(1, Game.isEnemy.monster.outfit.FightSound);
                         // }
                     }
@@ -553,10 +553,10 @@ namespace MonsterHunter
                     if ((2 < new_x && new_x < Window.x - 3) && (Window.top + 1 < new_y && new_y < Window.y - 2))
                     {
                         // we are inside field
-                        Game.enemy.monster.HideMonster(Game.enemy.monster.pos_x, Game.enemy.monster.pos_y);
-                        Game.enemy.monster.pos_x += move[0];
-                        Game.enemy.monster.pos_y += move[1];
-                        Game.enemy.monster.PrintMonster();
+                        Game.enemy.HideMonster(Game.enemy.pos_x, Game.enemy.pos_y);
+                        Game.enemy.pos_x += move[0];
+                        Game.enemy.pos_y += move[1];
+                        Game.enemy.PrintMonster();
 
 
                         // check for health in case we had a fight;
@@ -737,15 +737,15 @@ namespace MonsterHunter
             // get all possible directions;
             Choice[] attack = Choice.goTo;
 
-            // get the position of opponent;
+            // get the randomPosition of opponent;
             target = new int[2];
             target[0] = Game.player.pos_x;
             target[1] = Game.player.pos_y;
 
-            // get own position
+            // get own randomPosition
             me = new int[2];
-            me[0] = Game.enemy.monster.pos_x;
-            me[1] = Game.enemy.monster.pos_y;
+            me[0] = Game.enemy.pos_x;
+            me[1] = Game.enemy.pos_y;
 
             // get actual distance
             distance = Game.dist.GetDistance(me, target);
@@ -756,7 +756,7 @@ namespace MonsterHunter
             int new_dist = 100;
             for (int i = 0; i < attack.Length; i++)
             {
-                // calculate next position
+                // calculate next randomPosition
                 new_me[0] = me[0] + attack[i].coord[0];
                 new_me[1] = me[1] + attack[i].coord[1];
                 new_dist = Game.dist.GetDistance(new_me, target);
@@ -780,12 +780,12 @@ namespace MonsterHunter
             // get all possible directions;
             Choice[] attack = Choice.goTo;
 
-            // get the position of opponent;
+            // get the randomPosition of opponent;
             target = new int[2];
             target[0] = _him.pos_x;
             target[1] = _him.pos_y;
 
-            // get own position
+            // get own randomPosition
             me = new int[2];
             me[0] = _me.pos_x;
             me[1] = _me.pos_y;
@@ -805,7 +805,7 @@ namespace MonsterHunter
                 int new_dist = 100;
                 for (int i = 0; i < attack.Length; i++)
                 {
-                    // calculate next position
+                    // calculate next randomPosition
                     new_me[0] = me[0] + attack[i].coord[0];
                     new_me[1] = me[1] + attack[i].coord[1];
                     new_dist = Game.dist.GetDistance(new_me, target);

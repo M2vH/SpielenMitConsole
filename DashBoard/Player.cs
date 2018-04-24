@@ -22,7 +22,7 @@ namespace MonsterHunter
 
 
         /*  <Monster> CreateMonster(Design _design, int _x, int _y, string _name)
-         *  Creates a Monster at a given position;
+         *  Creates a Monster at a given randomPosition;
          */
         /// <summary>
         /// Create a Monster out of a given Design at a given position.
@@ -57,7 +57,7 @@ namespace MonsterHunter
                 else
                 {
                     //else let the computer control the player player
-                    // set start position to random in left half of field;
+                    // set start randomPosition to random in left half of field;
                     Game.player.pos_x = Game.random.Next(15, (Window.x / 2 - 5));
                     Game.player.pos_y = Game.random.Next(Window.top + 5, (Window.y - 5));
 

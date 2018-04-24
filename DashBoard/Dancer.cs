@@ -12,9 +12,9 @@ namespace MonsterHunter
 
         public void InitDancer(Design design, string title)
         {
-            isEnemy = new Enemy();
-            isEnemy.CreateEnemyFromDesign(design, title, true);
-            isEnemy.monster.parts = design.designElements;
+            isEnemy = new Enemy(design, title, true);
+            // isEnemy.CreateEnemyFromDesign(design, title, true);
+            // isEnemy.monster.parts = design.designElements;
         }
     }
 }

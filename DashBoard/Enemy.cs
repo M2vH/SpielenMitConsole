@@ -7,48 +7,39 @@ using System.Threading;
 
 namespace MonsterHunter
 {
-    class Enemy
+    class Enemy : Monster
     {
-        // Enemy ist auch ein Monster
-        public Monster monster;
-        int[] position;
+        // Enemy is child of monster
+        // public Monster monster;
+        int[] randomPosition;
 
         // 
-        public void CreateEnemyFromDesign(Design _design, string _name)
+
+        public Enemy(Design _design, string _name, bool _everywhere)
         {
-            position = Monster.RandomStartPos();
-            monster = new Monster
-            {
-                outfit = _design,
-                name = _name,
-                pos_x = position[0], // Program.x / 3,
-                pos_y = position[1], // (Program.y + Program.top) / 2,
-
-            };
-
-            // return monster;
+            this.CreateEnemyFromDesign(_design, _name, _everywhere);
         }
 
         public void CreateEnemyFromDesign(Design _design, string _name, bool _everywhere)
         {
-            position = Monster.RandomStartPos(_everywhere);
-            monster = new Monster
-            {
-                outfit = _design,
-                name = _name,
-                pos_x = position[0], // Program.x / 3,
-                pos_y = position[1], // (Program.y + Program.top) / 2,
-
-            };
+            randomPosition = RandomStartPos(_everywhere);
+            //monster = new Monster
+            //{
+            outfit = _design; // ,
+            name = _name;   //,
+            pos_x = randomPosition[0];  //, // Program.x / 3,
+            pos_y = randomPosition[1];  //, // (Program.y + Program.top) / 2,
+            parts = _design.designElements;
+            //};
 
             // return monster;
         }
 
-        public void CreateEnemyFromOponent()
-        {
-            position = Monster.RandomStartPos();
-            monster = Enemy.CreateEnemy(Game.player);
-        }
+        //public void CreateEnemyFromOponent()
+        //{
+        //    randomPosition = RandomStartPos();
+        //    monster = CreateEnemy(Game.player);
+        //}
 
         //  The Enemy Timer objects;
         /// <summary>
@@ -92,7 +83,7 @@ namespace MonsterHunter
             try
             {
                 // Enemy.StartEnemyTimer(500);
-                Enemy.StartEnemyTimer(Game.enemy.monster.outfit.stats.sPoints);
+                Enemy.StartEnemyTimer(Game.enemy.outfit.stats.sPoints);
 
             }
             catch (ThreadAbortException ex)
@@ -107,7 +98,7 @@ namespace MonsterHunter
             try
             {
                 // Program.theEnemy.Join();
-                Game.enemy.monster.HideMonster(Game.enemy.monster.pos_x, Game.enemy.monster.pos_y);
+                Game.enemy.HideMonster(Game.enemy.pos_x, Game.enemy.pos_y);
                 Game.keepAlive = false;
 
             }
@@ -123,10 +114,10 @@ namespace MonsterHunter
         /// <summary>
         /// Create an isEnemy different from Player
         /// </summary>
-        /// <remarks>Set isEnemy start position to random position</remarks>
+        /// <remarks>Set isEnemy start randomPosition to random randomPosition</remarks>
         /// <param name="_player">The player monster</param>
         /// <returns>Returns a monster different than parameter</returns>
-        public static Monster CreateEnemy(Monster _player)
+        public static Monster CreateEnemy(Player _player)
         {
             //  get the design of player
             //  and select a different one
@@ -138,13 +129,33 @@ namespace MonsterHunter
                 enemyDesign = Game.theDesigns[id];
             }
 
-            // store a random start position
-            int[] here = Monster.RandomStartPos();
+            // store a random start randomPosition
+            int[] here = RandomStartPos();
             Monster enemy = Player.CreateMonster(enemyDesign, here[0], here[1], "The incredible " + enemyDesign.designName);
             return enemy;
         }
 
+        public Enemy(Player _player)
+        {
+            //  get the design of player
+            //  and select a different one
+            int id = 0;
+            Design enemyDesign = Game.theDesigns[id];
+            while (enemyDesign.designName == _player.outfit.designName)
+            {
+                id = Game.random.Next(Game.theDesigns.Length - 1);
+                enemyDesign = Game.theDesigns[id];
+            }
 
+            this.outfit = enemyDesign;
+
+            // store a random start randomPosition
+            int[] here = RandomStartPos();
+            this.pos_x = here[0];
+            this.pos_y = here[1];
+            this.name = "The incredible " + enemyDesign.designName;
+
+        }
 
 
 

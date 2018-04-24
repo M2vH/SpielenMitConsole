@@ -156,7 +156,7 @@ namespace MonsterHunter
 
             //Console.SetCursorPosition(center, 2);
             //Console.Write(centertext);
-            CenterText(2, "You fight against: " + Game.enemy.monster.name);
+            CenterText(2, "You fight against: " + Game.enemy.name);
             DrawBox(3);
 
             DrawLine(4);
