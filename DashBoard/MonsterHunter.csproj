@@ -109,17 +109,17 @@
   <ItemGroup>
     <Compile Include="Layout\Background.cs" />
     <Compile Include="Helper\Choice.cs" />
-    <Compile Include="Dancer.cs" />
+    <Compile Include="TheMonster\Dancer.cs" />
     <Compile Include="Layout\Dashboard.cs" />
     <Compile Include="Helper\Difficulty.cs" />
     <Compile Include="Helper\Distance.cs" />
-    <Compile Include="Enemy.cs" />
+    <Compile Include="TheMonster\Enemy.cs" />
     <Compile Include="Helper\Direction.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Layout\InputRequest.cs" />
-    <Compile Include="Monster.cs" />
+    <Compile Include="TheMonster\Monster.cs" />
     <Compile Include="Helper\Design.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="TheMonster\Player.cs" />
     <Compile Include="Screens\ScreenPlayerMod.cs" />
     <Compile Include="Screens\ScreenChoose.cs" />
     <Compile Include="Screens\ScreenWelcome.cs" />

@@ -16,7 +16,9 @@ namespace MonsterHunter
         /// </summary>
         public static ConsoleKey choosenPlayer;
 
-
+        /// <summary>
+        /// Stores the key input.
+        /// </summary>
         public static ConsoleKey keyPressed;
 
         /// <summary>
@@ -24,6 +26,9 @@ namespace MonsterHunter
         /// </summary>
         public static ConsoleKey modInput;
 
+        /// <summary>
+        /// An instance of the PlayerModification 
+        /// </summary>
         public static ScreenPlayerMod modifications = new ScreenPlayerMod();
 
         /// <summary>
@@ -127,20 +132,26 @@ namespace MonsterHunter
                                         arg1: (remainTime / 60).ToString(),
                                         arg2: (remainTime % 60).ToString("D2"));
 
-            // Clear the dashboard with Key.Space
+            // Clear the dashboard by printing Key.Space
             string clear = String.Format("{0,50}", " ");
             Dashboard.CenterText(2, clear);
 
             // print the Countdown in the center of our dashboard
             Dashboard.CenterText(2, timeText);
 
-            // We send signals to waiting threads
+            // We want to send signals to waiting threads
             AutoResetEvent secondAuto = (AutoResetEvent)stateInfo;
 
             if (invokeCount == maxCount)    // the time has run out; 
             {
+                // tell waiting threads to continue work;
+                // we are done;
                 secondAuto.Set();
+                // Abort the Countdown Timer Thread
                 KillCountdown();
+
+                // ToDo: Funktionality when timer runs out;
+                // Ex: Check remaining stats and proclaim winner;
             }
         }
 
