@@ -83,28 +83,27 @@ namespace MonsterHunter
             // we start a Countdown Timer
             Game.StartCountdown();
 
-
             // next time we call it GameLoop
-            // PlayTheGame(player);
-            // we start a seperate Thread;
+            // we start seperate Threads;
             theEnemyThread.Name = "EnemyThread";
             theEnemyThread.Start();
 
             thePlayerThread.Name = "PlayerThread";
             thePlayerThread.Start();
 
-            // theEnemyThread.Join();
-            // thePlayerThread.Join();
-
             // The Game is running
             // Wait for the threads to finish
             // Added a return in the functions called by threads.
+
             // Thread.Join() doesnt work, 
+            // theEnemyThread.Join();
+            // thePlayerThread.Join();
+
             // cause thread starts timer thread
             // and AutoResetEvent gives us time back;
             while (Game.keepAlive)
             {
-
+                // we keep the main thread alive
             }
 
             Game.CloseTheGame();
