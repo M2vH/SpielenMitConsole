@@ -410,17 +410,17 @@ namespace MonsterHunter
             switch (Game.choosenPlayer)
             {
                 case ConsoleKey.A:
-                    Game.player = Player.CreatePlayer(theDesigns[2], theDesigns[2].designName);
+                    Game.player = Player.CreateMonster(theDesigns[2], theDesigns[2].designName);
                     break;
                 case ConsoleKey.F:
-                    Game.player = Player.CreatePlayer(theDesigns[1], theDesigns[1].designName);
+                    Game.player = Player.CreateMonster(theDesigns[1], theDesigns[1].designName);
                     break;
                 case ConsoleKey.G:
-                    Game.player = Player.CreatePlayer(theDesigns[0], theDesigns[0].designName);
+                    Game.player = Player.CreateMonster(theDesigns[0], theDesigns[0].designName);
                     break;
                 default:
                     int r = random.Next(0, theDesigns.Length);
-                    Game.player = Player.CreatePlayer(theDesigns[r], theDesigns[r].designName);
+                    Game.player = Player.CreateMonster(theDesigns[r], theDesigns[r].designName);
                     break;
             }
 

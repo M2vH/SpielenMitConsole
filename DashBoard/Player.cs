@@ -9,9 +9,21 @@ namespace MonsterHunter
 {
     class Player : Monster
     {
-        
-        /*  Function <Monster>CreatePlayer(Design _design, string _name)
+        // A constructor
+        public Player(Design _design, string _name)
+        {
+            outfit = _design;
+            name = _name;
+            pos_x = Window.x / 3;
+            pos_y = (Window.y + Window.top) / 2;
+            parts = _design.designElements;
+        }
+
+
+        /*  Function <Monster>CreateMonster(Design _design, string _name)
          *  Creates a gamer player with a given <Design> at default position
+         *  
+         *  we use constructor above;
          */
         /// <summary>
         /// Create a Monster out of a Design
@@ -19,7 +31,7 @@ namespace MonsterHunter
         /// <param name="_design">The Design</param>
         /// <param name="_name">The name</param>
         /// <returns></returns>
-        public static Monster CreatePlayer(Design _design, string _name)
+        public static Monster CreateMonster(Design _design, string _name)
         {
             Monster player = new Monster
             {
@@ -33,7 +45,7 @@ namespace MonsterHunter
             return player;
         }
 
-        /*  <Monster> CreatePlayer(Design _design, int _x, int _y, string _name)
+        /*  <Monster> CreateMonster(Design _design, int _x, int _y, string _name)
          *  Creates a Monster at a given position;
          */
         /// <summary>
@@ -44,7 +56,7 @@ namespace MonsterHunter
         /// <param name="_y">The y-Coordinate of the position</param>
         /// <param name="_name">The name displayed at the end of the game.</param>
         /// <returns></returns>
-        public static Monster CreatePlayer(Design _design, int _x, int _y, string _name)
+        public static Monster CreateMonster(Design _design, int _x, int _y, string _name)
         {
             Monster monster = new Monster
             {

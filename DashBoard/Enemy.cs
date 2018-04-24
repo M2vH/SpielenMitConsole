@@ -140,7 +140,7 @@ namespace MonsterHunter
 
             // store a random start position
             int[] here = Monster.RandomStartPos();
-            Monster enemy = Player.CreatePlayer(enemyDesign, here[0], here[1], "The incredible " + enemyDesign.designName);
+            Monster enemy = Player.CreateMonster(enemyDesign, here[0], here[1], "The incredible " + enemyDesign.designName);
             return enemy;
         }
 
