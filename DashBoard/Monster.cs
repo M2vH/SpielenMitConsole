@@ -540,9 +540,9 @@ namespace MonsterHunter
                         // if ((r % 2) == 0)
                         // {
                         Game.enemy.Fight(Game.enemy);
-                        // isEnemy.monster.HitMonster(enemyStats,playerStats);
+                        // asDancer.monster.HitMonster(enemyStats,playerStats);
                         Game.enemy.HitMonster(Game.playerStats, Game.enemyStats, false);
-                        // Sound.PlaySound(1, Game.isEnemy.monster.outfit.FightSound);
+                        // Sound.PlaySound(1, Game.asDancer.monster.outfit.FightSound);
                         // }
                     }
                     new_x = pos_x + move[0];

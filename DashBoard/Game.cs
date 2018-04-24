@@ -67,7 +67,7 @@ namespace MonsterHunter
         public static object printlock = new object();
 
         /// <summary>
-        /// An object to store the distance between player and isEnemy.
+        /// An object to store the distance between player and asDancer.
         /// </summary>
         public static Distance dist = new Distance();
 
@@ -310,7 +310,7 @@ namespace MonsterHunter
         /// </summary>
         public static void CloseTheGame()
         {
-            // stop the isEnemy timer
+            // stop the asDancer timer
             Enemy.enemyTimer.Dispose();
             // stop the player timer
             // check if Timer object exists
@@ -356,11 +356,11 @@ namespace MonsterHunter
 
                 //Dancer dancingWinner = new Dancer();
                 //dancingWinner.InitDancer(enemy.monster.outfit, "");
-                //dancingWinner.isEnemy.monster.pos_x = enemy.monster.pos_x;
-                //dancingWinner.isEnemy.monster.pos_y = enemy.monster.pos_y;
+                //dancingWinner.asDancer.monster.pos_x = enemy.monster.pos_x;
+                //dancingWinner.asDancer.monster.pos_y = enemy.monster.pos_y;
 
                 //AutoResetEvent winnerReset = new AutoResetEvent(true);
-                //Timer dancer = new Timer(dancingWinner.isEnemy.monster.DanceTheMonster, winnerReset, 0, 1111);
+                //Timer dancer = new Timer(dancingWinner.asDancer.monster.DanceTheMonster, winnerReset, 0, 1111);
                 //winnerReset.Set();
             }
 
@@ -392,9 +392,9 @@ namespace MonsterHunter
         }
 
         /// <summary>
-        /// Inits a player and his isEnemy
+        /// Inits a player and his asDancer
         /// </summary>
-        /// <remarks>The player is random and the isEnemy is different than player</remarks>
+        /// <remarks>The player is random and the asDancer is different than player</remarks>
         public static void InitPlayerAndEnemy()
         {
             //  [2]...from random design
@@ -438,24 +438,24 @@ namespace MonsterHunter
             Game.player.outfit.stats.SetHPoints(reduction);
 #endif
 
-            /* Create an isEnemy...
+            /* Create an asDancer...
             *  [1] this works
-            *  isEnemy = CreateEnemy(player);
+            *  asDancer = CreateEnemy(player);
             *  ...and print it;
-            *  isEnemy.PrintMonster();
+            *  asDancer.PrintMonster();
             *
             *  [2] test the <struct>Enemy
-            *  Enemy isEnemy = new Enemy();  // This works
-            *  isEnemy = new Enemy();    
+            *  Enemy asDancer = new Enemy();  // This works
+            *  asDancer = new Enemy();    
             *  [2.1] CreateEnemyFromDesign
-            *  isEnemy.CreateEnemyFromDesign(angry, "The angry"); // This works
-            *  isEnemy.CreateEnemyFromOponent();
+            *  asDancer.CreateEnemyFromDesign(angry, "The angry"); // This works
+            *  asDancer.CreateEnemyFromOponent();
 
             *  [3] Print the Enemy
-            *  isEnemy.monster.PrintMonster();
+            *  asDancer.monster.PrintMonster();
 
             *  we need a callback
-            *  MoveTheMonster(isEnemy, 500, 500);
+            *  MoveTheMonster(asDancer, 500, 500);
             */
             Game.enemy = new Enemy(player);
 
@@ -498,8 +498,8 @@ namespace MonsterHunter
                         // we stop the countdown
                         Game.KillCountdown();
 
-                        // we DONT stop the isEnemy, because his thread will run
-                        // until isEnemy is looser.
+                        // we DONT stop the asDancer, because his thread will run
+                        // until asDancer is looser.
                         //StopEnemy();
 
                         // dont display a dead player
@@ -596,7 +596,7 @@ namespace MonsterHunter
                                     {
                                         play = false;
                                         Game.KillCountdown();
-                                        // Stop the isEnemy's moving
+                                        // Stop the asDancer's moving
                                         Enemy.enemyTimer.Change(0, 2000);
                                         Game.CloseTheGame();
                                         break;
@@ -776,8 +776,8 @@ namespace MonsterHunter
         //                // we stop the countdown
         //                Game.KillCountdown();
 
-        //                // we DONT stop the isEnemy, because his thread will run
-        //                // until isEnemy is looser.
+        //                // we DONT stop the asDancer, because his thread will run
+        //                // until asDancer is looser.
         //                //StopEnemy();
 
         //                // dont display a dead player
@@ -889,7 +889,7 @@ namespace MonsterHunter
                     // I stop the countdown
                     KillCountdown();
 
-                    // I DONT stop the isEnemy, because his thread will 
+                    // I DONT stop the asDancer, because his thread will 
                     // check for his own.
                     // Enemy.StopEnemy();
 
@@ -937,8 +937,8 @@ namespace MonsterHunter
                     //me[1] = player.pos_y;
 
                     //int[] him = new int[2];
-                    //him[0] = isEnemy.monster.pos_x;
-                    //him[1] = isEnemy.monster.pos_y;
+                    //him[0] = asDancer.monster.pos_x;
+                    //him[1] = asDancer.monster.pos_y;
 
                     nextStep = Monster.GetCloser(player as Monster, enemy as Monster);
 

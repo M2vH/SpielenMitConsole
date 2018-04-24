@@ -43,12 +43,12 @@ namespace MonsterHunter
 
         //  The Enemy Timer objects;
         /// <summary>
-        /// The Timer object for isEnemy movement
+        /// The Timer object for asDancer movement
         /// </summary>
         public static Timer enemyTimer;
 
         /// <summary>
-        /// The callback when isEnemy move event is ready
+        /// The callback when asDancer move event is ready
         /// </summary>
         static AutoResetEvent resetEnemyTimer = new AutoResetEvent(true);
 
@@ -75,11 +75,11 @@ namespace MonsterHunter
         }
 
         /// <summary>
-        /// The delegate for the isEnemy thread
+        /// The delegate for the asDancer thread
         /// </summary>
         public static void StartEnemy()
         {
-            // Start the timerbased isEnemy movement
+            // Start the timerbased asDancer movement
             try
             {
                 // Enemy.StartEnemyTimer(500);
@@ -112,9 +112,9 @@ namespace MonsterHunter
         }
 
         /// <summary>
-        /// Create an isEnemy different from Player
+        /// Create an asDancer different from Player
         /// </summary>
-        /// <remarks>Set isEnemy start randomPosition to random randomPosition</remarks>
+        /// <remarks>Set asDancer start randomPosition to random randomPosition</remarks>
         /// <param name="_player">The player monster</param>
         /// <returns>Returns a monster different than parameter</returns>
         public static Monster CreateEnemy(Player _player)

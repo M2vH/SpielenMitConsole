@@ -42,7 +42,7 @@ namespace MonsterHunter
             // hide the cursor
             Console.CursorVisible = false;
 
-            // we init the movement goTo of the isEnemy
+            // we init the movement goTo of the asDancer
             Choice.InitChoices();
 
             // Printing a welcome
