@@ -44,12 +44,12 @@ namespace MonsterHunter
             // we init the movement goTos for the enemy.asDancer
             Choice.InitChoices();
 
+            // say Hello to the player
             ScreenWelcome.Show();
 
-
+            // let the player choose his monster
+            // and make user input possible
             ScreenChoose.Show();
-
-
 
             // Game is now ready for the action;
             // we print a background in the field
@@ -99,7 +99,7 @@ namespace MonsterHunter
             // theEnemyThread.Join();
             // thePlayerThread.Join();
 
-            // cause thread starts timer thread
+            // cause threads start timer threads
             // and AutoResetEvent gives us time back;
             while (Game.keepAlive)
             {

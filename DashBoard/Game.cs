@@ -183,7 +183,14 @@ namespace MonsterHunter
 
         #region Display the Statistics
 
+        /// <summary>
+        /// A place to store the player statistics (health points).
+        /// </summary>
         public static Stats playerStats;    //  = new Stats();
+
+        /// <summary>
+        /// A place to store the player statistics (health points).
+        /// </summary>
         public static Stats enemyStats;     //   = new Stats();
 
         public static void InitStats()
@@ -342,9 +349,9 @@ namespace MonsterHunter
                 Console.ForegroundColor = backup;
             }
         }
+
+
         #endregion
-
-
 
         /// <summary>
         /// Closing the game. Display "Press any key...".
