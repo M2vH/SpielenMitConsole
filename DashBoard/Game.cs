@@ -171,13 +171,17 @@ namespace MonsterHunter
         public static void InitStats()
         {
             rounds = 0;
-            playerStats = Game.player.outfit.stats;
+            // playerStats = Game.player.outfit.stats;
 
             playerStats.aPoints = Game.modifications.Attack;
             playerStats.dPoints = Game.modifications.Defense;
             playerStats.sPoints = Game.modifications.Speed;
+            playerStats.hPoints = Game.player.outfit.stats.GetHPoints();
 
-            enemyStats = Game.enemy.outfit.stats;
+            enemyStats.aPoints = Game.enemy.outfit.stats.aPoints;
+            enemyStats.dPoints = Game.enemy.outfit.stats.dPoints;
+            enemyStats.sPoints = Game.enemy.outfit.stats.sPoints;
+            enemyStats.hPoints = Game.enemy.outfit.stats.GetHPoints();
         }
 
         public static void UpdateStats(Stats _player, Stats _enemy)

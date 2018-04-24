@@ -33,32 +33,20 @@ namespace MonsterHunter
         /// <param name="_damage">amount of healthpoints to reduce</param>
         public void SetHPoints(int _damage)
         {
-            if (hPoints < _damage)
+            int absoluteDamage = Math.Abs(_damage);
+            if (hPoints < absoluteDamage)
             {
                 hPoints = 0;
             }
             else
             {
-                hPoints -= _damage;
+                hPoints -= absoluteDamage;
             }
         }
         public int GetHPoints()
         {
             return hPoints;
         }
-
-        // public int HPoints { get => hPoints; set => hPoints = value; }
-        //public int HPoints
-        //{
-        //    get
-        //    {
-        //        return hPoints;
-        //    }
-        //    set
-        //    {
-        //        hPoints = value;
-        //    }
-        //}
 
 
         /// <summary>
