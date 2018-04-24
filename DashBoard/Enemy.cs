@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace MonsterHunter
 {
-    struct Enemy
+    class Enemy
     {
         // Enemy ist auch ein Monster
         public Monster monster;

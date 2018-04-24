@@ -407,7 +407,7 @@ namespace MonsterHunter
 
             }
             // switch on ConsoleKey case [A]ngry , [F]rodo , [G]oblin
-            // ToDo: use constructor instead;
+            // we use constructor;
             switch (Game.choosenPlayer)
             {
                 case ConsoleKey.A:
@@ -463,6 +463,8 @@ namespace MonsterHunter
             Game.enemy.monster.outfit.stats.SetHPoints(reduction);
 #endif
             Game.enemy.monster.PrintMonster();
+
+            winner = new Monster();
         }
 
         /// <summary>

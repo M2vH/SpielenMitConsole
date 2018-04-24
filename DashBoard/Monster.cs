@@ -661,11 +661,11 @@ namespace MonsterHunter
 
             // pos x min/max
             int x_min = Window.x / 2 + 4;  // 4 steps right from middle
-            int x_max = Window.x - 4;      // 4 steps left from outer right
+            int x_max = Window.x - 15;      // 15 steps left from outer right
 
             // pos y min/max
             int y_min = 8;          // 4 steps below top // ToDo: set dynamic ??
-            int y_max = Window.y - 4;      // 4 steps above bottom
+            int y_max = Window.y - 6;      // 6 steps above bottom
 
             start[0] = Game.random.Next(x_min, x_max);
             start[1] = Game.random.Next(y_min, y_max);
