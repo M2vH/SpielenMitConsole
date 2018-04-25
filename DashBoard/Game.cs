@@ -874,7 +874,7 @@ namespace MonsterHunter
 
                     int[] nextStep = new int[2];
 
-                    // ToDo: fix strange movement
+                    //  Done: fix strange movement
                     //  by locking the calculation;
 
                     // put 'nextStep...' into lock(printlock)
@@ -884,7 +884,7 @@ namespace MonsterHunter
                     {
                         // new location
                         nextStep = Monster.GetCloser(player as Monster, enemy as Monster);
-                        // Todo: Weitermachen
+
                         player.HideMonster(player.pos_x, player.pos_y);
                         player.pos_x += nextStep[0];
                         player.pos_y += nextStep[1];

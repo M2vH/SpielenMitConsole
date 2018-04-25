@@ -7,8 +7,15 @@ using System.Threading;
 
 namespace MonsterHunter
 {
+    /// <summary>
+    /// The object to handle the user choice and input.
+    /// </summary>
     class ScreenChoose
     {
+        /// <summary>
+        /// Displays the 'Choose Monster' screen 
+        /// <remarks>...and handles the user input.</remarks>
+        /// </summary>
         public static void Show()
         {
             // Display "Choose"-Screen with dancing monster;
@@ -53,24 +60,15 @@ namespace MonsterHunter
 
                 if (Game.modInput == ConsoleKey.M)
                 {
-                    //string modAttack = "Enter value from 0 to 100:  ";
-                    //// we mod the player
-                    //// store the input
-                    //int attack = -1;
-                    //int defense = -1;
-                    //int speed;
-                    //attack = InputRequest.PrintModRequest("Attack - " + modAttack);
-                    //defense = InputRequest.PrintModRequest("Defense - " + modAttack);
-                    //speed = InputRequest.PrintModRequest("Speed - " + modAttack);
 
-                    // ToDo: Use the input values
+                    // Use the input values
                     Game.modifications.SetAttack();
                     Game.modifications.SetDefense();
                     Game.modifications.SetSpeed();
 
+                    // tell the game we have modifications
                     Game.isModyfied = true;
 
-                    // Console.ReadLine();
                 }
 
             }

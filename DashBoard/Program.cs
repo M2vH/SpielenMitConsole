@@ -35,7 +35,8 @@ namespace MonsterHunter
 
         static void Main(string[] args)
         {
-
+            // Init the game
+            // ToDo: make Game a class;
             Game.InitGame();
 
             // hide the cursor
