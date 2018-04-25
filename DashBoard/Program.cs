@@ -46,6 +46,7 @@ namespace MonsterHunter
 
 #if TEST
 
+
             // display the "M" and a Monster
             ScreenIcon.Show();
 
