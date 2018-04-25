@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Layout\Background.cs" />
     <Compile Include="Helper\Choice.cs" />
+    <Compile Include="Screens\ScreenIcon.cs" />
     <Compile Include="TheMonster\Dancer.cs" />
     <Compile Include="Layout\Dashboard.cs" />
     <Compile Include="Helper\Difficulty.cs" />
