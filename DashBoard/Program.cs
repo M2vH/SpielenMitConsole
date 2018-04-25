@@ -44,7 +44,12 @@ namespace MonsterHunter
             // we init the movement goTos for the enemy.asDancer
             Choice.InitChoices();
 
-            
+#if TEST
+
+            // display the "M" and a Monster
+            ScreenIcon.Show();
+
+#endif
             
             // say Hello to the player
             ScreenWelcome.Show();
@@ -69,7 +74,7 @@ namespace MonsterHunter
             // we print the starting stats
             Game.PrintStats(Game.playerStats, Game.enemyStats);
 
-            #region backgroundSong
+#region backgroundSong
             // test the sound
             // PlaySound(2);
 
@@ -80,7 +85,7 @@ namespace MonsterHunter
             // wir brauchen erst nen Song
             // InitASong();
             // PlayThisSong(theBackgroundSong);
-            #endregion
+#endregion
 
             // we start a Countdown Timer
             Game.StartCountdown();
