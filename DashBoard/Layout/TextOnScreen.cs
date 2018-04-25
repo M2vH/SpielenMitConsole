@@ -116,8 +116,8 @@ namespace MonsterHunter
                 {
                     Symbol symbol = new Symbol();
                     Console.SetCursorPosition(i, j);
-                    Console.ForegroundColor = (ConsoleColor)Game.random.Next(1, 7);
-                    storage = Fill[Game.random.Next(0, 4)];
+                    Console.ForegroundColor = (ConsoleColor)Game.rndm.Next(1, 7);
+                    storage = Fill[Game.rndm.Next(0, 4)];
                     Console.Write(storage);
                     symbol.Sign = storage;
                     symbol.Color = (int)Console.ForegroundColor;
@@ -157,11 +157,11 @@ namespace MonsterHunter
                 foreach (char symbol in symbols)
                 {
                     Console.SetCursorPosition(x++, y);
-                    Console.ForegroundColor = (ConsoleColor)Game.random.Next(1, 7);
+                    Console.ForegroundColor = (ConsoleColor)Game.rndm.Next(1, 7);
 
                     if (symbol == ' ')
                     {
-                        Console.Write(Fill[Game.random.Next(0, 5)]);
+                        Console.Write(Fill[Game.rndm.Next(0, 5)]);
                     }
                     else
                     {

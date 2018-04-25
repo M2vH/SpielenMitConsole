@@ -72,7 +72,7 @@ namespace MonsterHunter
         /// <summary>
         /// The Random object through out our game;
         /// </summary>
-        public static Random random = new Random();     // Make sure, we do it only once
+        public static Random rndm = new Random();     // Make sure, we do it only once
 
         /// <summary>
         /// The lock object to protect console printing
@@ -452,7 +452,7 @@ namespace MonsterHunter
                 // Implement random player monster
                 int[] playerKeys = new int[] { 65, 70, 71 };
                 choiceIsMade = true;
-                choosenPlayer = (ConsoleKey)playerKeys[random.Next(0, 2)];
+                choosenPlayer = (ConsoleKey)playerKeys[rndm.Next(0, 2)];
 
             }
             // switch on ConsoleKey case [A]ngry , [F]rodo , [G]oblin
@@ -469,7 +469,7 @@ namespace MonsterHunter
                     Game.player = new Player(theDesigns[0], theDesigns[0].designName);
                     break;
                 default:
-                    int r = random.Next(0, theDesigns.Length);
+                    int r = rndm.Next(0, theDesigns.Length);
                     Game.player = new Player(theDesigns[r], theDesigns[r].designName);
                     break;
             }
@@ -790,7 +790,7 @@ namespace MonsterHunter
 
         public static Timer startAutoplayTimer;
 
-        static AutoResetEvent resetAutoplayTimer = new AutoResetEvent(true);
+        // static AutoResetEvent resetAutoplayTimer = new AutoResetEvent(true);
 
         private static int rounds;
 
@@ -800,6 +800,8 @@ namespace MonsterHunter
         {
             try
             {
+                var resetAutoplayTimer = new AutoResetEvent(false);
+
                 startAutoplayTimer = new Timer(PlayThePlayer, resetAutoplayTimer, 1000, _millis);
                 // resetAutoplayTimer.WaitOne();
                 resetAutoplayTimer.WaitOne();
@@ -872,18 +874,16 @@ namespace MonsterHunter
 
                     int[] nextStep = new int[2];
 
-                    //int[] me = new int[2];
-                    //me[0] = player.pos_x;
-                    //me[1] = player.pos_y;
+                    // ToDo: fix strange movement
+                    //  by locking the calculation;
 
-                    //int[] him = new int[2];
-                    //him[0] = asDancer.monster.pos_x;
-                    //him[1] = asDancer.monster.pos_y;
-
-                    nextStep = Monster.GetCloser(player as Monster, enemy as Monster);
+                    // put 'nextStep...' into lock(printlock)
+                    // old location
 
                     lock (printlock)
                     {
+                        // new location
+                        nextStep = Monster.GetCloser(player as Monster, enemy as Monster);
                         // Todo: Weitermachen
                         player.HideMonster(player.pos_x, player.pos_y);
                         player.pos_x += nextStep[0];

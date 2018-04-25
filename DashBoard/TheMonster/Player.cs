@@ -58,8 +58,8 @@ namespace MonsterHunter
                 {
                     //else let the computer control the player player
                     // set start randomPosition to random in left half of field;
-                    Game.player.pos_x = Game.random.Next(15, (Window.x / 2 - 5));
-                    Game.player.pos_y = Game.random.Next(Window.top + 5, (Window.y - 5));
+                    Game.player.pos_x = Game.rndm.Next(25, (Window.x / 2 - 5));
+                    Game.player.pos_y = Game.rndm.Next(Window.top + 10, (Window.y - 10));
 
                     //// Test:
                     // Game.PlayThePlayer(Game.player); // works, but overloaded

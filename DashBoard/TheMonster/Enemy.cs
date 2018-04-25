@@ -125,7 +125,7 @@ namespace MonsterHunter
             Design enemyDesign = Game.theDesigns[id];
             while (enemyDesign.designName == _player.outfit.designName)
             {
-                id = Game.random.Next(Game.theDesigns.Length - 1);
+                id = Game.rndm.Next(Game.theDesigns.Length - 1);
                 enemyDesign = Game.theDesigns[id];
             }
 
@@ -143,7 +143,7 @@ namespace MonsterHunter
             Design enemyDesign = Game.theDesigns[id];
             while (enemyDesign.designName == _player.outfit.designName)
             {
-                id = Game.random.Next(Game.theDesigns.Length - 1);
+                id = Game.rndm.Next(Game.theDesigns.Length - 1);
                 enemyDesign = Game.theDesigns[id];
             }
 

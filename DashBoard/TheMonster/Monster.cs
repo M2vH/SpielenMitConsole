@@ -470,8 +470,8 @@ namespace MonsterHunter
             {
                 if (_oponent.aPoints > _me.dPoints)
                 {
-                damage = _oponent.aPoints - _me.dPoints;
-                _me.SetHPoints(damage);
+                    damage = _oponent.aPoints - _me.dPoints;
+                    _me.SetHPoints(damage);
                 }
 
 #if DEBUG
@@ -537,56 +537,64 @@ namespace MonsterHunter
                     //// next line(s) work
                     // move = RandomWeightedMove();
 
-                    // attack the player
-                    move = GetCloser(Game.enemy as Monster, Game.player as Monster);
+                    // ToDo: the thread problem
+                    //  #1
+                    //  put 'move...' into lock
 
-                    // erst hauen, dann laufen;
-                    // und nur nebeneinander kämpfen;
-#if DEBUG
-                    int test = Game.dist.CalcDistance_xy();
+                    lock (Game.printlock)
+                    {
+                        // attack the player
+                        move = GetCloser(Game.enemy as Monster, Game.player as Monster);
+
+
+                        // erst hauen, dann laufen;
+                        // und nur nebeneinander kämpfen;
+#if TEST
+                    int test1 = Game.dist.CalcDistance_xy();
                     int test2 = Game.dist.CalcDistance_y();
+                    Debug.WriteLine("Dist xy: {0}", test1);
+                    Debug.WriteLine("Dist  y: {0}", test2);
 #endif
-                    if (Game.dist.CalcDistance_xy() < 5 && Game.dist.CalcDistance_y() < 4)
-                    {
-                        // int r = Game.random.Next(2, 14);
-                        // if ((r % 2) == 0)
-                        // {
-                        Game.enemy.Fight(Game.enemy);
-                        // asDancer.monster.HitMonster(enemyStats,playerStats);
-                        Game.enemy.HitMonster(Game.playerStats, Game.enemyStats, false);
-                        // Sound.PlaySound(1, Game.asDancer.monster.outfit.FightSound);
-                        // }
+                        if (Game.dist.CalcDistance_xy() < 5 && Game.dist.CalcDistance_y() < 4)
+                        {
+                            Game.enemy.Fight(Game.enemy);
+                            Game.enemy.HitMonster(Game.playerStats, Game.enemyStats, false);
+                            // ToDo: Sound
+                            // play sound here;
+                        }
+                        new_x = pos_x + move[0];
+                        new_y = pos_y + move[1];
+
+                        // min_x < new_x < max_x
+                        // is next move inside the field?
+                        if ((3 < new_x && new_x < Window.x - 3) && (Window.top + 2 < new_y && new_y < Window.y - 3))
+                        {
+                            // we are inside field
+                            Game.enemy.HideMonster(Game.enemy.pos_x, Game.enemy.pos_y);
+                            Game.enemy.pos_x += move[0];
+                            Game.enemy.pos_y += move[1];
+                            Game.enemy.PrintMonster();
+
+                        }
+
                     }
-                    new_x = pos_x + move[0];
-                    new_y = pos_y + move[1];
+                    // end of lock
 
-                    // min_x < new_x < max_x
-                    // is next move inside the field?
-                    if ((2 < new_x && new_x < Window.x - 3) && (Window.top + 1 < new_y && new_y < Window.y - 2))
+                    // check for health in case we had a fight;
+                    // if both alive, print distance,
+                    if (Game.playerStats.GetHPoints() > 0 && Game.enemyStats.GetHPoints() > 0)
                     {
-                        // we are inside field
-                        Game.enemy.HideMonster(Game.enemy.pos_x, Game.enemy.pos_y);
-                        Game.enemy.pos_x += move[0];
-                        Game.enemy.pos_y += move[1];
-                        Game.enemy.PrintMonster();
+                        Game.dist.PrintTheDist();
+                        // break;
+                    }
+                    else
+                    {
+                        // one of us is dead
+                        Game.KillCountdown();
+                        Game.play = false;
 
-
-                        // check for health in case we had a fight;
-                        // if both alive, print distance,
-                        if (Game.playerStats.GetHPoints() > 0 && Game.enemyStats.GetHPoints() > 0)
-                        {
-                            Game.dist.PrintTheDist();
-                            // break;
-                        }
-                        else
-                        {
-                            // one of us is dead
-                            Game.KillCountdown();
-                            Game.play = false;
-
-                            // leave the loop;
-                            // break;
-                        }
+                        // leave the loop;
+                        // break;
                     }
                 }
 
@@ -611,7 +619,7 @@ namespace MonsterHunter
         static int[] RandomWeightedMove()
         {
             int[] goHere = new int[] { 0, 0 };
-            int selected = Game.random.Next(1, 20);
+            int selected = Game.rndm.Next(1, 20);
 
             if (selected >= 0 && selected < 3)  // 
             {
@@ -640,7 +648,7 @@ namespace MonsterHunter
         public static int[] RandomDanceMove()
         {
             int[] goHere = new int[] { 0, 0 };
-            int selected = Game.random.Next(0, 4);
+            int selected = Game.rndm.Next(0, 4);
 
             switch (selected)
             {
@@ -679,8 +687,8 @@ namespace MonsterHunter
             int y_min = 8;          // 4 steps below top // ToDo: set dynamic ??
             int y_max = Window.y - 6;      // 6 steps above bottom
 
-            start[0] = Game.random.Next(x_min, x_max);
-            start[1] = Game.random.Next(y_min, y_max);
+            start[0] = Game.rndm.Next(x_min, x_max);
+            start[1] = Game.rndm.Next(y_min, y_max);
 
             return start;
         }
@@ -697,8 +705,8 @@ namespace MonsterHunter
             int y_min = 8;          // 4 steps below top // ToDo: set dynamic ??
             int y_max = Window.y - 4;      // 4 steps above bottom
 
-            start[0] = Game.random.Next(x_min, x_max);
-            start[1] = Game.random.Next(y_min, y_max);
+            start[0] = Game.rndm.Next(x_min, x_max);
+            start[1] = Game.rndm.Next(y_min, y_max);
 
             return start;
         }
@@ -744,46 +752,47 @@ namespace MonsterHunter
         static int[] target;
         static int[] me;
         static int[] new_me;
-        public static int[] GetCloser()
-        {
-            // get all possible directions;
-            Choice[] attack = Choice.goTo;
 
-            // get the randomPosition of opponent;
-            target = new int[2];
-            target[0] = Game.player.pos_x;
-            target[1] = Game.player.pos_y;
+        //public static int[] GetCloser()
+        //{
+        //    // get all possible directions;
+        //    Choice[] attack = Choice.goTo;
 
-            // get own randomPosition
-            me = new int[2];
-            me[0] = Game.enemy.pos_x;
-            me[1] = Game.enemy.pos_y;
+        //    // get the randomPosition of opponent;
+        //    target = new int[2];
+        //    target[0] = Game.player.pos_x;
+        //    target[1] = Game.player.pos_y;
 
-            // get actual distance
-            distance = Game.dist.GetDistance(me, target);
+        //    // get own randomPosition
+        //    me = new int[2];
+        //    me[0] = Game.enemy.pos_x;
+        //    me[1] = Game.enemy.pos_y;
 
-            // calculate the distance for every possible move;
-            new_me = new int[2];
-            int[] reset_me = new int[] { 0, 0 };
-            int new_dist = 100;
-            for (int i = 0; i < attack.Length; i++)
-            {
-                // calculate next randomPosition
-                new_me[0] = me[0] + attack[i].coord[0];
-                new_me[1] = me[1] + attack[i].coord[1];
-                new_dist = Game.dist.GetDistance(new_me, target);
+        //    // get actual distance
+        //    distance = Game.dist.GetDistance(me, target);
 
-                if (new_dist < distance)
-                {
-                    goThere = attack[i].coord;
-                }
-                new_me = reset_me;
+        //    // calculate the distance for every possible move;
+        //    new_me = new int[2];
+        //    int[] reset_me = new int[] { 0, 0 };
+        //    int new_dist = 100;
+        //    for (int i = 0; i < attack.Length; i++)
+        //    {
+        //        // calculate next randomPosition
+        //        new_me[0] = me[0] + attack[i].coord[0];
+        //        new_me[1] = me[1] + attack[i].coord[1];
+        //        new_dist = Game.dist.GetDistance(new_me, target);
 
-            }
-            // store the distance, if smaller;
-            // return the move with minimum distance
-            return goThere;
-        }
+        //        if (new_dist < distance)
+        //        {
+        //            goThere = attack[i].coord;
+        //        }
+        //        new_me = reset_me;
+
+        //    }
+        //    // store the distance, if smaller;
+        //    // return the move with minimum distance
+        //    return goThere;
+        //}
 
         static object moveLock = new object();
 

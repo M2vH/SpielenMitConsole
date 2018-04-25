@@ -46,8 +46,8 @@ namespace MonsterHunter
 
 #if TEST
 
-
-            // display the "M" and a Monster
+            // display the "M" and the 3 monster
+            // to make a cool Screenshot for an icon;
             ScreenIcon.Show();
 
 #endif
