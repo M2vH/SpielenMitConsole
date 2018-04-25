@@ -537,12 +537,15 @@ namespace MonsterHunter
                     //// next line(s) work
                     // move = RandomWeightedMove();
 
-                    // ToDo: the thread problem
+                    // the thread problem
                     //  #1
                     //  put 'move...' into lock
+                    //  #2
+                    //  and expand lock until 'move' is not used anymore
 
                     lock (Game.printlock)
                     {
+                        // #1
                         // attack the player
                         move = GetCloser(Game.enemy as Monster, Game.player as Monster);
 
@@ -559,7 +562,7 @@ namespace MonsterHunter
                         {
                             Game.enemy.Fight(Game.enemy);
                             Game.enemy.HitMonster(Game.playerStats, Game.enemyStats, false);
-                            // ToDo: Sound
+                            // NoToDo: Sound
                             // play sound here;
                         }
                         new_x = pos_x + move[0];
@@ -578,7 +581,8 @@ namespace MonsterHunter
                         }
 
                     }
-                    // end of lock
+                    //  #2
+                    //  end of lock
 
                     // check for health in case we had a fight;
                     // if both alive, print distance,

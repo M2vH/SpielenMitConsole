@@ -49,7 +49,7 @@ namespace MonsterHunter
         {
             try
             {
-                if (Program.manual)
+                if (Program.arrowControl)
                 {
                     Game.PlayTheGame(Game.player);
 

@@ -151,7 +151,10 @@ namespace MonsterHunter
                 KillCountdown();
 
                 // ToDo: Funktionality when timer runs out;
-                // Ex: Check remaining stats and proclaim winner;
+                // Ex.: Check remaining stats and proclaim winner;
+                // we handle this in CloseGame() ???
+                CloseTheGame();
+
             }
         }
 
@@ -364,7 +367,7 @@ namespace MonsterHunter
             // stop the player timer
             // check if Timer object exists
             // Timer object exists, if Program.manual = false
-            if (!Program.manual)
+            if (!Program.arrowControl)
             {
                 startAutoplayTimer.Dispose();
 
@@ -482,7 +485,8 @@ namespace MonsterHunter
             text = new string(' ', text.Length);
             Dashboard.CenterText(ConsoleColor.Red, 25, text);
 
-#if DEBUG
+#if DEBUG || MANUAL
+
             int reduction = 400;
             Game.player.outfit.stats.SetHPoints(reduction);
 #endif
@@ -490,8 +494,10 @@ namespace MonsterHunter
             Game.enemy = new Enemy(player);
 
             //Game.enemy.CreateEnemyFromOponent();
-#if DEBUG
+#if DEBUG || MANUAL
+
             Game.enemy.outfit.stats.SetHPoints(reduction);
+
 #endif
 
 

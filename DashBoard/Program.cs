@@ -11,7 +11,7 @@ namespace MonsterHunter
     {
         /* --> The Game  <--
          * 
-         * Keep the Main() as clean as possible
+         * Keeping the Main() as clean as possible
          * 
          */
         #region GameThreads
@@ -26,8 +26,7 @@ namespace MonsterHunter
         /// <summary>
         /// Set to true, if player is keyboard controlled
         /// </summary>
-        public static bool manual = false;
-
+        public static bool arrowControl;
         // Printing a welcome
         // set next bool to false to hide welcome during debugging
         public static bool showWelcome = true;
@@ -35,6 +34,11 @@ namespace MonsterHunter
 
         static void Main(string[] args)
         {
+
+#if MANUAL
+        arrowControl = true;
+#endif
+
             // Init the game
             // ToDo: make Game a class;
             Game.InitGame();
