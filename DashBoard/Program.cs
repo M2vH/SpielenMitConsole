@@ -44,6 +44,8 @@ namespace MonsterHunter
             // we init the movement goTos for the enemy.asDancer
             Choice.InitChoices();
 
+            
+            
             // say Hello to the player
             ScreenWelcome.Show();
 
