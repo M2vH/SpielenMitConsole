@@ -101,7 +101,7 @@ namespace MonsterHunter
         /// <summary>
         /// The maximum Countdown Time in seconds
         /// </summary>
-        static int maxCount = 120;         // we want to run for given amount of seconds;
+        static int maxCount = 15;         // we want to run for given amount of seconds;
 
         // we store countdown here;
         // and init remaining time with maximum seconds
@@ -153,8 +153,16 @@ namespace MonsterHunter
                 // ToDo: Funktionality when timer runs out;
                 // Ex.: Check remaining stats and proclaim winner;
                 // we handle this in CloseGame() ???
-                
-                CloseTheGame();
+
+                //  the Player/Enemy Threads will be still alive,
+                //  we kill them;
+                Program.thePlayerThread.Abort();
+                Program.theEnemyThread.Abort();
+
+                // we break out of the main loop;
+                keepAlive = false;
+                return;
+                // CloseTheGame();
 
             }
         }
