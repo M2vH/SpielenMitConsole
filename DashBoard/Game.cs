@@ -153,6 +153,7 @@ namespace MonsterHunter
                 // ToDo: Funktionality when timer runs out;
                 // Ex.: Check remaining stats and proclaim winner;
                 // we handle this in CloseGame() ???
+                
                 CloseTheGame();
 
             }
