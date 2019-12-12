@@ -20,6 +20,8 @@ In this project I wanted to show the abilities and borders of a Console-App writ
 </video>
 </div>
 
+---
+
 ## Game Design Document
 
 - Create three types of `Monster`.
@@ -30,6 +32,8 @@ In this project I wanted to show the abilities and borders of a Console-App writ
 - The `Fight` is limited by `Time`.
 - The `Game` ends if one `Monster` dies or no `Time` is left.
 - `Winner` is the `Monster` with most `Health` at end of `Game`.
+
+---
 
 ## You want to see it on your computer?
 
