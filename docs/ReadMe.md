@@ -14,7 +14,11 @@ In this project I wanted to show the abilities and borders of a Console-App writ
 
 ![./Bilder/MonsterHunter.PNG](./Bilder/MonsterHunter.PNG) 
 
+<div>
+<video  style="display:block; width:100%; height:auto;" autoplay controls loop="loop">
 <source src="./Video/MonsterHunter.mp4" type="video/mp4">
+</video>
+</div>
 
 ## Game Design Document
 
