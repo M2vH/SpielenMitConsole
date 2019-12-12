@@ -12,7 +12,7 @@ In this project I wanted to show the abilities and borders of a Console-App writ
 
 ## And this is how it looks like
 
-![./Bilder/MonsterHunter.PNG](./Bilder/MonsterHunter.PNG) 
+<!-- ![./Bilder/MonsterHunter.PNG](./Bilder/MonsterHunter.PNG) -->
 
 <div>
 <video  style="display:block; width:100%; height:auto;" autoplay controls loop="loop">
